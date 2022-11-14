@@ -3,24 +3,28 @@ import { FilterQuery, Model, ProjectionType, SortOrder } from "mongoose";
 import { Paginated, Pagination } from "./paginated";
 
 export abstract class CrudUseCases<T, CreateDto, Dto, > {
-  private constructor(
+  protected constructor(
     private readonly model: Model<T>,
-    private readonly mapper: IMapper<T, Dto>,
+    private readonly mapper: Mapper<T, Dto>,
     private modelName: string
   ) {
   }
 
   async create(
     dto: CreateDto,
-    uniqueFields: Array<keyof CreateDto>
+    uniqueFields?: Array<keyof CreateDto>
   ): Promise<Result<Dto>> {
     try {
 
-      const existedItem = await this.model.findOne({
-        $or: uniqueFields.map(f => ({
+      const filter: FilterQuery<T> = {}
+
+      if(uniqueFields) {
+        filter.$or = uniqueFields.map(f => ({
           [f]: dto[f]
         } as FilterQuery<CreateDto>))
-      });
+      }
+
+      const existedItem = await this.model.findOne(filter);
 
       if (existedItem) {
         return Result.err(`${this.model} c одним из переданных параметров уже сущеуствует!`);
@@ -85,7 +89,7 @@ export abstract class CrudUseCases<T, CreateDto, Dto, > {
 
       return Result.ok(
         Paginated.new({
-          items: items.map(this.mapper.map),
+          items: this.mapper.mapArray(items),
           page: pagination.page,
           size: pagination.size,
           count
@@ -97,7 +101,7 @@ export abstract class CrudUseCases<T, CreateDto, Dto, > {
   }
 
   async find(
-    filters: FilterQuery<T>,
+    filters?: FilterQuery<T>,
     pagination?: Pagination,
     sort?: { [key in keyof T]: SortOrder },
     projection?: ProjectionType<T>
@@ -111,7 +115,7 @@ export abstract class CrudUseCases<T, CreateDto, Dto, > {
         )
         .sort(sort);
 
-      return Result.ok(items.map(this.mapper.map));
+      return Result.ok(this.mapper.mapArray(items));
 
     } catch (e) {
       return CrudUseCases.logErrorsAndReturnResult("find", e);

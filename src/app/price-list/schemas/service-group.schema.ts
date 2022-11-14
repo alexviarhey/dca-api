@@ -11,7 +11,7 @@ export interface IServiceGroup {
 export const serviceGroupSchema = new Schema<IServiceGroup>({
   groupNumber: { type: Number, required: true },
   name: { type: String, required: true },
-  subgroupsIds: { type: [String], required: true },
+  subgroupsIds: { type: [String], required: false, default: []},
 })
 
 
