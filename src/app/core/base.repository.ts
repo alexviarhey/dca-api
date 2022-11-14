@@ -7,7 +7,7 @@ export abstract class BaseRepository<T> {
   ) {
   }
 
-  async findById(id: string): Promise<HydratedDocument<T>> {
+  async findById(id: string): Promise<HydratedDocument<T> | null> {
     try {
       return await this.model.findById(id);
     } catch (e) {
@@ -18,7 +18,7 @@ export abstract class BaseRepository<T> {
   async findOne(
     filter: FilterQuery<T>,
     projection?: ProjectionType<T>
-  ): Promise<HydratedDocument<T>> {
+  ): Promise<HydratedDocument<T> | null> {
     try {
       return await this.model.findOne(filter, projection);
     } catch (e) {

@@ -1,0 +1,35 @@
+export class Result<T = null> {
+
+  private constructor(
+    private readonly _isSuccess: boolean,
+    private readonly _data?: T | null,
+    private readonly _error?: string | null
+  ) {
+  }
+
+  public static ok<T>(data?: T): Result<T> {
+    return new Result<T>(true, data, null);
+  }
+
+  public static err<T>(error: string): Result<T> {
+    return new Result<T>(false, null, error);
+  }
+
+  get isSuccess(): boolean {
+    return this._isSuccess;
+  }
+
+  get data(): T {
+    if(!this._data) throw new Error("Result error: no data found!")
+    return this._data;
+  }
+
+  get error(): string {
+    if (!this._error) throw new Error('Does not extract data from Result!');
+    return this._error;
+  }
+
+  static somethingWentWrong(): Result {
+    return Result.err('Что-то пошло не так, попробуйте позже!')
+  }
+}
