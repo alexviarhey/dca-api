@@ -10,6 +10,8 @@ import { MongoService } from "./mongo.service";
         const isTest = configService.get<string>("NODE_ENV") === 'test'
         const uri = configService.get<string>(!isTest ? 'MONGO_URI' : 'MONGO_TEST_URI')
 
+        console.log(uri)
+
         return {
           uri
         }

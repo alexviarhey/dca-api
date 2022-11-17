@@ -2,13 +2,14 @@ import { Result } from "./result";
 import { FilterQuery, Model, ProjectionType, SortOrder } from "mongoose";
 import { Paginated, Pagination } from "./paginated";
 
-export abstract class CrudUseCases<T, CreateDto, Dto, > {
+
+
+export abstract class CrudUseCases<T, CreateDto, Dto> {
   protected constructor(
     private readonly model: Model<T>,
     private readonly mapper: Mapper<T, Dto>,
     private modelName: string
-  ) {
-  }
+  ) {}
 
   async create(
     dto: CreateDto,

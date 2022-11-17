@@ -7,71 +7,33 @@ import {
     Post
 } from "@nestjs/common";
 import {
-    CreatePriceItemDto,
-    CreateServiceGroupDto,
-    CreateServiceSubgroupDto,
-    PriceItemsCrudUseCase, PriceListDto,
+    PriceItemsCrudUseCase,
     ServiceGroupCrudUseCase,
-    ServiceSubgroupCrudUseCase,
-    ServiceSubgroupDto,
-    ServiceSubgroupWithPriceItemsDto
-} from "../use-cases/price-items.crud-use-case";
+    ServiceSubgroupCrudUseCase
+} from "../use-cases/price-list.crud-use-cases";
 import { CustomResponse } from "../../core/custom-response";
+import { CreatePriceItemDto, CreateServiceGroupDto, CreateServiceSubgroupDto } from "../dto/price-list.dtos";
+import { GetPriceListUseCase } from "../use-cases/get-price-list.use-case";
 
 @Controller("/price-list")
 export class PriceListCrudController {
     constructor(
         private readonly priceItemsCrudUseCase: PriceItemsCrudUseCase,
         private readonly serviceSubgroupUseCase: ServiceSubgroupCrudUseCase,
-        private readonly serviceGroupUseCase: ServiceGroupCrudUseCase
+        private readonly serviceGroupUseCase: ServiceGroupCrudUseCase,
+        private readonly getPriseListUseCase: GetPriceListUseCase
     ) {
     }
 
-    private createMap<T extends { _id: string }>(items: T[]): Map<string, T> {
-        return items.reduce((map, item) => {
-            map.set(item._id, item);
-            return map;
-        }, new Map());
-    };
-
     @Get()
     async getPriceList() {
+        const res = await this.getPriseListUseCase.execute(
+            this.priceItemsCrudUseCase,
+            this.serviceSubgroupUseCase,
+            this.serviceGroupUseCase
+        );
 
-        //TODO get subgroups and groups by ids, because we can have draft groups
-        const groupsRes = await this.serviceGroupUseCase.find();
-        if (!groupsRes.isSuccess) return CustomResponse.fromResult(groupsRes);
-
-        const subgroupsRes = await this.serviceSubgroupUseCase.find();
-        if (!subgroupsRes.isSuccess) return CustomResponse.fromResult(subgroupsRes);
-
-        const priceItemsRes = await this.priceItemsCrudUseCase.find();
-        if (!priceItemsRes.isSuccess) return CustomResponse.fromResult(priceItemsRes);
-
-        const subgroupsMap = this.createMap(subgroupsRes.data);
-        const priceItemsMap = this.createMap(priceItemsRes.data);
-
-        const priceList: PriceListDto = groupsRes.data.map(g => {
-            const subgroups = g.subgroupIds.map(id => subgroupsMap.get(id));
-
-            const subgroupsWithPriceItems: ServiceSubgroupWithPriceItemsDto[] = subgroups.map(sg => {
-                const priceItems = sg.priceItemsIds.map(id => priceItemsMap.get(id));
-                return {
-                    _id: sg._id,
-                    subgroupNumber: sg.subgroupNumber,
-                    name: sg.name,
-                    priceItems
-                };
-            });
-
-            return {
-                _id: g._id,
-                groupNumber: g.groupNumber,
-                name: g.name,
-                subgroups: subgroupsWithPriceItems
-            };
-        });
-
-        return CustomResponse.success(priceList)
+        return CustomResponse.fromResult(res);
     }
 
     @Post("/item")
