@@ -1,5 +1,4 @@
 import {
-    Body,
     Controller,
     Delete,
     Get,
@@ -12,8 +11,15 @@ import {
     ServiceSubgroupCrudUseCase
 } from "../use-cases/price-list.crud-use-cases";
 import { CustomResponse } from "../../core/custom-response";
-import { CreatePriceItemDto, CreateServiceGroupDto, CreateServiceSubgroupDto } from "../dto/price-list.dtos";
+import {
+    createGroupSchema,
+    CreatePriceItemDto,
+    createPriceItemSchema,
+    CreateServiceGroupDto,
+    CreateServiceSubgroupDto, createSubgroupSchema
+} from "../dto/price-list.dtos";
 import { GetPriceListUseCase } from "../use-cases/get-price-list.use-case";
+import { AjvBody } from "../../common/decorators/ajv.decorators";
 
 @Controller("/price-list")
 export class PriceListCrudController {
@@ -38,9 +44,8 @@ export class PriceListCrudController {
 
     @Post("/item")
     async createPriceItem(
-        @Body() createDto: CreatePriceItemDto
+        @AjvBody(createPriceItemSchema) createDto: CreatePriceItemDto
     ) {
-
         const res = await this.priceItemsCrudUseCase.create(
             createDto,
             ["name", "itemNumber"]
@@ -53,7 +58,7 @@ export class PriceListCrudController {
 
     @Post("/subgroup")
     async createSubgroup(
-        @Body() createDto: CreateServiceSubgroupDto
+        @AjvBody(createSubgroupSchema) createDto: CreateServiceSubgroupDto
     ) {
 
         const res = await this.serviceSubgroupUseCase.create(
@@ -68,7 +73,7 @@ export class PriceListCrudController {
 
     @Post("/group")
     async createGroup(
-        @Body() createDto: CreateServiceGroupDto
+        @AjvBody(createGroupSchema) createDto: CreateServiceGroupDto
     ) {
         const res = await this.serviceGroupUseCase.create(
             createDto,
@@ -80,37 +85,39 @@ export class PriceListCrudController {
             .withSuccessMessage("Группа успешно создана!");
     }
 
-    @Delete("/item/:id")
-    async deletePriceItem(
-        @Param("id") id: string
-    ) {
-        const res = await this.priceItemsCrudUseCase.deleteById(id);
+    //TODO update delete methods need to delete ids from arrays in groups and subgroups
 
-        return CustomResponse
-            .fromResult(res)
-            .withSuccessMessage("Элемент прайс-листа успешно удален!");
-    }
-
-    @Delete("/subgroup/:id")
-    async deleteSubgroup(
-        @Param("id") id: string
-    ) {
-
-        const res = await this.serviceSubgroupUseCase.deleteById(id);
-
-        return CustomResponse
-            .fromResult(res)
-            .withSuccessMessage("Подгруппа успешно удалена!");
-    }
-
-    @Delete("/group")
-    async deleteGroup(
-        @Param("id") id: string
-    ) {
-        const res = await this.serviceGroupUseCase.deleteById(id);
-
-        return CustomResponse
-            .fromResult(res)
-            .withSuccessMessage("Группа успешно удалена!");
-    }
+    // @Delete("/item/:id")
+    // async deletePriceItem(
+    //     @Param("id") id: string
+    // ) {
+    //     const res = await this.priceItemsCrudUseCase.deleteById(id);
+    //
+    //     return CustomResponse
+    //         .fromResult(res)
+    //         .withSuccessMessage("Элемент прайс-листа успешно удален!");
+    // }
+    //
+    // @Delete("/subgroup/:id")
+    // async deleteSubgroup(
+    //     @Param("id") id: string
+    // ) {
+    //
+    //     const res = await this.serviceSubgroupUseCase.deleteById(id);
+    //
+    //     return CustomResponse
+    //         .fromResult(res)
+    //         .withSuccessMessage("Подгруппа успешно удалена!");
+    // }
+    //
+    // @Delete("/group")
+    // async deleteGroup(
+    //     @Param("id") id: string
+    // ) {
+    //     const res = await this.serviceGroupUseCase.deleteById(id);
+    //
+    //     return CustomResponse
+    //         .fromResult(res)
+    //         .withSuccessMessage("Группа успешно удалена!");
+    // }
 }

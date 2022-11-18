@@ -1,7 +1,7 @@
 import { Result } from "./result";
 import { FilterQuery, Model, ProjectionType, SortOrder } from "mongoose";
 import { Paginated, Pagination } from "./paginated";
-
+import { Mapper } from "./mapper";
 
 
 export abstract class CrudUseCases<T, CreateDto, Dto> {
@@ -28,7 +28,7 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
       const existedItem = await this.model.findOne(filter);
 
       if (existedItem) {
-        return Result.err(`${this.model} c одним из переданных параметров уже сущеуствует!`);
+        return Result.err(`${this.modelName} c одним из переданных параметров уже сущеуствует!`);
       }
 
       const item = await this.model.create(dto);

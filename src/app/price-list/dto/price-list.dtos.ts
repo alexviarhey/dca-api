@@ -1,3 +1,43 @@
+const costRules = { type: "number", minimum: 0.1 };
+const numberRules = { type: "string", pattern: "^\\d*\\d(.\\d*\\d)*$"};
+const nameRules = { type: "string", transform: ["trim"], minLength: 3, maxLength: 40 };
+const idsRules = { type: "array", items: { type: "string" } }
+
+export const createPriceItemSchema = {
+    type: "object",
+    properties: {
+        name: nameRules,
+        itemNumber: numberRules,
+        materialsCost: costRules,
+        serviceCost: costRules
+    },
+    allRequired: true,
+    additionalProperties: false,
+};
+
+export const createSubgroupSchema = {
+    type: "object",
+    properties: {
+        subgroupNumber: numberRules,
+        name: nameRules,
+        priceItemsIds: idsRules
+    },
+    allRequired: true,
+    additionalProperties: false
+};
+
+export const createGroupSchema = {
+    type: "object",
+    properties: {
+        groupNumber: numberRules,
+        name: nameRules,
+        subgroupsIds: idsRules
+    },
+    allRequired: true,
+    additionalProperties: false
+};
+
+
 export type PriceListDto = ServiceGroupWithSubgroupsDto[]
 
 export type CreatePriceItemDto = {
@@ -21,13 +61,15 @@ export type ServiceSubgroupWithPriceItemsDto = {
     _id: string
     subgroupNumber: number
     name: string,
-    priceItems: PriceItemDto[]
+    materialsCost: number,
+    serviceCost: number,
+    priceItems: PriceItemDto[],
 }
 
 export type CreateServiceGroupDto = {
     groupNumber: number
     name: string,
-    subgroupIds: string[]
+    subgroupsIds: string[]
 }
 
 export type ServiceGroupDto = CreateServiceGroupDto & {

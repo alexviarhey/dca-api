@@ -1,6 +1,7 @@
 import { Result } from "./result";
 
 export type CustomResponseMessage = { message: string }
+export type ValidationErrorMessage = { field: string, message: string }
 
 export enum ResultCode {
     OK = 0,
@@ -12,7 +13,8 @@ export class CustomResponse<T = null> {
     private constructor(
         private resultCode: ResultCode,
         private data?: T | null,
-        private messages: Array<CustomResponseMessage> = [],
+        private messages: Array<CustomResponseMessage> = null,
+        private validationErrors: ValidationErrorMessage[] = null
     ) {
     }
 
@@ -58,6 +60,23 @@ export class CustomResponse<T = null> {
         return new CustomResponse<T>(
             ResultCode.OK,
             data,
+        )
+    }
+
+    public static error<T = null>(message: CustomResponseMessage): CustomResponse<T> {
+        return new CustomResponse<T>(
+            ResultCode.ERROR,
+            null,
+            [message]
+        )
+    }
+
+    public static validationError<T = null>(message: ValidationErrorMessage): CustomResponse<T> {
+        return new CustomResponse<T>(
+            ResultCode.ERROR,
+            null,
+            null,
+            [message]
         )
     }
 }

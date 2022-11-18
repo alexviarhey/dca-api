@@ -5,7 +5,7 @@ import {
     ServiceGroupCrudUseCase,
     ServiceSubgroupCrudUseCase
 } from "./price-list.crud-use-cases";
-import { PriceListDto } from "../dto/price-list.dtos";
+import { PriceListDto, ServiceSubgroupWithPriceItemsDto } from "../dto/price-list.dtos";
 import { Result } from "../../core/result";
 
 @Injectable()
@@ -30,15 +30,27 @@ export class GetPriceListUseCase {
             const subgroupsMap = GetPriceListUseCase.createMap(subgroupsRes.data);
             const priceItemsMap = GetPriceListUseCase.createMap(priceItemsRes.data);
 
-            const priceList: PriceListDto = groupsRes.data.map(g => {
-                const subgroups = g.subgroupIds.map(id => subgroupsMap.get(id));
 
-                const subgroupsWithPriceItems = subgroups.map(sg => {
+            const priceList: PriceListDto = groupsRes.data.map(g => {
+                const subgroups = g.subgroupsIds.map(id => subgroupsMap.get(id));
+
+                const subgroupsWithPriceItems = subgroups.map<ServiceSubgroupWithPriceItemsDto>(sg => {
                     const priceItems = sg.priceItemsIds.map(id => priceItemsMap.get(id));
+
+                    let totalMaterialsCost = 0;
+                    let totalServiceCost = 0;
+
+                    priceItems.forEach((pi) => {
+                        totalMaterialsCost += pi.materialsCost
+                        totalServiceCost += pi.serviceCost
+                    })
+
                     return {
                         _id: sg._id,
                         subgroupNumber: sg.subgroupNumber,
                         name: sg.name,
+                        materialsCost: totalMaterialsCost,
+                        serviceCost: totalServiceCost,
                         priceItems
                     };
                 });

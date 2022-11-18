@@ -7,11 +7,11 @@ import { Mapper } from "../../core/mapper";
  class PriceItemMapper extends Mapper<IPriceItemSchema, PriceItemDto> {
     map(model: IPriceItemSchema): PriceItemDto {
         return {
-            _id: "testId",
-            itemNumber: 1,
-            name: "Test",
-            materialsCost: 1,
-            serviceCost: 1
+            _id: model._id.toString(),
+            itemNumber: model.itemNumber,
+            name: model.name,
+            materialsCost: model.materialsCost,
+            serviceCost: model.serviceCost
         };
     }
 }
@@ -19,10 +19,10 @@ import { Mapper } from "../../core/mapper";
 class ServiceSubgroupMapper extends Mapper<IServiceSubgroup, ServiceSubgroupDto> {
     map(model: IServiceSubgroup): ServiceSubgroupDto{
         return {
-            _id: "testId",
-            name: "Test",
-            subgroupNumber: 1,
-            priceItemsIds: ["1", "2"]
+            _id: model._id.toString(),
+            name: model.name,
+            subgroupNumber: model.subgroupNumber,
+            priceItemsIds: model.priceItemsIds
         };
     }
 }
@@ -30,10 +30,10 @@ class ServiceSubgroupMapper extends Mapper<IServiceSubgroup, ServiceSubgroupDto>
 class ServiceGroupMapper extends Mapper<IServiceGroup, ServiceGroupDto> {
     map(model: IServiceGroup): ServiceGroupDto{
         return {
-            _id: "testId",
-            name: "Test",
-            groupNumber: 1,
-            subgroupIds: ["1", "2"]
+            _id: model._id.toString(),
+            name: model.name,
+            groupNumber: model.groupNumber,
+            subgroupsIds: model.subgroupsIds
         };
     }
 }
