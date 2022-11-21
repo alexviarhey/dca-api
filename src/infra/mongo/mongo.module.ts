@@ -11,7 +11,7 @@ import { MongoService } from "./mongo.service";
         const uri = configService.get<string>(!isTest ? 'MONGO_URI' : 'MONGO_TEST_URI')
 
         return {
-          uri: uri || 'mongodb://localhost:27017/dca'
+          uri
         }
       },
       inject: [ConfigService],
