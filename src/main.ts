@@ -3,7 +3,7 @@ import { AppModule } from "./app/app.module";
 import { AjvExceptionFilter } from "./app/common/exeption-filters";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
