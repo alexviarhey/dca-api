@@ -30,7 +30,7 @@ export class CreateHumanNameDto  {
 }
 
 export class HumanNameDto extends CreateHumanNameDto {
-    @ApiProperty()
+    @ApiProperty({nullable: true})
     given: string | null
 
     @ApiProperty()

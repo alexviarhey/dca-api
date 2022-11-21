@@ -13,13 +13,16 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
 
   async create(
     dto: CreateDto,
-    uniqueFields?: Array<keyof CreateDto>
+    uniqueFields?: Array<keyof CreateDto>,
+    filterQuery?: FilterQuery<T>
   ): Promise<Result<Dto>> {
     try {
 
-      const filter: FilterQuery<T> = {}
+      let filter: FilterQuery<T> = {}
 
-      if(uniqueFields) {
+      if(filterQuery) filter = filterQuery
+
+      if(!filterQuery && uniqueFields) {
         filter.$or = uniqueFields.map(f => ({
           [f]: dto[f]
         } as FilterQuery<CreateDto>))

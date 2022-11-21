@@ -13,5 +13,5 @@ export const addressSchema = new Schema<IAddressSchema>({
     city: { type: String, required: true },
     street: { type: String, required: true },
     house: { type: String, required: true },
-    apartment: { type: String, required: false, default: null },
+    apartment: { type: String, nullable: true, required: false, default: null },
 }, { _id: false })
