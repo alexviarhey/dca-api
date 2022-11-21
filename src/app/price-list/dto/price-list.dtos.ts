@@ -1,7 +1,9 @@
+import { ApiProperty } from "@nestjs/swagger";
+
 const costRules = { type: "number", minimum: 0.1 };
-const numberRules = { type: "string", pattern: "^\\d*\\d(.\\d*\\d)*$"};
+const numberRules = { type: "string", pattern: "^\\d*\\d(.\\d*\\d)*$" };
 const nameRules = { type: "string", transform: ["trim"], minLength: 3, maxLength: 40 };
-const idsRules = { type: "array", items: { type: "string" } }
+const idsRules = { type: "array", items: { type: "string" } };
 
 export const createPriceItemSchema = {
     type: "object",
@@ -12,7 +14,7 @@ export const createPriceItemSchema = {
         serviceCost: costRules
     },
     allRequired: true,
-    additionalProperties: false,
+    additionalProperties: false
 };
 
 export const createSubgroupSchema = {
@@ -40,50 +42,90 @@ export const createGroupSchema = {
 
 export type PriceListDto = ServiceGroupWithSubgroupsDto[]
 
-export type CreatePriceItemDto = {
-    itemNumber: number
-    name: string
-    materialsCost: number
-    serviceCost: number
+
+export class CreatePriceItemDto {
+    @ApiProperty()
+    itemNumber: string;
+
+    @ApiProperty()
+    name: string;
+
+    @ApiProperty()
+    materialsCost: number;
+
+    @ApiProperty()
+    serviceCost: number;
 }
 
-export type CreateServiceSubgroupDto = {
-    subgroupNumber: number
-    name: string,
-    priceItemsIds: string[]
+export class CreateServiceSubgroupDto {
+    @ApiProperty()
+    subgroupNumber: string;
+
+    @ApiProperty()
+    name: string;
+
+    @ApiProperty()
+    priceItemsIds: string[];
 }
 
-export type ServiceSubgroupDto = CreateServiceSubgroupDto & {
+export class ServiceSubgroupDto extends CreateServiceSubgroupDto {
+    _id: string;
+}
+
+
+export class CreateServiceGroupDto {
+    @ApiProperty()
+    groupNumber: string;
+
+    @ApiProperty()
+    name: string;
+
+    @ApiProperty()
+    subgroupsIds: string[];
+}
+
+export class ServiceGroupDto extends CreateServiceGroupDto {
+    _id: string;
+}
+
+
+
+export class PriceItemDto extends CreatePriceItemDto {
+    @ApiProperty()
     _id: string
 }
 
-export type ServiceSubgroupWithPriceItemsDto = {
-    _id: string
-    subgroupNumber: number
-    name: string,
-    materialsCost: number,
-    serviceCost: number,
-    priceItems: PriceItemDto[],
+export class ServiceSubgroupWithPriceItemsDto {
+    @ApiProperty()
+    _id: string;
+
+    @ApiProperty()
+    subgroupNumber: string;
+
+    @ApiProperty()
+    name: string;
+
+    @ApiProperty()
+    materialsCost: number;
+
+    @ApiProperty()
+    serviceCost: number;
+
+    @ApiProperty({type: PriceItemDto, isArray: true})
+    priceItems: PriceItemDto[];
 }
 
-export type CreateServiceGroupDto = {
-    groupNumber: number
-    name: string,
-    subgroupsIds: string[]
+export class ServiceGroupWithSubgroupsDto {
+    @ApiProperty()
+    _id: string;
+
+    @ApiProperty()
+    groupNumber: string;
+
+    @ApiProperty()
+    name: string;
+
+    @ApiProperty({ type: ServiceSubgroupWithPriceItemsDto, isArray: true})
+    subgroups: ServiceSubgroupWithPriceItemsDto[];
 }
 
-export type ServiceGroupDto = CreateServiceGroupDto & {
-    _id: string
-}
-
-export type ServiceGroupWithSubgroupsDto = {
-    _id: string
-    groupNumber: number
-    name: string,
-    subgroups: ServiceSubgroupWithPriceItemsDto[]
-}
-
-
-export type PriceItemDto = CreatePriceItemDto & {
-    _id: string
-}

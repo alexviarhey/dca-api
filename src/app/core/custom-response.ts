@@ -1,11 +1,35 @@
 import { Result } from "./result";
+import { ApiProperty } from "@nestjs/swagger";
 
-export type CustomResponseMessage = { message: string }
-export type ValidationErrorMessage = { field: string, message: string }
+export class CustomResponseMessage {
+    @ApiProperty()
+    message: string;
+}
+
+export class ValidationErrorMessage {
+    @ApiProperty()
+    field: string;
+
+    @ApiProperty()
+    message: string;
+}
 
 export enum ResultCode {
     OK = 0,
     ERROR = 1
+}
+
+export abstract class CustomResponseType<T> {
+    @ApiProperty()
+    resultCode: ResultCode;
+
+    abstract data: T;
+
+    @ApiProperty({ type: () => [CustomResponseMessage] })
+    messages: CustomResponseMessage[];
+
+    @ApiProperty({ type: () => [ValidationErrorMessage] })
+    validationErrors: ValidationErrorMessage[];
 }
 
 export class CustomResponse<T = null> {
@@ -24,13 +48,13 @@ export class CustomResponse<T = null> {
             return new CustomResponse<T>(
                 ResultCode.OK,
                 result.data
-            )
+            );
         } else {
             return new CustomResponse<T>(
                 ResultCode.ERROR,
                 null,
                 [{ message: result.error }]
-            )
+            );
         }
     }
 
@@ -39,10 +63,10 @@ export class CustomResponse<T = null> {
     ): this {
 
         if (this.resultCode === ResultCode.OK) {
-            this.messages = [{ message }]
+            this.messages = [{ message }];
         }
 
-        return this
+        return this;
     }
 
     public withErrorMessage<T>(
@@ -50,17 +74,17 @@ export class CustomResponse<T = null> {
     ): this {
 
         if (this.resultCode === ResultCode.ERROR) {
-            this.messages = [{ message }]
+            this.messages = [{ message }];
         }
 
-        return this
+        return this;
     }
 
     public static success<T = null>(data: T): CustomResponse<T> {
         return new CustomResponse<T>(
             ResultCode.OK,
-            data,
-        )
+            data
+        );
     }
 
     public static error<T = null>(message: CustomResponseMessage): CustomResponse<T> {
@@ -68,7 +92,7 @@ export class CustomResponse<T = null> {
             ResultCode.ERROR,
             null,
             [message]
-        )
+        );
     }
 
     public static validationError<T = null>(message: ValidationErrorMessage): CustomResponse<T> {
@@ -77,6 +101,6 @@ export class CustomResponse<T = null> {
             null,
             null,
             [message]
-        )
+        );
     }
 }

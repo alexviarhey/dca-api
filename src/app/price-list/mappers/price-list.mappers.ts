@@ -28,7 +28,7 @@ class ServiceSubgroupMapper extends Mapper<IServiceSubgroup, ServiceSubgroupDto>
 }
 
 class ServiceGroupMapper extends Mapper<IServiceGroup, ServiceGroupDto> {
-    map(model: IServiceGroup): ServiceGroupDto{
+    map(model: IServiceGroup): ServiceGroupDto {
         return {
             _id: model._id.toString(),
             name: model.name,

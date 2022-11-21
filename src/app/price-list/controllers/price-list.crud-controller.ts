@@ -1,8 +1,6 @@
 import {
     Controller,
-    Delete,
     Get,
-    Param,
     Post
 } from "@nestjs/common";
 import {
@@ -10,17 +8,45 @@ import {
     ServiceGroupCrudUseCase,
     ServiceSubgroupCrudUseCase
 } from "../use-cases/price-list.crud-use-cases";
-import { CustomResponse } from "../../core/custom-response";
+import { CustomResponse, CustomResponseType } from "../../core/custom-response";
 import {
     createGroupSchema,
     CreatePriceItemDto,
     createPriceItemSchema,
     CreateServiceGroupDto,
-    CreateServiceSubgroupDto, createSubgroupSchema
+    CreateServiceSubgroupDto,
+    createSubgroupSchema,
+    PriceItemDto,
+    ServiceGroupDto,
+    ServiceGroupWithSubgroupsDto,
+    ServiceSubgroupDto
 } from "../dto/price-list.dtos";
 import { GetPriceListUseCase } from "../use-cases/get-price-list.use-case";
 import { AjvBody } from "../../common/decorators/ajv.decorators";
+import { ApiBody, ApiOkResponse, ApiProperty, ApiTags } from "@nestjs/swagger";
 
+export class PriceListResponse extends CustomResponseType<ServiceGroupWithSubgroupsDto[]> {
+    @ApiProperty({ type: ServiceGroupWithSubgroupsDto, isArray: true })
+    data: ServiceGroupWithSubgroupsDto[];
+}
+
+export class CreatePriceItemResponse extends CustomResponseType<CreatePriceItemDto> {
+    @ApiProperty({ type: CreatePriceItemDto })
+    data: CreatePriceItemDto;
+}
+
+export class CreateSubgroupResponse extends CustomResponseType<ServiceSubgroupDto> {
+    @ApiProperty({ type: ServiceSubgroupDto})
+    data: ServiceSubgroupDto;
+}
+
+export class CreateGroupResponse extends CustomResponseType<ServiceGroupDto> {
+    @ApiProperty({ type: ServiceGroupDto})
+    data: ServiceGroupDto;
+}
+
+
+@ApiTags("Price List")
 @Controller("/price-list")
 export class PriceListCrudController {
     constructor(
@@ -32,6 +58,7 @@ export class PriceListCrudController {
     }
 
     @Get()
+    @ApiOkResponse({ type: PriceListResponse})
     async getPriceList() {
         const res = await this.getPriseListUseCase.execute(
             this.priceItemsCrudUseCase,
@@ -43,6 +70,8 @@ export class PriceListCrudController {
     }
 
     @Post("/item")
+    @ApiBody({ type: CreatePriceItemDto })
+    @ApiOkResponse({ type: CreatePriceItemResponse})
     async createPriceItem(
         @AjvBody(createPriceItemSchema) createDto: CreatePriceItemDto
     ) {
@@ -57,6 +86,8 @@ export class PriceListCrudController {
     }
 
     @Post("/subgroup")
+    @ApiBody({ type: CreateServiceSubgroupDto})
+    @ApiOkResponse({ type: CreateSubgroupResponse})
     async createSubgroup(
         @AjvBody(createSubgroupSchema) createDto: CreateServiceSubgroupDto
     ) {
@@ -72,6 +103,8 @@ export class PriceListCrudController {
     }
 
     @Post("/group")
+    @ApiBody({ type: CreateServiceGroupDto})
+    @ApiOkResponse({ type: CreateGroupResponse})
     async createGroup(
         @AjvBody(createGroupSchema) createDto: CreateServiceGroupDto
     ) {

@@ -2,14 +2,14 @@ import { ObjectId, Schema } from "mongoose";
 
 export interface IServiceGroup {
   _id: ObjectId
-  groupNumber: number
+  groupNumber: string
   name: string
   subgroupsIds: string[]
 }
 
 
 export const serviceGroupSchema = new Schema<IServiceGroup>({
-  groupNumber: { type: Number, required: true },
+  groupNumber: { type: String, required: true },
   name: { type: String, required: true },
   subgroupsIds: { type: [String], required: false, default: []},
 })
