@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { PATIENTS, patientSchema } from "./schemas/patient.schema";
 import { PatientsCrudUseCases } from "./use-cases/patients.crud-use-cases";
+import { PatientsController } from "./controllers/patients.controller";
 
 
 @Module({
@@ -12,6 +13,9 @@ import { PatientsCrudUseCases } from "./use-cases/patients.crud-use-cases";
     ],
     providers: [
         PatientsCrudUseCases
+    ],
+    controllers: [
+        PatientsController
     ]
 })
 export class PatientsModule {}
