@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { InfraModule } from "../infra/infra.module";
 import { PriceListModule } from "./price-list/price-list.module";
+import { PatientsModule } from "./patients/patients.module";
 
 @Module({
     imports: [
@@ -9,7 +10,8 @@ import { PriceListModule } from "./price-list/price-list.module";
             isGlobal: true
         }),
         InfraModule,
-        PriceListModule
+        PriceListModule,
+        PatientsModule
     ],
 })
 export class AppModule {
