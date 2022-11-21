@@ -1,5 +1,5 @@
 import { Controller, Post } from "@nestjs/common";
-import { ApiBody, ApiOkResponse, ApiProperty } from "@nestjs/swagger";
+import { ApiBody, ApiOkResponse, ApiProperty, ApiTags } from "@nestjs/swagger";
 import { CreatePatientDto, PatientDto } from "../dto/patient.dtos";
 import { CustomResponse, CustomResponseType } from "../../core/custom-response";
 import { PatientsCrudUseCases } from "../use-cases/patients.crud-use-cases";
@@ -13,6 +13,7 @@ class CreatePatientResponse extends CustomResponseType<PatientDto> {
 }
 
 @Controller("/patients")
+@ApiTags("Patients")
 export class PatientsController {
 
     constructor(
