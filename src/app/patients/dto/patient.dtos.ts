@@ -10,7 +10,7 @@ import { GenderValues } from "../types/gender";
 import { ApiProperty } from "@nestjs/swagger";
 
 
-export const patientValidationSchema = {
+export const createPatientValidationSchema = {
     type: "object",
     required: ["birthDate", "gender", "name"],
     properties: {
@@ -22,6 +22,15 @@ export const patientValidationSchema = {
         contact: { type: "array", items: contactValidationSchema }
     },
     additionalProperties: false
+};
+
+export const updatePatientValidationSchema = {
+    ...createPatientValidationSchema,
+    properties: {
+        ...createPatientValidationSchema.properties,
+        _id: { type: "string" }
+    },
+    required: ["_id"]
 };
 
 
@@ -46,9 +55,28 @@ export class CreatePatientDto {
 }
 
 
-export class UpdatePatientDto extends CreatePatientDto {
+
+export class UpdatePatientDto {
     @ApiProperty()
     _id: string;
+
+    @ApiProperty({required: false})
+    birthDate?: string;
+
+    @ApiProperty({ enum: GenderValues, required: false })
+    gender?: GenderValues;
+
+    @ApiProperty({ type: CreateHumanNameDto, required: false })
+    name?: CreateHumanNameDto;
+
+    @ApiProperty({ type: CreateContactPointDto, isArray: true, required: false })
+    telecom?: CreateContactPointDto[];
+
+    @ApiProperty({ type: CreateAddressDto, isArray: true, required: false })
+    address?: CreateAddressDto[];
+
+    @ApiProperty({ type: CreateContactDto, isArray: true, required: false })
+    contact?: CreateContactDto[];
 }
 
 export class PatientDto {

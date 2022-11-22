@@ -1,10 +1,14 @@
-import { Controller, Get, Param, Post } from "@nestjs/common";
+import { Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
 import { ApiBody, ApiOkResponse, ApiProperty, ApiQuery, ApiTags } from "@nestjs/swagger";
-import { CreatePatientDto, PatientDto } from "../dto/patient.dtos";
+import {
+    CreatePatientDto,
+    createPatientValidationSchema,
+    PatientDto, UpdatePatientDto,
+    updatePatientValidationSchema
+} from "../dto/patient.dtos";
 import { CustomResponse, CustomResponseType } from "../../../core/custom-response";
 import { PatientsCrudUseCases } from "../use-cases/patients.crud-use-cases";
 import { AjvBody, AjvQuery } from "../../common/decorators/ajv.decorators";
-import { patientSchema } from "../schemas/patient.schema";
 import { GetPatientsFilters, getPatientsFiltersSchema } from "../dto/get-patients-filters";
 import { Paginated } from "../../../core/paginated";
 
@@ -38,12 +42,24 @@ export class PatientsController {
     @ApiBody({ type: CreatePatientDto })
     @ApiOkResponse({ type: CreatePatientResponse })
     async create(
-        @AjvBody(patientSchema) dto: CreatePatientDto
+        @AjvBody(createPatientValidationSchema) dto: CreatePatientDto
     ) {
         const res = await this.patientsCrudUseCases.create(dto);
         return CustomResponse
             .fromResult(res)
             .withSuccessMessage("Пациент успешно создан!");
+    }
+
+    @Put()
+    @ApiBody({ type: UpdatePatientDto})
+    @ApiOkResponse({ type: GetPatientsResponse})
+    async update(
+        @AjvBody(updatePatientValidationSchema) {_id, ...dto}: UpdatePatientDto
+    ) {
+        const res = await this.patientsCrudUseCases.updateOne(_id, dto);
+        return CustomResponse
+            .fromResult(res)
+            .withSuccessMessage("Пациент успешно обновлен!");
     }
 
     @Get()
