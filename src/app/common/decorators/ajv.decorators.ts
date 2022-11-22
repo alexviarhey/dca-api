@@ -3,7 +3,7 @@ import { Request } from "express";
 import { AnySchema } from "ajv";
 import ajvKeywords from "ajv-keywords";
 import addFormats from "ajv-formats";
-import { AjvBuilder } from "../../core/ajv.builder";
+import { AjvBuilder } from "../../../core/ajv.builder";
 import { AjvException } from "../exeption-filters";
 
 const ajv = AjvBuilder

@@ -1,12 +1,12 @@
 import { Injectable } from "@nestjs/common";
-import { logErrorsAndReturnSomethingWentWrongResult } from "../../core/errors";
+import { logErrorsAndReturnSomethingWentWrongResult } from "../../../core/errors";
 import {
     PriceItemsCrudUseCase,
     ServiceGroupCrudUseCase,
     ServiceSubgroupCrudUseCase
 } from "./price-list.crud-use-cases";
 import { PriceListDto, ServiceSubgroupWithPriceItemsDto } from "../dto/price-list.dtos";
-import { Result } from "../../core/result";
+import { Result } from "../../../core/result";
 
 @Injectable()
 export class GetPriceListUseCase {

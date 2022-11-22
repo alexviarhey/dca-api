@@ -7,7 +7,7 @@ import { Mapper } from "./mapper";
 export abstract class CrudUseCases<T, CreateDto, Dto> {
   protected constructor(
     private readonly model: Model<T>,
-    private readonly mapper: Mapper<T, Dto>,
+    private readonly mapper: Mapper<T, Dto, CreateDto>,
     private modelName: string
   ) {}
 
@@ -34,7 +34,9 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
         return Result.err(`${this.modelName} c одним из переданных параметров уже сущеуствует!`);
       }
 
-      const item = await this.model.create(dto);
+      const schema = this.mapper.mapToSchema(dto)
+
+      const item = await this.model.create(schema);
 
       return Result.ok(
         this.mapper.map(item)

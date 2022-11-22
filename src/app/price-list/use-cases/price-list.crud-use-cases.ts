@@ -1,4 +1,4 @@
-import { CrudUseCases } from "../../core/crud.use-cases";
+import { CrudUseCases } from "../../../core/crud.use-cases";
 import { Injectable } from "@nestjs/common";
 import { IPriceItemSchema, PRICE_ITEMS } from "../schemas/price-item.schema";
 import { InjectModel } from "@nestjs/mongoose";

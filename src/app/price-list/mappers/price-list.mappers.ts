@@ -1,10 +1,16 @@
 import { IPriceItemSchema } from "../schemas/price-item.schema";
-import { PriceItemDto, ServiceGroupDto, ServiceSubgroupDto } from "../dto/price-list.dtos";
+import {
+    CreatePriceItemDto, CreateServiceGroupDto,
+    CreateServiceSubgroupDto,
+    PriceItemDto,
+    ServiceGroupDto,
+    ServiceSubgroupDto
+} from "../dto/price-list.dtos";
 import { IServiceSubgroup } from "../schemas/service-subgroup.schema";
 import { IServiceGroup } from "../schemas/service-group.schema";
-import { Mapper } from "../../core/mapper";
+import { Mapper } from "../../../core/mapper";
 
- class PriceItemMapper extends Mapper<IPriceItemSchema, PriceItemDto> {
+ class PriceItemMapper extends Mapper<IPriceItemSchema, PriceItemDto, CreatePriceItemDto> {
     map(model: IPriceItemSchema): PriceItemDto {
         return {
             _id: model._id.toString(),
@@ -14,9 +20,18 @@ import { Mapper } from "../../core/mapper";
             serviceCost: model.serviceCost
         };
     }
-}
 
-class ServiceSubgroupMapper extends Mapper<IServiceSubgroup, ServiceSubgroupDto> {
+    mapToSchema(dto: CreatePriceItemDto): IPriceItemSchema {
+        return {
+            itemNumber: dto.itemNumber,
+            name: dto.name,
+            materialsCost: dto.materialsCost,
+            serviceCost: dto.serviceCost
+        }
+    }
+ }
+
+class ServiceSubgroupMapper extends Mapper<IServiceSubgroup, ServiceSubgroupDto, CreateServiceSubgroupDto> {
     map(model: IServiceSubgroup): ServiceSubgroupDto{
         return {
             _id: model._id.toString(),
@@ -25,9 +40,17 @@ class ServiceSubgroupMapper extends Mapper<IServiceSubgroup, ServiceSubgroupDto>
             priceItemsIds: model.priceItemsIds
         };
     }
+
+    mapToSchema(dto: CreateServiceSubgroupDto): IServiceSubgroup {
+       return {
+           name: dto.name,
+           subgroupNumber: dto.subgroupNumber,
+           priceItemsIds: dto.priceItemsIds
+       }
+    }
 }
 
-class ServiceGroupMapper extends Mapper<IServiceGroup, ServiceGroupDto> {
+class ServiceGroupMapper extends Mapper<IServiceGroup, ServiceGroupDto, CreateServiceGroupDto> {
     map(model: IServiceGroup): ServiceGroupDto {
         return {
             _id: model._id.toString(),
@@ -35,6 +58,14 @@ class ServiceGroupMapper extends Mapper<IServiceGroup, ServiceGroupDto> {
             groupNumber: model.groupNumber,
             subgroupsIds: model.subgroupsIds
         };
+    }
+
+    mapToSchema(dto: CreateServiceGroupDto): IServiceGroup {
+       return {
+           name: dto.name,
+           groupNumber: dto.groupNumber,
+           subgroupsIds: dto.subgroupsIds
+       }
     }
 }
 

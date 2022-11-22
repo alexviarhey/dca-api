@@ -1,7 +1,7 @@
 import { ObjectId, Schema } from "mongoose"
 
 export interface IPriceItemSchema {
-  _id: ObjectId
+  _id?: ObjectId
   itemNumber: string
   name: string
   materialsCost: number

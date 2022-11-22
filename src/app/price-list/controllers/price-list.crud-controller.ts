@@ -8,7 +8,7 @@ import {
     ServiceGroupCrudUseCase,
     ServiceSubgroupCrudUseCase
 } from "../use-cases/price-list.crud-use-cases";
-import { CustomResponse, CustomResponseType } from "../../core/custom-response";
+import { CustomResponse, CustomResponseType } from "../../../core/custom-response";
 import {
     createGroupSchema,
     CreatePriceItemDto,

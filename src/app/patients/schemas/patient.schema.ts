@@ -6,7 +6,7 @@ import { GenderValues } from "../types/gender"
 import { contactSchema, IContactSchema } from "./contact.schema"
 
 export interface IPatientSchema {
-    _id: string
+    _id?: string
     active: boolean
     birthDate: string
     gender: GenderValues

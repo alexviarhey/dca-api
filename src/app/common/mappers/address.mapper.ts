@@ -1,26 +1,37 @@
-import { Mapper } from "../../core/mapper";
+import { Mapper } from "../../../core/mapper";
 import { IAddressSchema } from "../schemas/address.schema";
-import { AddressDto } from "../dto/adress.dtos";
+import { AddressDto, CreateAddressDto } from "../dto/adress.dtos";
 
 
-export class AddressMapper extends Mapper<IAddressSchema, AddressDto> {
+export class AddressMapper extends Mapper<IAddressSchema, AddressDto, CreateAddressDto> {
     map(model: IAddressSchema) {
-        const text =
-            model.country +
-            model.city +
-            model.street +
-            model.house +
-            model.apartment ? model.apartment : ''
+        return {
+            country: model.country,
+            city: model.city,
+            street: model.street,
+            house: model.house,
+            apartment: model.apartment,
+            text: model.text
+        };
+    }
 
-       return {
-           text,
-           country: model.country,
-           city: model.city,
-           street: model.street,
-           house: model.house,
-           apartment: model.apartment
-       }
+    mapToSchema(dto: CreateAddressDto): IAddressSchema {
+        const text =
+            dto.country +
+            dto.city +
+            dto.street +
+            dto.house +
+            dto.apartment ? dto.apartment : "";
+
+        return {
+            country: dto.country,
+            city: dto.city,
+            street: dto.street,
+            house: dto.house,
+            apartment: dto.apartment,
+            text
+        };
     }
 }
 
-export const addressMapper = new AddressMapper()
+export const addressMapper = new AddressMapper();

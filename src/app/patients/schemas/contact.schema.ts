@@ -19,7 +19,7 @@ export enum ContactRelationship {
 }
 
 export interface IContactSchema {
-    _id: string
+    _id?: string
     relationship: ContactRelationship,
     gender: GenderValues
     name: IHumanNameSchema

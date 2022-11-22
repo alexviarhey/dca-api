@@ -1,7 +1,7 @@
 import { ObjectId, Schema } from "mongoose";
 
 export interface IServiceSubgroup {
-  _id: ObjectId
+  _id?: ObjectId
   subgroupNumber: string
   name: string
   priceItemsIds: string[]
