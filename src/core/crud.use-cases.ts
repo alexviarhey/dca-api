@@ -3,6 +3,7 @@ import { FilterQuery, Model, ProjectionType, SortOrder, UpdateQuery } from "mong
 import { Paginated, Pagination } from "./paginated";
 import { Mapper } from "./mapper";
 import { IPatientSchema } from "../app/patients/schemas/patient.schema";
+import { CreatePatientDto } from "../app/patients/dto/patient.dtos";
 
 
 export abstract class CrudUseCases<T, CreateDto, Dto> {
@@ -48,7 +49,7 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
         }
     }
 
-    async updateOne(id: string, dto: Partial<CreateDto>): Promise<Result<Dto>> {
+    async updateOne(id: string, dto: Partial<CreatePatientDto>): Promise<Result<Dto>> {
         try {
             const updateQuery = Object
                 .keys(dto)

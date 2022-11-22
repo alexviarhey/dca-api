@@ -74,4 +74,8 @@ export class PatientsCrudUseCases extends CrudUseCases<IPatientSchema,
         return super.findWithPagination(filterQuery, paginated);
     }
 
+    async inactivatePatient(_id: string): Promise<Result<PatientDto>> {
+        return super.updateOne(_id, { active: false })
+    }
+
 }

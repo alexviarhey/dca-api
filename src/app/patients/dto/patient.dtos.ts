@@ -17,6 +17,7 @@ export const createPatientValidationSchema = {
         birthDate: { type: "string", pattern: "^\\d{4}-\\d{2}-\\d{2}$" },
         gender: { type: "string", enum: Object.values(GenderValues) },
         name: humanNameValidationSchema,
+        active: { type: 'boolean' },
         telecom: { type: "array", items: contactPointValidationSchema },
         address: { type: "array", items: addressValidationSchema },
         contact: { type: "array", items: contactValidationSchema }
@@ -31,6 +32,15 @@ export const updatePatientValidationSchema = {
         _id: { type: "string" }
     },
     required: ["_id"]
+};
+
+export const inactivatePatientSchema = {
+    type: "object",
+    requiredAll: true,
+    additionalProperties: false,
+    properties: {
+        _id: { type: "string" }
+    }
 };
 
 
@@ -52,6 +62,9 @@ export class CreatePatientDto {
 
     @ApiProperty({ type: CreateContactDto, isArray: true, required: false })
     contact?: CreateContactDto[];
+
+    @ApiProperty({required: false })
+    active?: boolean;
 }
 
 
@@ -103,4 +116,9 @@ export class PatientDto {
 
     @ApiProperty({type: ContactDto, isArray: true})
     contact: ContactDto[];
+}
+
+export class InactivatePatientDto {
+    @ApiProperty()
+    _id: string
 }

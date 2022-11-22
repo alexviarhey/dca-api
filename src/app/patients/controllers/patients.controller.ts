@@ -2,7 +2,7 @@ import { Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
 import { ApiBody, ApiOkResponse, ApiProperty, ApiQuery, ApiTags } from "@nestjs/swagger";
 import {
     CreatePatientDto,
-    createPatientValidationSchema,
+    createPatientValidationSchema, InactivatePatientDto, inactivatePatientSchema,
     PatientDto, UpdatePatientDto,
     updatePatientValidationSchema
 } from "../dto/patient.dtos";
@@ -48,6 +48,17 @@ export class PatientsController {
         return CustomResponse
             .fromResult(res)
             .withSuccessMessage("Пациент успешно создан!");
+    }
+
+    @Put()
+    @ApiOkResponse({ type: CustomResponseType<null> })
+    async inactivate(
+        @AjvBody(inactivatePatientSchema) dto: InactivatePatientDto
+    ) {
+        const res = await this.patientsCrudUseCases.inactivatePatient(dto._id);
+        return CustomResponse
+            .fromResult(res)
+            .withSuccessMessage("Пациент успещно заархивирован!");
     }
 
     @Put()

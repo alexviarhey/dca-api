@@ -49,7 +49,7 @@ class PatientMapper extends Mapper<IPatientSchema, PatientDto, CreatePatientDto>
     mapToSchema(dto: CreatePatientDto): IPatientSchema {
         return {
             //By default all patients is active
-            active: true,
+            active: dto.active !== undefined ? true : dto.active,
             birthDate: dto.birthDate,
             gender: dto.gender,
             name: humanNameMapper.mapToSchema(dto.name),
