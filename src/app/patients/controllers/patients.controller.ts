@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Controller, Get, Param, Post, Put } from "@nestjs/common";
 import { ApiBody, ApiOkResponse, ApiProperty, ApiQuery, ApiTags } from "@nestjs/swagger";
 import {
     CreatePatientDto,

@@ -128,4 +128,3 @@ export class ServiceGroupWithSubgroupsDto {
     @ApiProperty({ type: ServiceSubgroupWithPriceItemsDto, isArray: true})
     subgroups: ServiceSubgroupWithPriceItemsDto[];
 }
-
