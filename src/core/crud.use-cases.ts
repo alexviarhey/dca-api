@@ -3,7 +3,6 @@ import { FilterQuery, Model, ProjectionType, SortOrder, UpdateQuery } from "mong
 import { Paginated, Pagination } from "./paginated";
 import { Mapper } from "./mapper";
 import { IPatientSchema } from "../app/patients/schemas/patient.schema";
-import { map } from "rxjs";
 
 
 export abstract class CrudUseCases<T, CreateDto, Dto> {
