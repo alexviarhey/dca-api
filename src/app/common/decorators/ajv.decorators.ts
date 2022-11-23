@@ -8,6 +8,7 @@ import { AjvException } from "../exeption-filters";
 
 const ajv = AjvBuilder
     .new()
+    .withOptions({coerceTypes: true})
     .bindPlugins(ajvKeywords, addFormats)
     .build();
 
