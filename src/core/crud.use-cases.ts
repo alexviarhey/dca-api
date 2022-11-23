@@ -39,12 +39,11 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
 
             const schema = this.mapper.mapToSchema(dto);
 
-            const item: any = await this.model.create([schema], options);
-
-            console.log("ITEM: ", item)
+            //If option is used return type is Array<HydratedDoc<T>>
+            const items = await this.model.create([schema], options);
 
             return Result.ok(
-                this.mapper.map(item as HydratedDocument<T>)
+                this.mapper.map(items[0])
             );
         } catch (e) {
             return CrudUseCases.logErrorsAndReturnResult("create", e);
