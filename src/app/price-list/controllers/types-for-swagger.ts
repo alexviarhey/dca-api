@@ -22,9 +22,19 @@ export class CreateSubgroupResponse extends CustomResponseType<ServiceSubgroupDt
     data: ServiceSubgroupDto;
 }
 
+export class GetSubgroupsResponse extends CustomResponseType<ServiceSubgroupDto[]> {
+    @ApiProperty({ type: ServiceSubgroupDto, isArray: true })
+    data: ServiceSubgroupDto[]
+}
+
 export class CreateGroupResponse extends CustomResponseType<ServiceGroupDto> {
     @ApiProperty({ type: ServiceGroupDto })
     data: ServiceGroupDto;
+}
+
+export class GetGroupsResponse extends CustomResponseType<ServiceGroupDto[]> {
+    @ApiProperty({ type: ServiceGroupDto, isArray: true })
+    data: ServiceGroupDto[]
 }
 
 

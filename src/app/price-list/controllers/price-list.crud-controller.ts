@@ -1,7 +1,8 @@
 import {
     Controller,
     Get,
-    Post
+    Post,
+    Put
 } from "@nestjs/common";
 import {
     PriceItemsCrudUseCase,
@@ -15,15 +16,17 @@ import {
     createPriceItemSchema,
     CreateServiceGroupDto,
     CreateServiceSubgroupDto,
-    createSubgroupSchema
+    createSubgroupSchema,
+    UpdatePriceItemDto,
+    updatePriceItemShema
 } from "../dto/price-list.dtos";
 import { GetPriceListUseCase } from "../use-cases/get-price-list.use-case";
 import { AjvBody } from "../../common/decorators/ajv.decorators";
-import { ApiBody, ApiOkResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBody, ApiOkResponse, ApiProperty, ApiTags } from "@nestjs/swagger";
 import {
     CreateGroupResponse,
     CreatePriceItemResponse,
-    CreateSubgroupResponse, GetPriceItemsResponse,
+    CreateSubgroupResponse, GetGroupsResponse, GetPriceItemsResponse, GetSubgroupsResponse,
     PriceListResponse
 } from "./types-for-swagger";
 
@@ -67,6 +70,7 @@ export class PriceListCrudController {
             .withSuccessMessage("Элемент прайс-листа успешно создан!");
     }
 
+
     @Get("/items")
     @ApiOkResponse({type: GetPriceItemsResponse})
     async getPriceItems() {
@@ -80,15 +84,18 @@ export class PriceListCrudController {
     async createSubgroup(
         @AjvBody(createSubgroupSchema) createDto: CreateServiceSubgroupDto
     ) {
-
-        const res = await this.serviceSubgroupUseCase.create(
-            createDto,
-            ["name", "subgroupNumber"]
-        );
+        const res = await this.serviceSubgroupUseCase.create(createDto,);
 
         return CustomResponse
             .fromResult(res)
             .withSuccessMessage("Подгруппа успешно создана!");
+    }
+
+    @Get("/subgroups")
+    @ApiOkResponse({type: GetSubgroupsResponse})
+    async getSubgroups() {
+        const res = await this.serviceSubgroupUseCase.find()
+        return CustomResponse.fromResult(res)
     }
 
     @Post("/groups")
@@ -106,6 +113,25 @@ export class PriceListCrudController {
             .fromResult(res)
             .withSuccessMessage("Группа успешно создана!");
     }
+
+
+    @Get("/groups")
+    @ApiOkResponse({type: GetGroupsResponse})
+    async getGroups() {
+        const res = await this.serviceGroupUseCase.find()
+        return CustomResponse.fromResult(res)
+    }
+
+	@Put("/items")
+	@ApiOkResponse()
+	@ApiBody({ type: UpdatePriceItemDto })
+	async updatePriceItem(
+		@AjvBody(updatePriceItemShema) dto: UpdatePriceItemDto
+	) {
+		const res = await this.priceItemsCrudUseCase.update(dto)
+		return CustomResponse.fromResult(res)
+	}
+
 
     //TODO update delete methods need to delete ids from arrays in groups and subgroups
 

@@ -22,9 +22,10 @@ export const createSubgroupSchema = {
     properties: {
         subgroupNumber: numberRules,
         name: nameRules,
-        priceItemsIds: idsRules
+        priceItemsIds: idsRules,
+        groupId: { type: "string" }
     },
-    allRequired: true,
+    required: ["name", "subgroupNumber", "priceItemsIds"],
     additionalProperties: false
 };
 
@@ -66,6 +67,10 @@ export class CreateServiceSubgroupDto {
 
     @ApiProperty()
     priceItemsIds: string[];
+
+    @ApiProperty({ required: false })
+    groupId?: string;
+
 }
 
 export class ServiceSubgroupDto extends CreateServiceSubgroupDto {
@@ -128,3 +133,33 @@ export class ServiceGroupWithSubgroupsDto {
     @ApiProperty({ type: ServiceSubgroupWithPriceItemsDto, isArray: true})
     subgroups: ServiceSubgroupWithPriceItemsDto[];
 }
+
+
+export class UpdatePriceItemDto {
+	@ApiProperty()
+	_id: string
+
+    @ApiProperty({ required: false } )
+    itemNumber?: string;
+
+    @ApiProperty({ required: false } )
+    name?: string;
+
+    @ApiProperty({ required: false } )
+    materialsCost?: number;
+
+    @ApiProperty({ required: false } )
+    serviceCost?: number;
+}
+
+export const updatePriceItemShema = {
+	...createPriceItemSchema,
+	required: ["_id"],
+	properties: {
+		...createPriceItemSchema.properties,
+		_id: { type: "string" }
+	}
+}
+
+
+

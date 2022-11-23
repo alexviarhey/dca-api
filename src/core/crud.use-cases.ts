@@ -1,9 +1,8 @@
 import { Result } from "./result";
-import { FilterQuery, Model, ProjectionType, SortOrder, UpdateQuery } from "mongoose";
+import { FilterQuery, HydratedDocument, Model, ProjectionType, SaveOptions, SortOrder, UpdateQuery } from "mongoose";
 import { Paginated, Pagination } from "./paginated";
 import { Mapper } from "./mapper";
 import { IPatientSchema } from "../app/patients/schemas/patient.schema";
-import { CreatePatientDto } from "../app/patients/dto/patient.dtos";
 
 
 export abstract class CrudUseCases<T, CreateDto, Dto> {
@@ -17,7 +16,8 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
     async create(
         dto: CreateDto,
         uniqueFields?: Array<keyof CreateDto>,
-        filterQuery?: FilterQuery<T>
+        filterQuery?: FilterQuery<T>,
+        options?: SaveOptions
     ): Promise<Result<Dto>> {
         try {
 
@@ -39,36 +39,57 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
 
             const schema = this.mapper.mapToSchema(dto);
 
-            const item = await this.model.create(schema);
+            const item: any = await this.model.create([schema], options);
 
             return Result.ok(
-                this.mapper.map(item)
+                this.mapper.map(item as HydratedDocument<T>)
             );
         } catch (e) {
             return CrudUseCases.logErrorsAndReturnResult("create", e);
         }
     }
 
-    async updateOne(id: string, dto: Partial<CreatePatientDto>): Promise<Result<Dto>> {
+    async findOne(filterQuery: FilterQuery<T>): Promise<Result<Dto | null>> {
         try {
-            const updateQuery = Object
-                .keys(dto)
-                .reduce<UpdateQuery<IPatientSchema>>((updateQuery, k) => {
-                    updateQuery.$set = { [k]: dto[k] };
-                    return updateQuery;
-                }, {});
+            return await this.model.findOne(filterQuery);
+        } catch (e) {
+            return CrudUseCases.logErrorsAndReturnResult("findOne", e);
+        }
+
+    }
+
+    async updateOne(
+        id: string,
+        dto?: Partial<CreateDto>,
+        update?: UpdateQuery<T>
+    ): Promise<Result<Dto>> {
+        try {
+            let updateQuery: UpdateQuery<T>;
+
+            if (dto) {
+                updateQuery = Object
+                    .keys(dto)
+                    .reduce<UpdateQuery<IPatientSchema>>((updateQuery, k) => {
+                        updateQuery.$set = { [k]: dto[k] };
+                        return updateQuery;
+                    }, {});
+            }
+
+            if(update) {
+                updateQuery = update
+            }
 
             const updatedItem = await this.model.findOneAndUpdate(
                 { _id: id },
-                updateQuery,
+                updateQuery || {},
                 { new: true }
             );
 
-            if(!updatedItem) {
-                 return Result.err(`${this.modelName} с id ${id} не найден!`);
+            if (!updatedItem) {
+                return Result.err(`${this.modelName} с id ${id} не найден!`);
             }
 
-            return Result.ok(this.mapper.map(updatedItem))
+            return Result.ok(this.mapper.map(updatedItem));
 
         } catch (e) {
             return CrudUseCases.logErrorsAndReturnResult("update", e);
