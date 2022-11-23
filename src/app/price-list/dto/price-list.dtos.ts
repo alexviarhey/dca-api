@@ -74,6 +74,7 @@ export class CreateServiceSubgroupDto {
 }
 
 export class ServiceSubgroupDto extends CreateServiceSubgroupDto {
+    @ApiProperty()
     _id: string;
 }
 
@@ -90,6 +91,7 @@ export class CreateServiceGroupDto {
 }
 
 export class ServiceGroupDto extends CreateServiceGroupDto {
+    @ApiProperty()
     _id: string;
 }
 
