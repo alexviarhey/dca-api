@@ -56,7 +56,6 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
         } catch (e) {
             return CrudUseCases.logErrorsAndReturnResult("findOne", e);
         }
-
     }
 
     async updateOne(

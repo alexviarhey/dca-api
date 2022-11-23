@@ -6,8 +6,8 @@ export const getPatientsFiltersSchema = {
     required: ["page", "size"],
     additionalProperties: false,
     properties: {
-        page: { type: "number", min: 1 },
-        size: { type: "number", min: 1 },
+        page: { type: "number", minimum: 0 },
+        size: { type: "number", minimum: 1 },
         name: { type: "string" },
         address: { type: "string" },
         active: { type: "boolean" },
