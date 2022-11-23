@@ -41,6 +41,8 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
 
             const item: any = await this.model.create([schema], options);
 
+            console.log("ITEM: ", item)
+
             return Result.ok(
                 this.mapper.map(item as HydratedDocument<T>)
             );
