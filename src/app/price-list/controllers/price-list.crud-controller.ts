@@ -1,5 +1,7 @@
 import {
+    Body,
     Controller,
+    Delete,
     Get,
     Post,
     Put
@@ -9,7 +11,7 @@ import {
     ServiceGroupCrudUseCase,
     ServiceSubgroupCrudUseCase
 } from "../use-cases/price-list.crud-use-cases";
-import { CustomResponse } from "../../../core/custom-response";
+import { CustomResponse, CustomResponseType } from "../../../core/custom-response";
 import {
     createGroupSchema,
     CreatePriceItemDto,
@@ -22,13 +24,14 @@ import {
 } from "../dto/price-list.dtos";
 import { GetPriceListUseCase } from "../use-cases/get-price-list.use-case";
 import { AjvBody } from "../../common/decorators/ajv.decorators";
-import { ApiBody, ApiOkResponse, ApiProperty, ApiTags } from "@nestjs/swagger";
+import { ApiBody, ApiOkResponse, ApiTags } from "@nestjs/swagger";
 import {
     CreateGroupResponse,
     CreatePriceItemResponse,
     CreateSubgroupResponse, GetGroupsResponse, GetPriceItemsResponse, GetSubgroupsResponse,
     PriceListResponse
 } from "./types-for-swagger";
+import { IdDto } from "../../common/dto/id.dto";
 
 
 @ApiTags("Price List")
@@ -72,7 +75,7 @@ export class PriceListCrudController {
 
 
     @Get("/items")
-    @ApiOkResponse({type: GetPriceItemsResponse})
+    @ApiOkResponse({ type: GetPriceItemsResponse })
     async getPriceItems() {
         const res = await this.priceItemsCrudUseCase.find()
         return CustomResponse.fromResult(res)
@@ -92,7 +95,7 @@ export class PriceListCrudController {
     }
 
     @Get("/subgroups")
-    @ApiOkResponse({type: GetSubgroupsResponse})
+    @ApiOkResponse({ type: GetSubgroupsResponse })
     async getSubgroups() {
         const res = await this.serviceSubgroupUseCase.find()
         return CustomResponse.fromResult(res)
@@ -116,56 +119,59 @@ export class PriceListCrudController {
 
 
     @Get("/groups")
-    @ApiOkResponse({type: GetGroupsResponse})
+    @ApiOkResponse({ type: GetGroupsResponse })
     async getGroups() {
         const res = await this.serviceGroupUseCase.find()
         return CustomResponse.fromResult(res)
     }
 
-	@Put("/items")
-	@ApiOkResponse()
-	@ApiBody({ type: UpdatePriceItemDto })
-	async updatePriceItem(
-		@AjvBody(updatePriceItemShema) dto: UpdatePriceItemDto
-	) {
-		const res = await this.priceItemsCrudUseCase.update(dto)
-		return CustomResponse.fromResult(res)
-	}
+    @Put("/items")
+    @ApiOkResponse({ type: CustomResponseType })
+    @ApiBody({ type: UpdatePriceItemDto })
+    async updatePriceItem(
+        @AjvBody(updatePriceItemShema) dto: UpdatePriceItemDto
+    ) {
+        const res = await this.priceItemsCrudUseCase.update(dto)
+        return CustomResponse.fromResult(res)
+    }
 
+    @Delete("/group")
+    @ApiBody({ type: IdDto})
+    @ApiOkResponse({ type: CustomResponseType})
+    async deleteGroup(
+		@Body() dto: IdDto
+    ) {
+        const res = await this.serviceGroupUseCase.deleteById(dto.id);
 
-    //TODO update delete methods need to delete ids from arrays in groups and subgroups
+        return CustomResponse
+            .fromResult(res)
+            .withSuccessMessage("Группа успешно удалена!");
+    }
 
-    // @Delete("/item/:id")
-    // async deletePriceItem(
-    //     @Param("id") id: string
-    // ) {
-    //     const res = await this.priceItemsCrudUseCase.deleteById(id);
-    //
-    //     return CustomResponse
-    //         .fromResult(res)
-    //         .withSuccessMessage("Элемент прайс-листа успешно удален!");
-    // }
-    //
-    // @Delete("/subgroup/:id")
-    // async deleteSubgroup(
-    //     @Param("id") id: string
-    // ) {
-    //
-    //     const res = await this.serviceSubgroupUseCase.deleteById(id);
-    //
-    //     return CustomResponse
-    //         .fromResult(res)
-    //         .withSuccessMessage("Подгруппа успешно удалена!");
-    // }
-    //
-    // @Delete("/group")
-    // async deleteGroup(
-    //     @Param("id") id: string
-    // ) {
-    //     const res = await this.serviceGroupUseCase.deleteById(id);
-    //
-    //     return CustomResponse
-    //         .fromResult(res)
-    //         .withSuccessMessage("Группа успешно удалена!");
-    // }
+    @Delete("/subgroup")
+    @ApiBody({ type: IdDto})
+    @ApiOkResponse({ type: CustomResponseType })
+    async deleteSubgroup(
+        @Body() dto: IdDto
+    ) {
+        const res = await this.serviceSubgroupUseCase.deleteOne(dto.id)
+
+        return CustomResponse
+            .fromResult(res)
+            .withSuccessMessage("Подгруппа успешно удалена!");
+    }
+
+    @Delete("/item")
+    @ApiBody({ type: IdDto})
+    @ApiOkResponse({ type: CustomResponseType })
+    async deletePriceItem(
+        @Body() dto: IdDto
+    ) {
+        const res = await this.priceItemsCrudUseCase.deleteOne(dto.id);
+
+        return CustomResponse
+            .fromResult(res)
+            .withSuccessMessage("Элемент прайс-листа успешно удален!");
+    }
+
 }

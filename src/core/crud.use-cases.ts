@@ -1,8 +1,9 @@
 import { Result } from "./result";
-import { FilterQuery, HydratedDocument, Model, ProjectionType, SaveOptions, SortOrder, UpdateQuery } from "mongoose";
+import { FilterQuery, Model, ProjectionType, SaveOptions, SortOrder, UpdateQuery } from "mongoose";
 import { Paginated, Pagination } from "./paginated";
 import { Mapper } from "./mapper";
 import { IPatientSchema } from "../app/patients/schemas/patient.schema";
+import {DeleteResult} from 'mongodb'
 
 
 export abstract class CrudUseCases<T, CreateDto, Dto> {
@@ -96,14 +97,14 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
         }
     }
 
-    async deleteById(id: string): Promise<Result> {
+    async deleteById(id: string): Promise<Result<DeleteResult>> {
         try {
 
-            await this.model.deleteOne({
+            const res =  await this.model.deleteOne({
                 _id: id
             });
 
-            return Result.ok();
+            return Result.ok(res);
 
         } catch (e) {
             return CrudUseCases.logErrorsAndReturnResult("create", e);

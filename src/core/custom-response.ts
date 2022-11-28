@@ -19,7 +19,7 @@ export enum ResultCode {
     ERROR = 1
 }
 
-export abstract class CustomResponseType<T> {
+export abstract class CustomResponseType<T > {
     @ApiProperty()
     resultCode: ResultCode;
 

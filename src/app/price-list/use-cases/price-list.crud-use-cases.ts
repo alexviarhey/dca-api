@@ -2,7 +2,7 @@ import { CrudUseCases } from "../../../core/crud.use-cases";
 import { Injectable } from "@nestjs/common";
 import { IPriceItemSchema, PRICE_ITEMS } from "../schemas/price-item.schema";
 import { InjectConnection, InjectModel } from "@nestjs/mongoose";
-import mongoose, { FilterQuery, Model } from "mongoose";
+import mongoose, { ClientSession, FilterQuery, Model } from "mongoose";
 import { IServiceSubgroup, SERVICE_SUBGROUPS } from "../schemas/service-subgroup.schema";
 import { IServiceGroup, SERVICE_GROUPS } from "../schemas/service-group.schema";
 import {
@@ -19,13 +19,18 @@ import {
     serviceSubgroupMapper
 } from "../mappers/price-list.mappers";
 import { Result } from "src/core/result";
+import { DeleteResult } from "mongodb";
 
 
 @Injectable()
 export class PriceItemsCrudUseCase extends CrudUseCases<IPriceItemSchema, CreatePriceItemDto, PriceItemDto> {
     constructor(
         @InjectModel(PRICE_ITEMS)
-            priceItemModel: Model<IPriceItemSchema>
+        private readonly priceItemModel: Model<IPriceItemSchema>,
+        @InjectModel(SERVICE_SUBGROUPS)
+        private readonly serviceSubgroupModel: Model<IServiceSubgroup>,
+        @InjectConnection()
+        private readonly connection: mongoose.Connection
     ) {
         super(
             priceItemModel,
@@ -53,6 +58,18 @@ export class PriceItemsCrudUseCase extends CrudUseCases<IPriceItemSchema, Create
         }
 
         return super.updateOne(_id, dto);
+    }
+
+    async deleteOne(id: string): Promise<Result> {
+        const session = await this.connection.startSession();
+
+        return await deletePriceListChildElement<IServiceSubgroup>(
+            session,
+            super.deleteById.bind(this),
+            this.serviceSubgroupModel,
+            id,
+            "priceItemsIds"
+        );
     }
 }
 
@@ -110,6 +127,18 @@ export class ServiceSubgroupCrudUseCase extends CrudUseCases<IServiceSubgroup, C
             await session.endSession();
         }
     }
+
+    async deleteOne(id: string): Promise<Result> {
+        const session = await this.connection.startSession();
+
+        return await deletePriceListChildElement<IServiceGroup>(
+            session,
+            super.deleteById.bind(this),
+            this.serviceGroupModel,
+            id,
+            "subgroupsIds"
+        );
+    }
 }
 
 @Injectable()
@@ -124,4 +153,41 @@ export class ServiceGroupCrudUseCase extends CrudUseCases <IServiceGroup, Create
         );
     }
 }
+
+//Need for delete priceItem or subgroup
+const deletePriceListChildElement = async <ParentModel>(
+    session: ClientSession,
+    deleteById: (id: string) => Promise<Result<DeleteResult>>,
+    parentModel: Model<ParentModel>,
+    childId: string,
+    childIdsFieldName: keyof ParentModel
+): Promise<Result> => {
+    session.startTransaction();
+
+    try {
+        //First delete child
+        let res = await deleteById(childId);
+        let isDeleteError = !res.isSuccess || !res.data.deletedCount;
+        if (isDeleteError) throw new Error();
+
+        //Second delete childId from parent childIds field
+        const fieldObj = { [childIdsFieldName]: childId } as { [P in keyof ParentModel]: string };
+
+        await parentModel.updateMany(
+            fieldObj,
+            { $pull: fieldObj }
+        );
+
+        await session.commitTransaction();
+
+        return Result.ok();
+    } catch (e) {
+        console.log("DeletePriceListChildElement error: ", e);
+        await session.abortTransaction();
+        return Result.somethingWentWrong();
+    } finally {
+        await session.endSession();
+    }
+};
+
 
