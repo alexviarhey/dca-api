@@ -35,7 +35,7 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
             const existedItem = await this.model.findOne(filter);
 
             if (existedItem) {
-                return Result.err(`${this.modelName} c одним из переданных параметров уже сущеуствует!`);
+                return Result.err(`${this.modelName} c одним из переданных параметров уже существует!`);
             }
 
             const schema = this.mapper.mapToSchema(dto);
