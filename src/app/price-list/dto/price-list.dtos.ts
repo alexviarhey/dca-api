@@ -1,6 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-const costRules = { type: "number", minimum: 0.1 };
 const numberRules = { type: "string", pattern: "^\\d*\\d(.\\d*\\d)*$" };
 const nameRules = { type: "string", transform: ["trim"], minLength: 3, maxLength: 40 };
 const idsRules = { type: "array", items: { type: "string" } };
@@ -10,8 +9,8 @@ export const createPriceItemSchema = {
     properties: {
         name: nameRules,
         itemNumber: numberRules,
-        materialsCost: costRules,
-        serviceCost: costRules
+        materialsCost: { type: "number", minimum: 0.1 },
+        serviceCost: { type: "number", minimum: 0 }
     },
     allRequired: true,
     additionalProperties: false
