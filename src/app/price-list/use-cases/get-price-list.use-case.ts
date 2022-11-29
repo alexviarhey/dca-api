@@ -51,7 +51,8 @@ export class GetPriceListUseCase {
                         name: sg.name,
                         materialsCost: totalMaterialsCost,
                         serviceCost: totalServiceCost,
-                        priceItems
+                        priceItems,
+                        totalCost: totalMaterialsCost + totalServiceCost
                     };
                 });
 

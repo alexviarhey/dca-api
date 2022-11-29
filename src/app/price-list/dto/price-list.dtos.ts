@@ -99,6 +99,9 @@ export class ServiceGroupDto extends CreateServiceGroupDto {
 export class PriceItemDto extends CreatePriceItemDto {
     @ApiProperty()
     _id: string
+
+    @ApiProperty()
+    totalCost: number
 }
 
 export class ServiceSubgroupWithPriceItemsDto {
@@ -116,6 +119,9 @@ export class ServiceSubgroupWithPriceItemsDto {
 
     @ApiProperty()
     serviceCost: number;
+
+    @ApiProperty()
+    totalCost: number;
 
     @ApiProperty({type: PriceItemDto, isArray: true})
     priceItems: PriceItemDto[];

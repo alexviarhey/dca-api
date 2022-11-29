@@ -17,7 +17,8 @@ import { Mapper } from "../../../core/mapper";
             itemNumber: model.itemNumber,
             name: model.name,
             materialsCost: model.materialsCost,
-            serviceCost: model.serviceCost
+            serviceCost: model.serviceCost,
+            totalCost: model.serviceCost + model.materialsCost
         };
     }
 
@@ -32,7 +33,7 @@ import { Mapper } from "../../../core/mapper";
  }
 
 class ServiceSubgroupMapper extends Mapper<IServiceSubgroup, ServiceSubgroupDto, CreateServiceSubgroupDto> {
-    map(model: IServiceSubgroup): ServiceSubgroupDto{
+    map(model: IServiceSubgroup): ServiceSubgroupDto {
         return {
             _id: model._id.toString(),
             name: model.name,
