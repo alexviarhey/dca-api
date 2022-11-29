@@ -159,8 +159,7 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
 
     async find(
         filters?: FilterQuery<T>,
-        pagination?: Pagination,
-        sort?: { [key in keyof T]: SortOrder },
+        sort?: { [key in keyof T]?: SortOrder },
         projection?: ProjectionType<T>
     ): Promise<Result<Dto[]>> {
         try {

@@ -17,7 +17,7 @@ export class Result<T = null> {
         return this._error;
     }
 
-    public static ok<T>(data?: T): Result<T> {
+    public static ok<T>(data: T = null): Result<T> {
         return new Result<T>(true, data, null);
     }
 

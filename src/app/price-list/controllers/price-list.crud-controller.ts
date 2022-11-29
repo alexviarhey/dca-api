@@ -77,8 +77,11 @@ export class PriceListCrudController {
     @Get("/items")
     @ApiOkResponse({ type: GetPriceItemsResponse })
     async getPriceItems() {
-        const res = await this.priceItemsCrudUseCase.find()
-        return CustomResponse.fromResult(res)
+        const res = await this.priceItemsCrudUseCase.find(
+            {},
+            {itemNumber: 'ascending'}
+        );
+        return CustomResponse.fromResult(res);
     }
 
     @Post("/subgroups")
@@ -87,7 +90,7 @@ export class PriceListCrudController {
     async createSubgroup(
         @AjvBody(createSubgroupSchema) createDto: CreateServiceSubgroupDto
     ) {
-        const res = await this.serviceSubgroupUseCase.create(createDto,);
+        const res = await this.serviceSubgroupUseCase.create(createDto);
 
         return CustomResponse
             .fromResult(res)
@@ -97,8 +100,11 @@ export class PriceListCrudController {
     @Get("/subgroups")
     @ApiOkResponse({ type: GetSubgroupsResponse })
     async getSubgroups() {
-        const res = await this.serviceSubgroupUseCase.find()
-        return CustomResponse.fromResult(res)
+        const res = await this.serviceSubgroupUseCase.find(
+            {},
+            { subgroupNumber: 'ascending' }
+        );
+        return CustomResponse.fromResult(res);
     }
 
     @Post("/groups")
@@ -121,8 +127,11 @@ export class PriceListCrudController {
     @Get("/groups")
     @ApiOkResponse({ type: GetGroupsResponse })
     async getGroups() {
-        const res = await this.serviceGroupUseCase.find()
-        return CustomResponse.fromResult(res)
+        const res = await this.serviceGroupUseCase.find(
+            {},
+            { groupNumber: 'ascending' }
+        );
+        return CustomResponse.fromResult(res);
     }
 
     @Put("/items")
@@ -131,15 +140,15 @@ export class PriceListCrudController {
     async updatePriceItem(
         @AjvBody(updatePriceItemShema) dto: UpdatePriceItemDto
     ) {
-        const res = await this.priceItemsCrudUseCase.update(dto)
-        return CustomResponse.fromResult(res)
+        const res = await this.priceItemsCrudUseCase.update(dto);
+        return CustomResponse.fromResult(res);
     }
 
     @Delete("/group")
-    @ApiBody({ type: IdDto})
-    @ApiOkResponse({ type: CustomResponseType})
+    @ApiBody({ type: IdDto })
+    @ApiOkResponse({ type: CustomResponseType })
     async deleteGroup(
-		@Body() dto: IdDto
+        @Body() dto: IdDto
     ) {
         const res = await this.serviceGroupUseCase.deleteById(dto.id);
 
@@ -149,12 +158,12 @@ export class PriceListCrudController {
     }
 
     @Delete("/subgroup")
-    @ApiBody({ type: IdDto})
+    @ApiBody({ type: IdDto })
     @ApiOkResponse({ type: CustomResponseType })
     async deleteSubgroup(
         @Body() dto: IdDto
     ) {
-        const res = await this.serviceSubgroupUseCase.deleteOne(dto.id)
+        const res = await this.serviceSubgroupUseCase.deleteOne(dto.id);
 
         return CustomResponse
             .fromResult(res)
@@ -162,7 +171,7 @@ export class PriceListCrudController {
     }
 
     @Delete("/item")
-    @ApiBody({ type: IdDto})
+    @ApiBody({ type: IdDto })
     @ApiOkResponse({ type: CustomResponseType })
     async deletePriceItem(
         @Body() dto: IdDto
