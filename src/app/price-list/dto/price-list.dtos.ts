@@ -123,7 +123,7 @@ export class ServiceSubgroupWithPriceItemsDto {
     @ApiProperty()
     totalCost: number;
 
-    @ApiProperty({type: PriceItemDto, isArray: true})
+    @ApiProperty({ type: PriceItemDto, isArray: true })
     priceItems: PriceItemDto[];
 }
 
@@ -137,36 +137,34 @@ export class ServiceGroupWithSubgroupsDto {
     @ApiProperty()
     name: string;
 
-    @ApiProperty({ type: ServiceSubgroupWithPriceItemsDto, isArray: true})
+    @ApiProperty({ type: ServiceSubgroupWithPriceItemsDto, isArray: true })
     subgroups: ServiceSubgroupWithPriceItemsDto[];
 }
 
 
 export class UpdatePriceItemDto {
-	@ApiProperty()
-	_id: string
+    @ApiProperty()
+    _id: string
 
-    @ApiProperty({ required: false } )
+    @ApiProperty({ required: false })
     itemNumber?: string;
 
-    @ApiProperty({ required: false } )
+    @ApiProperty({ required: false })
     name?: string;
 
-    @ApiProperty({ required: false } )
+    @ApiProperty({ required: false })
     materialsCost?: number;
 
-    @ApiProperty({ required: false } )
+    @ApiProperty({ required: false })
     serviceCost?: number;
 }
 
 export const updatePriceItemShema = {
-	...createPriceItemSchema,
-	required: ["_id"],
-	properties: {
-		...createPriceItemSchema.properties,
-		_id: { type: "string" }
-	}
+    ...createPriceItemSchema,
+    requredAll: false,
+    required: ["_id"],
+    properties: {
+        ...createPriceItemSchema.properties,
+        _id: { type: "string" }
+    }
 }
-
-
-
