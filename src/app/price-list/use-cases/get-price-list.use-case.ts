@@ -35,7 +35,7 @@ export class GetPriceListUseCase {
                 const subgroups = g.subgroupsIds.map(id => subgroupsMap.get(id));
 
                 const subgroupsWithPriceItems = subgroups.map<ServiceSubgroupWithPriceItemsDto>(sg => {
-                    const priceItems = sg.priceItemsIds.map(id => priceItemsMap.get(id));
+                    const priceItems = sg.priceItems.map(pi => priceItemsMap.get(pi._id));
 
                     let totalMaterialsCost = 0;
                     let totalServiceCost = 0;

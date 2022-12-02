@@ -38,7 +38,7 @@ class ServiceSubgroupMapper extends Mapper<IServiceSubgroup, ServiceSubgroupDto,
             _id: model._id.toString(),
             name: model.name,
             subgroupNumber: model.subgroupNumber,
-            priceItemsIds: model.priceItemsIds
+            priceItems: model.priceItems
         };
     }
 
@@ -46,7 +46,7 @@ class ServiceSubgroupMapper extends Mapper<IServiceSubgroup, ServiceSubgroupDto,
        return {
            name: dto.name,
            subgroupNumber: dto.subgroupNumber,
-           priceItemsIds: dto.priceItemsIds
+           priceItems: dto.priceItems
        }
     }
 }

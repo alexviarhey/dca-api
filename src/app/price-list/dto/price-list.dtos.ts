@@ -21,7 +21,7 @@ export const createSubgroupSchema = {
     properties: {
         subgroupNumber: numberRules,
         name: nameRules,
-        priceItemsIds: idsRules,
+        priceItemsIds: { type: 'array', items: { type: "object", properties: { id: { type: "string" }, quantity: { type: "number", minimum: 1 } } } },
         groupId: { type: "string" }
     },
     required: ["name", "subgroupNumber", "priceItemsIds"],
@@ -57,15 +57,24 @@ export class CreatePriceItemDto {
     serviceCost: number;
 }
 
+
+export class PriceItemsWithQuantity {
+    @ApiProperty()
+    _id: string
+
+    @ApiProperty()
+    quantity: number
+}
 export class CreateServiceSubgroupDto {
     @ApiProperty()
     subgroupNumber: string;
 
+
     @ApiProperty()
     name: string;
 
-    @ApiProperty()
-    priceItemsIds: string[];
+    @ApiProperty({ type: PriceItemsWithQuantity, isArray: true })
+    priceItems: PriceItemsWithQuantity[];
 
     @ApiProperty({ required: false })
     groupId?: string;

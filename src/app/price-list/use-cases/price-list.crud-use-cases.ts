@@ -68,7 +68,7 @@ export class PriceItemsCrudUseCase extends CrudUseCases<IPriceItemSchema, Create
             super.deleteById.bind(this),
             this.serviceSubgroupModel,
             id,
-            "priceItemsIds"
+            "priceItems"
         );
     }
 }
