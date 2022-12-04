@@ -177,3 +177,18 @@ export const updatePriceItemShema = {
         _id: { type: "string" }
     }
 }
+
+
+export class UpdateGroupDto {
+    @ApiProperty()
+    _id: string
+
+    @ApiProperty({ required: false })
+    groupNumber?: string;
+
+    @ApiProperty({ required: false })
+    name?: string;
+
+    @ApiProperty({ required: false })
+    subgroupsIds?: string[];
+}

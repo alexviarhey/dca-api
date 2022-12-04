@@ -59,18 +59,62 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
         }
     }
 
+
+    async patchUpdate(
+        id: string,
+        dto: Partial<CreateDto>,
+        uniqueFields?: { and?: Array<keyof T>, or?: Array<keyof T> },
+    ) {
+       try {
+
+           let partialSchema = this.mapper.mapToSchemaPartial(dto)
+
+           let filterQuery: FilterQuery<T> = {}
+
+           if(uniqueFields) {
+               const andFields = uniqueFields.and
+               const orFields = uniqueFields.or
+
+               if(andFields && !orFields) {
+                   andFields.forEach(f => {
+                       if(partialSchema[f]) {
+                           filterQuery[f] = partialSchema[f]
+                       }
+                   })
+               }
+
+               if(orFields && !andFields) {
+                   filterQuery.$or = []
+
+                   orFields.forEach(f => {
+                       if(partialSchema[f]) {
+                           filterQuery.$or.push({ [f]: partialSchema[f] })
+                       }
+                   })
+               }
+           }
+
+       } catch(e) {
+           return CrudUseCases.logErrorsAndReturnResult("patchUpdate", e);
+       }
+    }
+
+
     async updateOne(
         id: string,
         dto?: Partial<CreateDto>,
         update?: UpdateQuery<T>
     ): Promise<Result<Dto>> {
         try {
+
             let updateQuery: UpdateQuery<T>;
+
 
             if (dto) {
                 updateQuery = Object
                     .keys(dto)
-                    .reduce<UpdateQuery<IPatientSchema>>((updateQuery, k) => {
+                    //TODO FIX THAT I THINK NEED PARTIAL MAPPER TO SCHEMA
+                    .reduce<UpdateQuery<any>>((updateQuery, k) => {
                         updateQuery.$set = { [k]: dto[k] };
                         return updateQuery;
                     }, {});
@@ -175,6 +219,16 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
 
         } catch (e) {
             return CrudUseCases.logErrorsAndReturnResult("find", e);
+        }
+    }
+
+    public isModelExist(
+
+    ) {
+        try {
+
+        } catch(e) {
+            return CrudUseCases.logErrorsAndReturnResult("isModelExist", e);
         }
     }
 

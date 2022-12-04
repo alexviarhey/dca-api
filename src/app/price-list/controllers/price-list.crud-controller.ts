@@ -18,7 +18,7 @@ import {
     createPriceItemSchema,
     CreateServiceGroupDto,
     CreateServiceSubgroupDto,
-    createSubgroupSchema,
+    createSubgroupSchema, UpdateGroupDto,
     UpdatePriceItemDto,
     updatePriceItemShema
 } from "../dto/price-list.dtos";
@@ -79,7 +79,7 @@ export class PriceListCrudController {
     async getPriceItems() {
         const res = await this.priceItemsCrudUseCase.find(
             {},
-            {itemNumber: 'ascending'}
+            { itemNumber: 'ascending' }
         );
         return CustomResponse.fromResult(res);
     }
@@ -121,6 +121,17 @@ export class PriceListCrudController {
         return CustomResponse
             .fromResult(res)
             .withSuccessMessage("Группа успешно создана!");
+    }
+
+    @Put("/groups")
+    async udpateGroup(
+        @AjvBody() dto: UpdateGroupDto
+    ) {
+        const res = await this.serviceGroupUseCase.update(dto)
+
+        return CustomResponse
+            .fromResult(res)
+            .withSuccessMessage("Группа успешно обновлена!");
     }
 
 

@@ -10,7 +10,7 @@ import {
     CreateServiceSubgroupDto,
     PriceItemDto,
     ServiceGroupDto,
-    ServiceSubgroupDto,
+    ServiceSubgroupDto, UpdateGroupDto,
     UpdatePriceItemDto
 } from "../dto/price-list.dtos";
 import {
@@ -151,6 +151,27 @@ export class ServiceGroupCrudUseCase extends CrudUseCases <IServiceGroup, Create
             serviceGroupMapper,
             "Группа"
         );
+    }
+
+    async update({ _id, ...dto }: UpdateGroupDto): Promise<Result<ServiceGroupDto>> {
+
+        const filterQuery: FilterQuery<IServiceGroup> = { $or: [] };
+
+        if (dto.groupNumber) {
+            filterQuery.$or.push({ groupNumber: dto.groupNumber });
+        }
+
+        if (dto.name) {
+            filterQuery.$or.push({ name: dto.name });
+        }
+
+        const existItemWithNewProps = await super.findOne(filterQuery);
+
+        if (existItemWithNewProps) {
+            return Result.err("Группа с таким именем или номером уже сущесутвует!");
+        }
+
+        return super.updateOne(_id, dto);
     }
 }
 
