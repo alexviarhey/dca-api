@@ -8,7 +8,7 @@ export class Result<T = null> {
     }
 
     get data(): T {
-        if (!this._data) throw new Error("Result error: no data found!");
+        if (this._data === undefined) throw new Error("Result error: no data found!");
         return this._data;
     }
 
