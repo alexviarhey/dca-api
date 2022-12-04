@@ -21,10 +21,10 @@ export const createSubgroupSchema = {
     properties: {
         subgroupNumber: numberRules,
         name: nameRules,
-        priceItemsIds: { type: 'array', items: { type: "object", properties: { id: { type: "string" }, quantity: { type: "number", minimum: 1 } } } },
+        priceItems: { type: 'array', items: { type: "object", properties: { id: { type: "string" }, quantity: { type: "number", minimum: 1 } } } },
         groupId: { type: "string" }
     },
-    required: ["name", "subgroupNumber", "priceItemsIds"],
+    required: ["name", "subgroupNumber", "priceItems"],
     additionalProperties: false
 };
 

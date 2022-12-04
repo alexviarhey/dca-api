@@ -96,6 +96,8 @@ export class ServiceSubgroupCrudUseCase extends CrudUseCases<IServiceSubgroup, C
 
         let res: Result<ServiceSubgroupDto>;
 
+        console.log("HELLO", dto)
+
         try {
             res = await super.create(
                 dto,
