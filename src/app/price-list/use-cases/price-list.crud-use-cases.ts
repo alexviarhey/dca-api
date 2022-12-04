@@ -119,6 +119,8 @@ export class ServiceSubgroupCrudUseCase extends CrudUseCases<IServiceSubgroup, C
             }
 
             await session.commitTransaction();
+
+            return Result.ok()
         } catch (e) {
             console.log("ServiceSubgroupCrudUseCase error: ", e);
             await session.abortTransaction();
