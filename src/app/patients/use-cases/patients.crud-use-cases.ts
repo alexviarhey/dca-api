@@ -27,7 +27,9 @@ export class PatientsCrudUseCases extends CrudUseCases<IPatientSchema,
 
     async create(dto: CreatePatientDto): Promise<Result<PatientDto>> {
 
-        let filterQuery: FilterQuery<IPatientSchema>;
+        let filterQuery: FilterQuery<IPatientSchema> = {
+            name: dto.name
+        }
 
         if (dto.telecom && dto.telecom.length) {
             const phone = dto.telecom.find(t => t.system === ContactPointSystem.PHONE);
@@ -38,11 +40,7 @@ export class PatientsCrudUseCases extends CrudUseCases<IPatientSchema,
             }
         }
 
-        return super.create(
-            dto,
-            null,
-            filterQuery
-        );
+        return super.create( dto, filterQuery);
     }
 
     async findWithPagination(filters: GetPatientsFilters): Promise<Result<Paginated<PatientDto>>> {

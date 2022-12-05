@@ -1,12 +1,16 @@
 import { Result } from "./result";
-import { FilterQuery, Model, ProjectionType, SaveOptions, SortOrder, UpdateQuery } from "mongoose";
+import { AnyKeys, FilterQuery, Model, ProjectionType, SaveOptions, SortOrder, UpdateQuery } from "mongoose";
 import { Paginated, Pagination } from "./paginated";
 import { Mapper } from "./mapper";
-import { IPatientSchema } from "../app/patients/schemas/patient.schema";
-import {DeleteResult} from 'mongodb'
+import { DeleteResult } from "mongodb";
 
+type UniqueFields<T> = {
+    and?: Array<keyof T>,
+    or?: Array<keyof T>
+}
 
 export abstract class CrudUseCases<T, CreateDto, Dto> {
+
     protected constructor(
         private readonly model: Model<T>,
         private readonly mapper: Mapper<T, Dto, CreateDto>,
@@ -16,29 +20,17 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
 
     async create(
         dto: CreateDto,
-        uniqueFields?: Array<keyof CreateDto>,
         filterQuery?: FilterQuery<T>,
+        uniqueFields?: UniqueFields<T>,
         options?: SaveOptions
     ): Promise<Result<Dto>> {
         try {
-
-            let filter: FilterQuery<T> = {};
-
-            if (filterQuery) filter = filterQuery;
-
-            if (!filterQuery && uniqueFields) {
-                filter.$or = uniqueFields.map(f => ({
-                    [f]: dto[f]
-                } as FilterQuery<CreateDto>));
-            }
-
-            const existedItem = await this.model.findOne(filter);
-
-            if (existedItem) {
-                return Result.err(`${this.modelName} c одним из переданных параметров уже существует!`);
-            }
-
             const schema = this.mapper.mapToSchema(dto);
+
+            if (uniqueFields) {
+                const res = await this.checkUniqueness(schema, uniqueFields, filterQuery);
+                if (!res.isSuccess) return res;
+            }
 
             //If option is used return type is Array<HydratedDoc<T>>
             const items = await this.model.create([schema], options);
@@ -61,24 +53,25 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
 
     async updateOne(
         id: string,
-        dto?: Partial<CreateDto>,
-        update?: UpdateQuery<T>
+        dto: Partial<CreateDto>,
+        uniqueFields?: UniqueFields<T>
     ): Promise<Result<Dto>> {
         try {
+            let partialSchema = this.mapper.mapToSchemaPartial(dto);
+
+            if (uniqueFields) {
+                const res = await this.checkUniqueness(partialSchema, uniqueFields);
+                if (!res.isSuccess) return res;
+            }
+
             let updateQuery: UpdateQuery<T>;
 
-            if (dto) {
-                updateQuery = Object
-                    .keys(dto)
-                    .reduce<UpdateQuery<IPatientSchema>>((updateQuery, k) => {
-                        updateQuery.$set = { [k]: dto[k] };
-                        return updateQuery;
-                    }, {});
-            }
-
-            if(update) {
-                updateQuery = update
-            }
+            updateQuery = Object
+                .keys(partialSchema)
+                .reduce<UpdateQuery<T>>((updateQuery, k) => {
+                    updateQuery.$set = { [k]: partialSchema[k] } as AnyKeys<T>;
+                    return updateQuery;
+                }, {});
 
             const updatedItem = await this.model.findOneAndUpdate(
                 { _id: id },
@@ -100,7 +93,7 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
     async deleteById(id: string): Promise<Result<DeleteResult>> {
         try {
 
-            const res =  await this.model.deleteOne({
+            const res = await this.model.deleteOne({
                 _id: id
             });
 
@@ -175,6 +168,68 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
 
         } catch (e) {
             return CrudUseCases.logErrorsAndReturnResult("find", e);
+        }
+    }
+
+    public async checkUniqueness(
+        schema: T | Partial<T>,
+        uniqueFields?: { and?: Array<keyof T>, or?: Array<keyof T> },
+        filterQuery?: FilterQuery<T>
+    ): Promise<Result> {
+        try {
+            let filter: FilterQuery<T> = filterQuery;
+
+            if (!filterQuery) {
+                const andFields = uniqueFields.and;
+                const orFields = uniqueFields.or;
+
+                if (andFields.length || orFields.length) filter = {};
+
+                if (andFields && !orFields) addAndFields(filter);
+
+                if (orFields && !andFields) {
+                    filter.$or = [];
+                    addOrFields();
+                }
+
+                if (orFields && andFields) {
+                    filter.$or = [{ $and: [] }];
+                    addAndFields(null, filter.$or[0].$and);
+                    addOrFields();
+                }
+
+                function addAndFields(toObj: FilterQuery<T> | null, toArray?: FilterQuery<T>[]) {
+                    andFields.forEach(f => {
+                        if (schema[f]) {
+                            if (toObj) {
+                                toObj[f] = schema[f];
+                            }
+
+                            if (toArray) {
+                                toArray.push({ [f]: schema[f] } as FilterQuery<T>);
+                            }
+                        }
+                    });
+                }
+
+                function addOrFields() {
+                    orFields.forEach(f => {
+                        if (schema[f]) {
+                            filterQuery.$or.push({ [f]: schema[f] } as FilterQuery<T>);
+                        }
+                    });
+                }
+            }
+
+            if (filter) {
+                const exists = await this.findOne(filter);
+                if (exists) return Result.err(`${this.modelName} c одним из переданных параметров уже существует!`);
+            }
+
+            return Result.ok();
+
+        } catch (e) {
+            return CrudUseCases.logErrorsAndReturnResult("isModelExist", e);
         }
     }
 

@@ -18,9 +18,9 @@ import {
     createPriceItemSchema,
     CreateServiceGroupDto,
     CreateServiceSubgroupDto,
-    createSubgroupSchema,
+    createSubgroupSchema, UpdateGroupDto, updateGroupSchema,
     UpdatePriceItemDto,
-    updatePriceItemShema
+    updatePriceItemSchema, UpdateServiceSubgroupDto, updateSubgroupSchema
 } from "../dto/price-list.dtos";
 import { GetPriceListUseCase } from "../use-cases/get-price-list.use-case";
 import { AjvBody } from "../../common/decorators/ajv.decorators";
@@ -65,7 +65,7 @@ export class PriceListCrudController {
     ) {
         const res = await this.priceItemsCrudUseCase.create(
             createDto,
-            ["name", "itemNumber"]
+            { or: ["name", "itemNumber"] }
         );
 
         return CustomResponse
@@ -79,9 +79,36 @@ export class PriceListCrudController {
     async getPriceItems() {
         const res = await this.priceItemsCrudUseCase.find(
             {},
-            {itemNumber: 'ascending'}
+            { itemNumber: "ascending" }
         );
         return CustomResponse.fromResult(res);
+    }
+
+    @Put("/items")
+    @ApiOkResponse({ type: CustomResponseType })
+    @ApiBody({ type: UpdatePriceItemDto })
+    async updatePriceItem(
+        @AjvBody(updatePriceItemSchema) { _id, ...updatePriceItemDto }: UpdatePriceItemDto
+    ) {
+        const res = await this.priceItemsCrudUseCase.updateOne(
+            _id,
+            updatePriceItemDto,
+            { or: ["itemNumber", "name"] }
+        );
+        return CustomResponse.fromResult(res);
+    }
+
+    @Delete("/items")
+    @ApiBody({ type: IdDto })
+    @ApiOkResponse({ type: CustomResponseType })
+    async deletePriceItem(
+        @Body() dto: IdDto
+    ) {
+        const res = await this.priceItemsCrudUseCase.deleteOne(dto.id);
+
+        return CustomResponse
+            .fromResult(res)
+            .withSuccessMessage("Элемент прайс-листа успешно удален!");
     }
 
     @Post("/subgroups")
@@ -102,59 +129,24 @@ export class PriceListCrudController {
     async getSubgroups() {
         const res = await this.serviceSubgroupUseCase.find(
             {},
-            { subgroupNumber: 'ascending' }
+            { subgroupNumber: "ascending" }
         );
         return CustomResponse.fromResult(res);
     }
 
-    @Post("/groups")
-    @ApiBody({ type: CreateServiceGroupDto })
-    @ApiOkResponse({ type: CreateGroupResponse })
-    async createGroup(
-        @AjvBody(createGroupSchema) createDto: CreateServiceGroupDto
+    @Put("/subgroups")
+    async updateSubgroup(
+        @AjvBody(updateSubgroupSchema) { _id, ...updateSubgroupDto }: UpdateServiceSubgroupDto
     ) {
-        const res = await this.serviceGroupUseCase.create(
-            createDto,
-            ["name", "groupNumber"]
+        const res = await this.serviceSubgroupUseCase.updateOne(
+            _id,
+            updateSubgroupDto,
+            { or: ["subgroupNumber", "name"] }
         );
 
         return CustomResponse
             .fromResult(res)
-            .withSuccessMessage("Группа успешно создана!");
-    }
-
-
-    @Get("/groups")
-    @ApiOkResponse({ type: GetGroupsResponse })
-    async getGroups() {
-        const res = await this.serviceGroupUseCase.find(
-            {},
-            { groupNumber: 'ascending' }
-        );
-        return CustomResponse.fromResult(res);
-    }
-
-    @Put("/items")
-    @ApiOkResponse({ type: CustomResponseType })
-    @ApiBody({ type: UpdatePriceItemDto })
-    async updatePriceItem(
-        @AjvBody(updatePriceItemShema) dto: UpdatePriceItemDto
-    ) {
-        const res = await this.priceItemsCrudUseCase.update(dto);
-        return CustomResponse.fromResult(res);
-    }
-
-    @Delete("/group")
-    @ApiBody({ type: IdDto })
-    @ApiOkResponse({ type: CustomResponseType })
-    async deleteGroup(
-        @Body() dto: IdDto
-    ) {
-        const res = await this.serviceGroupUseCase.deleteById(dto.id);
-
-        return CustomResponse
-            .fromResult(res)
-            .withSuccessMessage("Группа успешно удалена!");
+            .withSuccessMessage("Подгруппа успешно обновлена!");
     }
 
     @Delete("/subgroup")
@@ -170,17 +162,59 @@ export class PriceListCrudController {
             .withSuccessMessage("Подгруппа успешно удалена!");
     }
 
-    @Delete("/item")
-    @ApiBody({ type: IdDto })
-    @ApiOkResponse({ type: CustomResponseType })
-    async deletePriceItem(
-        @Body() dto: IdDto
+    @Post("/groups")
+    @ApiBody({ type: CreateServiceGroupDto })
+    @ApiOkResponse({ type: CreateGroupResponse })
+    async createGroup(
+        @AjvBody(createGroupSchema) createDto: CreateServiceGroupDto
     ) {
-        const res = await this.priceItemsCrudUseCase.deleteOne(dto.id);
+        const res = await this.serviceGroupUseCase.create(
+            createDto,
+            { or: ["name", "groupNumber"] }
+        );
 
         return CustomResponse
             .fromResult(res)
-            .withSuccessMessage("Элемент прайс-листа успешно удален!");
+            .withSuccessMessage("Группа успешно создана!");
     }
 
+    @Put("/groups")
+    async updateGroup(
+        @AjvBody(updateGroupSchema) { _id, ...updateGroupDto }: UpdateGroupDto
+    ) {
+        const res = await this.serviceGroupUseCase.updateOne(
+            _id,
+            updateGroupDto,
+            { or: ["groupNumber", "name"] }
+        );
+
+        return CustomResponse
+            .fromResult(res)
+            .withSuccessMessage("Группа успешно обновлена!");
+    }
+
+
+    @Get("/groups")
+    @ApiOkResponse({ type: GetGroupsResponse })
+    async getGroups() {
+        const res = await this.serviceGroupUseCase.find(
+            {},
+            { groupNumber: "ascending" }
+        );
+        return CustomResponse.fromResult(res);
+    }
+
+
+    @Delete("/group")
+    @ApiBody({ type: IdDto })
+    @ApiOkResponse({ type: CustomResponseType })
+    async deleteGroup(
+        @Body() dto: IdDto
+    ) {
+        const res = await this.serviceGroupUseCase.deleteById(dto.id);
+
+        return CustomResponse
+            .fromResult(res)
+            .withSuccessMessage("Группа успешно удалена!");
+    }
 }
