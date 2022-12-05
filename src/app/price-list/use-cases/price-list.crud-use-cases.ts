@@ -2,7 +2,7 @@ import { CrudUseCases } from "../../../core/crud.use-cases";
 import { Injectable } from "@nestjs/common";
 import { IPriceItemSchema, PRICE_ITEMS } from "../schemas/price-item.schema";
 import { InjectConnection, InjectModel } from "@nestjs/mongoose";
-import mongoose, { ClientSession, FilterQuery, Model } from "mongoose";
+import mongoose, { ClientSession, Model } from "mongoose";
 import { IServiceSubgroup, SERVICE_SUBGROUPS } from "../schemas/service-subgroup.schema";
 import { IServiceGroup, SERVICE_GROUPS } from "../schemas/service-group.schema";
 import {
@@ -10,8 +10,7 @@ import {
     CreateServiceSubgroupDto,
     PriceItemDto,
     ServiceGroupDto,
-    ServiceSubgroupDto, UpdateGroupDto,
-    UpdatePriceItemDto
+    ServiceSubgroupDto
 } from "../dto/price-list.dtos";
 import {
     priceItemMapper,
@@ -20,7 +19,6 @@ import {
 } from "../mappers/price-list.mappers";
 import { Result } from "src/core/result";
 import { DeleteResult } from "mongodb";
-
 
 @Injectable()
 export class PriceItemsCrudUseCase extends CrudUseCases<IPriceItemSchema, CreatePriceItemDto, PriceItemDto> {
@@ -37,27 +35,6 @@ export class PriceItemsCrudUseCase extends CrudUseCases<IPriceItemSchema, Create
             priceItemMapper,
             "Элемент прайс листа"
         );
-    }
-
-    async update({ _id, ...dto }: UpdatePriceItemDto): Promise<Result<PriceItemDto>> {
-
-        const filterQuery: FilterQuery<IPriceItemSchema> = { $or: [] };
-
-        if (dto.itemNumber) {
-            filterQuery.$or.push({ itemNumber: dto.itemNumber });
-        }
-
-        if (dto.name) {
-            filterQuery.$or.push({ name: dto.name });
-        }
-
-        const existItemWithNewProps = await super.findOne(filterQuery);
-
-        if (existItemWithNewProps) {
-            return Result.err("Такой элемент прайс листа уже сущесутвует!");
-        }
-
-        return super.updateOne(_id, dto);
     }
 
     async deleteOne(id: string): Promise<Result> {
@@ -99,7 +76,7 @@ export class ServiceSubgroupCrudUseCase extends CrudUseCases<IServiceSubgroup, C
         try {
             res = await super.create(
                 dto,
-                ["subgroupNumber", "name"],
+                { or: ["subgroupNumber", "name"] },
                 null,
                 { session }
             );
@@ -151,27 +128,6 @@ export class ServiceGroupCrudUseCase extends CrudUseCases <IServiceGroup, Create
             serviceGroupMapper,
             "Группа"
         );
-    }
-
-    async update({ _id, ...dto }: UpdateGroupDto): Promise<Result<ServiceGroupDto>> {
-
-        const filterQuery: FilterQuery<IServiceGroup> = { $or: [] };
-
-        if (dto.groupNumber) {
-            filterQuery.$or.push({ groupNumber: dto.groupNumber });
-        }
-
-        if (dto.name) {
-            filterQuery.$or.push({ name: dto.name });
-        }
-
-        const existItemWithNewProps = await super.findOne(filterQuery);
-
-        if (existItemWithNewProps) {
-            return Result.err("Группа с таким именем или номером уже сущесутвует!");
-        }
-
-        return super.updateOne(_id, dto);
     }
 }
 

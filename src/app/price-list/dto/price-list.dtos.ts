@@ -78,7 +78,33 @@ export class CreateServiceSubgroupDto {
 
     @ApiProperty({ required: false })
     groupId?: string;
+}
 
+export class UpdateServiceSubgroupDto {
+    @ApiProperty()
+    _id: string
+
+    @ApiProperty({required: false})
+    subgroupNumber?: string;
+
+    @ApiProperty({required: false})
+    name?: string;
+
+    @ApiProperty({ type: PriceItemsWithQuantity, isArray: true, required: false })
+    priceItems?: PriceItemsWithQuantity[];
+
+    @ApiProperty({ required: false })
+    groupId?: string;
+}
+
+export const updateSubgroupSchema = {
+    ...createSubgroupSchema,
+    requiredAll: false,
+    required: ["_id"],
+    properties: {
+        ...createSubgroupSchema.properties,
+        _id: { type: "string" }
+    }
 }
 
 export class ServiceSubgroupDto extends CreateServiceSubgroupDto {
@@ -168,16 +194,15 @@ export class UpdatePriceItemDto {
     serviceCost?: number;
 }
 
-export const updatePriceItemShema = {
+export const updatePriceItemSchema = {
     ...createPriceItemSchema,
-    requredAll: false,
+    requiredAll: false,
     required: ["_id"],
     properties: {
         ...createPriceItemSchema.properties,
         _id: { type: "string" }
     }
 }
-
 
 export class UpdateGroupDto {
     @ApiProperty()
@@ -191,4 +216,14 @@ export class UpdateGroupDto {
 
     @ApiProperty({ required: false })
     subgroupsIds?: string[];
+}
+
+export const updateGroupSchema = {
+    ...createGroupSchema,
+    requiredAll: false,
+    required: ["_id"],
+    properties: {
+        ...createGroupSchema.properties,
+        _id: { type: "string" }
+    }
 }

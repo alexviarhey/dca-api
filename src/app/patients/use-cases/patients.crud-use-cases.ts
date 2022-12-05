@@ -40,11 +40,7 @@ export class PatientsCrudUseCases extends CrudUseCases<IPatientSchema,
             }
         }
 
-        return super.create(
-            dto,
-            null,
-            filterQuery
-        );
+        return super.create( dto, filterQuery);
     }
 
     async findWithPagination(filters: GetPatientsFilters): Promise<Result<Paginated<PatientDto>>> {
