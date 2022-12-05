@@ -13,13 +13,13 @@ import { GetPatientsFilters, getPatientsFiltersSchema } from "../dto/get-patient
 import { Paginated } from "../../../core/paginated";
 
 class CreatePatientResponse extends CustomResponseType<PatientDto> {
-    @ApiProperty({ type: PatientDto})
+    @ApiProperty({ type: PatientDto })
     data: PatientDto;
 }
 
 class PaginatedPatients extends Paginated<PatientDto> {
     @ApiProperty({ type: PatientDto, isArray: true })
-    items: PatientDto[]
+    items: PatientDto[];
 }
 
 class GetPatientsResponse extends CustomResponseType<PaginatedPatients> {
@@ -27,7 +27,7 @@ class GetPatientsResponse extends CustomResponseType<PaginatedPatients> {
     data: PaginatedPatients;
 }
 
-const GetPatientResponse = CreatePatientResponse
+const GetPatientResponse = CreatePatientResponse;
 
 @Controller("/patients")
 @ApiTags("Patients")
@@ -44,7 +44,11 @@ export class PatientsController {
     async create(
         @AjvBody(createPatientValidationSchema) dto: CreatePatientDto
     ) {
-        const res = await this.patientsCrudUseCases.create(dto);
+        const res = await this.patientsCrudUseCases.create(
+            dto,
+            this.patientsCrudUseCases.getFiltersForUniqueness(dto)
+        );
+
         return CustomResponse
             .fromResult(res)
             .withSuccessMessage("Пациент успешно создан!");
@@ -62,19 +66,24 @@ export class PatientsController {
     }
 
     @Put()
-    @ApiBody({ type: UpdatePatientDto})
-    @ApiOkResponse({ type: GetPatientsResponse})
+    @ApiBody({ type: UpdatePatientDto })
+    @ApiOkResponse({ type: GetPatientsResponse })
     async update(
-        @AjvBody(updatePatientValidationSchema) {_id, ...dto}: UpdatePatientDto
+        @AjvBody(updatePatientValidationSchema) { _id, ...dto }: UpdatePatientDto
     ) {
-        const res = await this.patientsCrudUseCases.updateOne(_id, dto);
+        const res = await this.patientsCrudUseCases.updateOne(
+            _id,
+            dto,
+            this.patientsCrudUseCases.getFiltersForUniqueness(dto)
+        );
+
         return CustomResponse
             .fromResult(res)
             .withSuccessMessage("Пациент успешно обновлен!");
     }
 
     @Get()
-    @ApiOkResponse({ type: GetPatientsResponse})
+    @ApiOkResponse({ type: GetPatientsResponse })
     @ApiQuery({ type: GetPatientsFilters })
     async getPatients(
         @AjvQuery(getPatientsFiltersSchema) filters: GetPatientsFilters
@@ -84,11 +93,11 @@ export class PatientsController {
     }
 
     @Get("/:id")
-    @ApiOkResponse({ type: GetPatientResponse})
+    @ApiOkResponse({ type: GetPatientResponse })
     async getPatient(
         @Param("id") id: string
     ) {
-        const res = await this.patientsCrudUseCases.findById(id)
+        const res = await this.patientsCrudUseCases.findById(id);
         return CustomResponse.fromResult(res);
     }
 }

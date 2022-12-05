@@ -27,7 +27,7 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
         try {
             const schema = this.mapper.mapToSchema(dto);
 
-            if (uniqueFields) {
+            if (filterQuery || uniqueFields) {
                 const res = await this.checkUniqueness(schema, uniqueFields, filterQuery);
                 if (!res.isSuccess) return res;
             }
@@ -54,12 +54,13 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
     async updateOne(
         id: string,
         dto: Partial<CreateDto>,
+        filterQuery?: FilterQuery<T>,
         uniqueFields?: UniqueFields<T>
     ): Promise<Result<Dto>> {
         try {
             let partialSchema = this.mapper.mapToSchemaPartial(dto);
 
-            if (uniqueFields) {
+            if (filterQuery || uniqueFields) {
                 const res = await this.checkUniqueness(partialSchema, uniqueFields);
                 if (!res.isSuccess) return res;
             }
