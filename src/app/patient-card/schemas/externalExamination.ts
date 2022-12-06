@@ -58,11 +58,36 @@ export const TemporomandibularJointReadable = {
     [TemporomandibularJoint.WITH_CLICK_OR_CRUNCH]: "со щелчком/хрустом",
 }
 
+interface IHardTissuesOfTeethAndPeriodontiumCondtitions {
+    extensiveFillings: number[] | null
+    abrasion: number[] | null
+    colorChange: number[] | null
+    shapeChange: number[] | null
+    IROPZ: number[] | null
+    hyperemia: number[] | null
+    recession: number[] | null
+    dentogingivalAttachmentDisorder: number[] | null
+}
+
+export enum XrayAndOtherResearchData {
+    NOT_CARRIED_OUT = 1,
+    SEE_DIARY
+}
+
+export const XrayAndOtherResearchDataReadable = {
+    [XrayAndOtherResearchData.NOT_CARRIED_OUT]: 'не проводились',
+    [XrayAndOtherResearchData.SEE_DIARY]: 'см. дневник'
+}
+
 export interface IExternalExamination {
     //Обсудить это поле
     complaints: string
-    faceConfiguration: FaceConfiguration,
+    faceConfiguration: FaceConfiguration[],
     conditionOfTheSkinRedBorder: string | null
-    lymphNodes: LymphNodes
-    temporomandibularJoint: TemporomandibularJoint
+    lymphNodes: LymphNodes[]
+    temporomandibularJoint: TemporomandibularJoint[]
+    //уточнить про прикус
+    bite: string
+    hardTissuesOfTeethAndPeriodontiumCondtitions: IHardTissuesOfTeethAndPeriodontiumCondtitions
+    xrayAndOtherResearchData: XrayAndOtherResearchData
 }
