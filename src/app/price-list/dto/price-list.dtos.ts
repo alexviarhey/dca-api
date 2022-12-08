@@ -99,7 +99,7 @@ export class UpdateServiceSubgroupDto {
 
 export const updateSubgroupSchema = {
     ...createSubgroupSchema,
-    requiredAll: false,
+    allRequired: false,
     required: ["_id"],
     properties: {
         ...createSubgroupSchema.properties,
@@ -196,7 +196,7 @@ export class UpdatePriceItemDto {
 
 export const updatePriceItemSchema = {
     ...createPriceItemSchema,
-    requiredAll: false,
+    allRequired: false,
     required: ["_id"],
     properties: {
         ...createPriceItemSchema.properties,
@@ -220,7 +220,7 @@ export class UpdateGroupDto {
 
 export const updateGroupSchema = {
     ...createGroupSchema,
-    requiredAll: false,
+    allRequired: false,
     required: ["_id"],
     properties: {
         ...createGroupSchema.properties,
