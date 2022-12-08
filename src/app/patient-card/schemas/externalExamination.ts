@@ -58,6 +58,26 @@ export const TemporomandibularJointReadable = {
     [TemporomandibularJoint.WITH_CLICK_OR_CRUNCH]: "со щелчком/хрустом",
 }
 
+export enum Bite {
+    ORTHOGNATHIC = 1,
+    STRAIGHT,
+    DISTAL,
+    MESIAL,
+    DEEP,
+    OPEN,
+    CROSS
+}
+
+export const biteReadable = {
+    [Bite.ORTHOGNATHIC]: 'ортогнатический',
+    [Bite.STRAIGHT]: 'прямой',
+    [Bite.DISTAL]: 'дистальный',
+    [Bite.MESIAL]: 'мезиальный',
+    [Bite.DEEP]: 'глубокий',
+    [Bite.OPEN]: 'открытый',
+    [Bite.CROSS]: 'перекрестный',
+}
+
 interface IHardTissuesOfTeethAndPeriodontiumCondtitions {
     extensiveFillings: number[] | null
     abrasion: number[] | null
@@ -69,24 +89,19 @@ interface IHardTissuesOfTeethAndPeriodontiumCondtitions {
     dentogingivalAttachmentDisorder: number[] | null
 }
 
-export enum XrayAndOtherResearchData {
-    NOT_CARRIED_OUT = 1,
-    SEE_DIARY
+export interface XrayAndOtherResearchData {
+    notCarriedOut: boolean
+    seeDiary: boolean
+    pathologicalChanges: number[] | null
 }
 
-export const XrayAndOtherResearchDataReadable = {
-    [XrayAndOtherResearchData.NOT_CARRIED_OUT]: 'не проводились',
-    [XrayAndOtherResearchData.SEE_DIARY]: 'см. дневник'
-}
 
 export interface IExternalExamination {
-    //Обсудить это поле
     complaints: string
     faceConfiguration: FaceConfiguration[],
     conditionOfTheSkinRedBorder: string | null
     lymphNodes: LymphNodes[]
     temporomandibularJoint: TemporomandibularJoint[]
-    //уточнить про прикус
     bite: string
     hardTissuesOfTeethAndPeriodontiumCondtitions: IHardTissuesOfTeethAndPeriodontiumCondtitions
     xrayAndOtherResearchData: XrayAndOtherResearchData
