@@ -1,4 +1,4 @@
-import { BadRequestException, createParamDecorator, ExecutionContext } from "@nestjs/common";
+import { createParamDecorator, ExecutionContext } from "@nestjs/common";
 import { Request } from "express";
 import { AnySchema } from "ajv";
 import ajvKeywords from "ajv-keywords";
@@ -8,13 +8,13 @@ import { AjvException } from "../exeption-filters";
 
 const ajv = AjvBuilder
     .new()
-    .withOptions({coerceTypes: true})
+    .withOptions({ coerceTypes: true })
     .bindPlugins(ajvKeywords, addFormats)
     .build();
 
 const isValid = (
     schema: AnySchema,
-    data: any,
+    data: any
 ) => {
     if (!ajv.validate(schema, data)) {
         throw new AjvException(ajv.errors);

@@ -2,7 +2,7 @@ import { CrudUseCases } from "../../../core/crud.use-cases";
 import { Injectable } from "@nestjs/common";
 import { IPriceItemSchema, PRICE_ITEMS } from "../schemas/price-item.schema";
 import { InjectConnection, InjectModel } from "@nestjs/mongoose";
-import mongoose, { ClientSession, Model } from "mongoose";
+import mongoose, { ClientSession, FilterQuery, Model } from "mongoose";
 import { IServiceSubgroup, SERVICE_SUBGROUPS } from "../schemas/service-subgroup.schema";
 import { IServiceGroup, SERVICE_GROUPS } from "../schemas/service-group.schema";
 import {
@@ -37,7 +37,7 @@ export class PriceItemsCrudUseCase extends CrudUseCases<IPriceItemSchema, Create
         );
     }
 
-    async deleteOne(id: string): Promise<Result> {
+    async deleteOne(id: string): Promise<Result<DeleteResult>> {
         const session = await this.connection.startSession();
 
         return await deletePriceListChildElement<IServiceSubgroup>(
@@ -45,7 +45,7 @@ export class PriceItemsCrudUseCase extends CrudUseCases<IPriceItemSchema, Create
             super.deleteById.bind(this),
             this.serviceSubgroupModel,
             id,
-            "priceItems"
+            {"priceItems._id": id}
         );
     }
 }
@@ -73,13 +73,11 @@ export class ServiceSubgroupCrudUseCase extends CrudUseCases<IServiceSubgroup, C
 
         let res: Result<ServiceSubgroupDto>;
 
-        console.log("HELLO", dto)
-
         try {
             res = await super.create(
                 dto,
-                { or: ["subgroupNumber", "name"] },
                 null,
+                { or: ["subgroupNumber", "name"] },
                 { session }
             );
 
@@ -109,7 +107,7 @@ export class ServiceSubgroupCrudUseCase extends CrudUseCases<IServiceSubgroup, C
         }
     }
 
-    async deleteOne(id: string): Promise<Result> {
+    async deleteOne(id: string): Promise<Result<DeleteResult>> {
         const session = await this.connection.startSession();
 
         return await deletePriceListChildElement<IServiceGroup>(
@@ -117,7 +115,7 @@ export class ServiceSubgroupCrudUseCase extends CrudUseCases<IServiceSubgroup, C
             super.deleteById.bind(this),
             this.serviceGroupModel,
             id,
-            "subgroupsIds"
+            { "subgroupsIds": id }
         );
     }
 }
@@ -141,22 +139,25 @@ const deletePriceListChildElement = async <ParentModel>(
     deleteById: (id: string) => Promise<Result<DeleteResult>>,
     parentModel: Model<ParentModel>,
     childId: string,
-    childIdsFieldName: keyof ParentModel
-): Promise<Result> => {
+    filterQuery: FilterQuery<ParentModel>
+): Promise<Result<DeleteResult>> => {
     session.startTransaction();
+
+    let res: Result<DeleteResult>;
 
     try {
         //First delete child
-        let res = await deleteById(childId);
-        let isDeleteError = !res.isSuccess || !res.data.deletedCount;
-        if (isDeleteError) throw new Error();
-
-        //Second delete childId from parent childIds field
-        const fieldObj = { [childIdsFieldName]: childId } as { [P in keyof ParentModel]: string };
+        res =  await deleteById(childId);
+        const isNotDeletedCount = !res.data.deletedCount;
+        const isDeleteError = !res.isSuccess || isNotDeletedCount
+        if (isDeleteError) {
+            if(isNotDeletedCount) res = Result.err(`Элемент-прайс листа с id ${childId} не найден!`)
+            throw new Error()
+        }
 
         await parentModel.updateMany(
-            fieldObj,
-            { $pull: fieldObj }
+                filterQuery,
+                { $pull: filterQuery }
         );
 
         await session.commitTransaction();
@@ -165,7 +166,7 @@ const deletePriceListChildElement = async <ParentModel>(
     } catch (e) {
         console.log("DeletePriceListChildElement error: ", e);
         await session.abortTransaction();
-        return Result.somethingWentWrong();
+        return res ? res : Result.somethingWentWrong();
     } finally {
         await session.endSession();
     }

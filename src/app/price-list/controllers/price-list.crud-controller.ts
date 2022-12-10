@@ -65,6 +65,7 @@ export class PriceListCrudController {
     ) {
         const res = await this.priceItemsCrudUseCase.create(
             createDto,
+            null,
             { or: ["name", "itemNumber"] }
         );
 
@@ -170,6 +171,7 @@ export class PriceListCrudController {
     ) {
         const res = await this.serviceGroupUseCase.create(
             createDto,
+            null,
             { or: ["name", "groupNumber"] }
         );
 

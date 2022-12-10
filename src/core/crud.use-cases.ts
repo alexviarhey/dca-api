@@ -3,6 +3,7 @@ import { AnyKeys, FilterQuery, Model, ProjectionType, SaveOptions, SortOrder, Up
 import { Paginated, Pagination } from "./paginated";
 import { Mapper } from "./mapper";
 import { DeleteResult } from "mongodb";
+import { or } from "ajv/dist/compile/codegen";
 
 type UniqueFields<T> = {
     and?: Array<keyof T>,
@@ -178,13 +179,14 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
         filterQuery?: FilterQuery<T>
     ): Promise<Result> {
         try {
+
             let filter: FilterQuery<T> = filterQuery;
 
             if (!filterQuery) {
                 const andFields = uniqueFields.and;
                 const orFields = uniqueFields.or;
 
-                if (andFields.length || orFields.length) filter = {};
+                if (andFields?.length || orFields?.length) filter = {};
 
                 if (andFields && !orFields) addAndFields(filter);
 
@@ -216,7 +218,7 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
                 function addOrFields() {
                     orFields.forEach(f => {
                         if (schema[f]) {
-                            filterQuery.$or.push({ [f]: schema[f] } as FilterQuery<T>);
+                            filter.$or.push({ [f]: schema[f] } as FilterQuery<T>);
                         }
                     });
                 }
@@ -230,7 +232,7 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
             return Result.ok();
 
         } catch (e) {
-            return CrudUseCases.logErrorsAndReturnResult("isModelExist", e);
+            return CrudUseCases.logErrorsAndReturnResult("checkUniqueness", e);
         }
     }
 
