@@ -94,6 +94,7 @@ export class PriceListCrudController {
         const res = await this.priceItemsCrudUseCase.updateOne(
             _id,
             updatePriceItemDto,
+            null,
             { or: ["itemNumber", "name"] }
         );
         return CustomResponse.fromResult(res);
@@ -142,6 +143,7 @@ export class PriceListCrudController {
         const res = await this.serviceSubgroupUseCase.updateOne(
             _id,
             updateSubgroupDto,
+            null,
             { or: ["subgroupNumber", "name"] }
         );
 
@@ -187,6 +189,7 @@ export class PriceListCrudController {
         const res = await this.serviceGroupUseCase.updateOne(
             _id,
             updateGroupDto,
+            null,
             { or: ["groupNumber", "name"] }
         );
 
