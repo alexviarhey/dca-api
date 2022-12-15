@@ -62,22 +62,20 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
             let partialSchema = this.mapper.mapToSchemaPartial(dto);
 
             if (filterQuery || uniqueFields) {
-                const res = await this.checkUniqueness(partialSchema, uniqueFields);
+                const res = await this.checkUniqueness(partialSchema, uniqueFields, filterQuery);
                 if (!res.isSuccess) return res;
             }
 
-            let updateQuery: UpdateQuery<T>;
-
-            updateQuery = Object
+            let updateQuery: UpdateQuery<T> = Object
                 .keys(partialSchema)
-                .reduce<UpdateQuery<T>>((updateQuery, k) => {
-                    updateQuery.$set = { [k]: partialSchema[k] } as AnyKeys<T>;
+                .reduce((updateQuery, k) => {
+                    updateQuery.$set[k] = partialSchema[k]
                     return updateQuery;
-                }, {});
+                }, {$set: {}});
 
             const updatedItem = await this.model.findOneAndUpdate(
                 { _id: id },
-                updateQuery || {},
+                updateQuery,
                 { new: true }
             );
 
