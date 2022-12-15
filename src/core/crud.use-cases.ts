@@ -69,9 +69,9 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
             let updateQuery: UpdateQuery<T> = Object
                 .keys(partialSchema)
                 .reduce((updateQuery, k) => {
-                    updateQuery.$set[k] = partialSchema[k]
+                    updateQuery.$set[k] = partialSchema[k];
                     return updateQuery;
-                }, {$set: {}});
+                }, { $set: {} });
 
             const updatedItem = await this.model.findOneAndUpdate(
                 { _id: id },
@@ -181,48 +181,53 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
             let filter: FilterQuery<T> = filterQuery;
 
             if (!filterQuery) {
-                const andFields = uniqueFields.and;
-                const orFields = uniqueFields.or;
+                const isAndFieldsLength = uniqueFields?.and?.length;
+                const isOrFieldsLength = uniqueFields?.or?.length;
 
-                if (andFields?.length || orFields?.length) filter = {};
+                if (!isAndFieldsLength && !isOrFieldsLength) return;
 
-                if (andFields && !orFields) addAndFields(filter);
+                filter = {}
 
-                if (orFields && !andFields) {
-                    filter.$or = [];
-                    addOrFields();
-                }
+                if (isAndFieldsLength && !isOrFieldsLength) addAndFields();
 
-                if (orFields && andFields) {
-                    filter.$or = [{ $and: [] }];
-                    addAndFields(null, filter.$or[0].$and);
-                    addOrFields();
-                }
+                if (isOrFieldsLength && !isAndFieldsLength) addOrFields();
 
-                function addAndFields(toObj: FilterQuery<T> | null, toArray?: FilterQuery<T>[]) {
-                    andFields.forEach(f => {
-                        if (schema[f]) {
-                            if (toObj) {
-                                toObj[f] = schema[f];
-                            }
+                if (isOrFieldsLength && isAndFieldsLength) combineOrWithAndFields()
 
-                            if (toArray) {
-                                toArray.push({ [f]: schema[f] } as FilterQuery<T>);
-                            }
+                function addAndFields(andOperatorArray?) {
+                    uniqueFields.and.forEach(f => {
+                        if (!schema[f]) return;
+
+                        if(!andOperatorArray) {
+                            filter[f] = schema[f];
+                        } else {
+                            andOperatorArray.push({ [f]: schema[f] })
                         }
                     });
                 }
 
                 function addOrFields() {
-                    orFields.forEach(f => {
+                    uniqueFields.or.forEach(f => {
                         if (schema[f]) {
+                            if (!filter.$or) filter.$or = [];
                             filter.$or.push({ [f]: schema[f] } as FilterQuery<T>);
                         }
                     });
                 }
+
+                function combineOrWithAndFields() {
+                    addOrFields();
+
+                    if(!filter.$or) {
+                        addAndFields()
+                    } else {
+                        filter.$or.push({ $and: [] })
+                        addAndFields(filter.$or[filter.$or.length - 1])
+                    }
+                }
             }
 
-            if (filter) {
+            if (filter && Object.keys(filter).length) {
                 const exists = await this.findOne(filter);
                 if (exists) return Result.err(`${this.modelName} c одним из переданных параметров уже существует!`);
             }
