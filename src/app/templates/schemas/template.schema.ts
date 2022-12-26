@@ -1,26 +1,26 @@
 import { Schema } from "mongoose"
 
-export enum TemplateCode {
+export enum TemplateType {
     TREATMENT = 1,
     LOCAL_STATUS,
     RESEARCH
 }
 
-export interface ITemlpateSchema {
+export interface ITemplateSchema {
     _id?: string
     icdId?: string
     serviceSubgroupsIds?: string[]
-    code: TemplateCode
+    type: TemplateType
     name: string
-    text: string
+    description: string
 }
 
-export const templateSchema = new Schema<ITemlpateSchema>({
+export const templateSchema = new Schema<ITemplateSchema>({
     icdId: { type: String, required: false, default: null},
     serviceSubgroupsIds: { type: [String], required: false, default: []},
-    code: { type: Number, required: true },
+    type: { type: Number, required: true },
     name: {type: String, required: true},
-    text: {type: String, required: true},
+    description: {type: String, required: true},
 })
 
 export const TEMPLATES_COLLECTION = 'templates'

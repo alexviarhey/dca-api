@@ -1,17 +1,17 @@
 export abstract class Mapper<Model, Dto, CreateDto> {
     abstract map(model: Model): Dto
 
-    abstract mapToSchema(dto: CreateDto | Partial<CreateDto>): Model
+    abstract mapToSchema(dto: CreateDto | Partial<CreateDto>): Promise<Model>
 
-    public mapArray(models: Model[]): Dto[] {
-        return models.map(this.map)
+    public mapArray(models: Model[]): Promise<Dto[]> {
+        return Promise.all(models.map(this.map))
     }
 
-    public mapToSchemaArray(dtos: CreateDto[]): Model[] {
-        return dtos.map(this.mapToSchema)
+    public mapToSchemaArray(dtos: CreateDto[]): Promise<Model[]> {
+        return Promise.all(dtos.map(this.mapToSchema))
     }
 
-    public mapToSchemaPartial(dto: Partial<CreateDto>): Partial<Model> {
+    public mapToSchemaPartial(dto: Partial<CreateDto>): Promise<Partial<Model>> {
         const fullSchema = this.mapToSchema(dto)
 
         //remove undefined fields
