@@ -15,6 +15,12 @@ export class ICDDto extends CreateICDDto {
 }
 
 export class GetICDFilters {
+    @ApiProperty()
+    page: number
+
+    @ApiProperty()
+    size: number
+
     @ApiProperty({required: false})
     code?: string
 
@@ -25,7 +31,10 @@ export class GetICDFilters {
 export const getICDFiltersSchema = {
     type: 'object',
     additionalProperties: false,
+    required: ["page", "size"],
     properties: {
+        page: { type: "number", minimum: 0 },
+        size: { type: "number", maximum: 1 },
         code: { type: "string" },
         name: { type: "string" },
     }
