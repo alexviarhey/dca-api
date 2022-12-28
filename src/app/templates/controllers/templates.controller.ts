@@ -89,7 +89,7 @@ export class TemplatesController {
     }
 
     @Get("")
-    @ApiOkResponse({ type: GetTemplatesResponseType})
+    @ApiOkResponse({ type: GetTemplatesResponseType })
     @ApiQuery({ type: GetTemplatesFilters })
     async getTemplates(
         @Query() filters: GetTemplatesFilters
@@ -102,10 +102,12 @@ export class TemplatesController {
 
         if (filters.icdIds) filterQuery.icdIds = { $all: filters.icdIds };
 
-        if (filters.searchQuery) {
+        const searchQuery = filters.searchQuery;
+
+        if (searchQuery) {
             filterQuery.$or = [
-                { name: { $regex: `/^${filters.searchQuery}/i` } },
-                { description: { $regex: `/^${filters.searchQuery}/i` } }
+                { name: { $regex: searchQuery, $options: "i" } },
+                { description: { $regex: searchQuery, $options: "i" } }
             ];
         }
 
