@@ -1,5 +1,5 @@
 import { Mapper } from "../../../core/mapper";
-import { ITemplateSchema} from "../schemas/template.schema";
+import { ITemplateSchema } from "../schemas/template.schema";
 import { CreateTemplateDto, TemplateDto } from "../dto/templates.dto";
 import { Injectable } from "@nestjs/common";
 import { ICDCrudUseCase } from "../../icd/icd.crud-use-case";
@@ -19,12 +19,12 @@ export class TemplatesMapper extends Mapper<ITemplateSchema, TemplateDto, Create
 
     public async map(model: ITemplateSchema): Promise<TemplateDto> {
 
-        const icd = await this.icdCrudUseCase.findOne({ _id: model.icdId });
+        const icds = await this.icdCrudUseCase.find({ _id: { $in: model.icdIds } });
         const subgroups = await this.subgroupCrudUseCase.find({ _id: { $in: model.serviceSubgroupsIds } });
 
         return {
             _id: model._id.toString(),
-            icd: icd.data,
+            icds: icds.data,
             type: model.type,
             name: model.name,
             description: model.description,
@@ -35,7 +35,7 @@ export class TemplatesMapper extends Mapper<ITemplateSchema, TemplateDto, Create
 
     public async mapToSchema(dto: CreateTemplateDto | Partial<CreateTemplateDto>): Promise<ITemplateSchema> {
         return {
-            icdId: dto.icdId,
+            icdIds: dto.icdIds,
             serviceSubgroupsIds: dto.subgroupsIds,
             type: dto.type,
             name: dto.name,
@@ -48,23 +48,23 @@ export class TemplatesMapper extends Mapper<ITemplateSchema, TemplateDto, Create
         const subgroupIds = [];
 
         models.forEach(m => {
-            icdIds.push(m.icdId);
+            icdIds.concat(m.icdIds);
             subgroupIds.concat(m.serviceSubgroupsIds);
         });
 
         const icds = await this.icdCrudUseCase.find({ _id: { $in: icdIds } });
         const subgroups = await this.subgroupCrudUseCase.find({ _id: { $in: icdIds } });
 
-        const icdsMap = fromArrayToMap(icds.data)
-        const subgroupsMap = fromArrayToMap(subgroups.data)
+        const icdsMap = fromArrayToMap(icds.data);
+        const subgroupsMap = fromArrayToMap(subgroups.data);
 
         return models.map(model => ({
             _id: model._id.toString(),
-            icd: icdsMap.get(model.icdId),
+            icds: model.icdIds.map(id => icdsMap.get(id)),
             type: model.type,
             name: model.name,
             description: model.description,
             subgroups: model.serviceSubgroupsIds.map(id => subgroupsMap.get(id))
-        }))
+        }));
     }
 }

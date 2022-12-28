@@ -3,10 +3,22 @@ import { ICDDto } from "../../icd/icd.dto";
 import { ServiceSubgroupDto } from "../../price-list/dto/price-list.dtos";
 import { ApiProperty } from "@nestjs/swagger";
 
+export const createTemplateSchema = {
+    type: "object",
+    required: ['type', 'name', 'description'],
+    additionalProperties: false,
+    properties: {
+        icdIds: { type: 'array', items: { type: 'string' } },
+        name: { type: 'string', transform: ['trim'], minLength: 3 },
+        type: { enum: Object.values(TemplateType) },
+        description: { type: 'string', transform: ['trim'], minLength: 3 },
+        subgroupsIds: { type: 'array', items: { type: 'string' } },
+    },
+}
 
 export class CreateTemplateDto {
-    @ApiProperty({ required: false })
-    icdId?: string;
+    @ApiProperty({ required: false, isArray: true })
+    icdIds?: string[];
 
     @ApiProperty({ enum: TemplateType })
     type: TemplateType;
@@ -25,8 +37,8 @@ export class TemplateDto {
     @ApiProperty()
     _id: string;
 
-    @ApiProperty({ type: () => ICDDto })
-    icd: ICDDto;
+    @ApiProperty({ type: () => ICDDto, isArray: true })
+    icds: ICDDto[];
 
     @ApiProperty({ enum: TemplateType })
     type: TemplateType;
