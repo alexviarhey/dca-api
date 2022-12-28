@@ -11,7 +11,7 @@ import { IServiceGroup } from "../schemas/service-group.schema";
 import { Mapper } from "../../../core/mapper";
 
  class PriceItemMapper extends Mapper<IPriceItemSchema, PriceItemDto, CreatePriceItemDto> {
-    map(model: IPriceItemSchema): PriceItemDto {
+    async map(model: IPriceItemSchema): Promise<PriceItemDto> {
         return {
             _id: model._id.toString(),
             itemNumber: model.itemNumber,
@@ -22,7 +22,7 @@ import { Mapper } from "../../../core/mapper";
         };
     }
 
-    mapToSchema(dto: CreatePriceItemDto): IPriceItemSchema {
+    async mapToSchema(dto: CreatePriceItemDto): Promise<IPriceItemSchema> {
         return {
             itemNumber: dto.itemNumber,
             name: dto.name,
@@ -33,7 +33,7 @@ import { Mapper } from "../../../core/mapper";
  }
 
 class ServiceSubgroupMapper extends Mapper<IServiceSubgroup, ServiceSubgroupDto, CreateServiceSubgroupDto> {
-    map(model: IServiceSubgroup): ServiceSubgroupDto {
+    async map(model: IServiceSubgroup): Promise<ServiceSubgroupDto> {
         return {
             _id: model._id.toString(),
             name: model.name,
@@ -42,7 +42,7 @@ class ServiceSubgroupMapper extends Mapper<IServiceSubgroup, ServiceSubgroupDto,
         };
     }
 
-    mapToSchema(dto: CreateServiceSubgroupDto): IServiceSubgroup {
+    async mapToSchema(dto: CreateServiceSubgroupDto): Promise<IServiceSubgroup> {
        return {
            name: dto.name,
            subgroupNumber: dto.subgroupNumber,
@@ -52,7 +52,7 @@ class ServiceSubgroupMapper extends Mapper<IServiceSubgroup, ServiceSubgroupDto,
 }
 
 class ServiceGroupMapper extends Mapper<IServiceGroup, ServiceGroupDto, CreateServiceGroupDto> {
-    map(model: IServiceGroup): ServiceGroupDto {
+    async map(model: IServiceGroup): Promise<ServiceGroupDto> {
         return {
             _id: model._id.toString(),
             name: model.name,
@@ -61,7 +61,7 @@ class ServiceGroupMapper extends Mapper<IServiceGroup, ServiceGroupDto, CreateSe
         };
     }
 
-    mapToSchema(dto: CreateServiceGroupDto): IServiceGroup {
+    async mapToSchema(dto: CreateServiceGroupDto): Promise<IServiceGroup> {
        return {
            name: dto.name,
            groupNumber: dto.groupNumber,

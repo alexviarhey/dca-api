@@ -1,5 +1,5 @@
 export abstract class Mapper<Model, Dto, CreateDto> {
-    abstract map(model: Model): Dto
+    abstract map(model: Model): Promise<Dto>
 
     abstract mapToSchema(dto: CreateDto | Partial<CreateDto>): Promise<Model>
 
@@ -22,5 +22,4 @@ export abstract class Mapper<Model, Dto, CreateDto> {
         })
 
         return fullSchema
-    }
-}
+    }}

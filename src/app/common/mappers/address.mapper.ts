@@ -4,7 +4,7 @@ import { AddressDto, CreateAddressDto } from "../dto/adress.dtos";
 
 
 export class AddressMapper extends Mapper<IAddressSchema, AddressDto, CreateAddressDto> {
-    map(model: IAddressSchema) {
+    async map(model: IAddressSchema) {
         return {
             country: model.country,
             city: model.city,
@@ -15,7 +15,7 @@ export class AddressMapper extends Mapper<IAddressSchema, AddressDto, CreateAddr
         };
     }
 
-    mapToSchema(dto: CreateAddressDto): IAddressSchema {
+    async mapToSchema(dto: CreateAddressDto): Promise<IAddressSchema> {
         const text =
             dto.country +
             dto.city +

@@ -1,6 +1,6 @@
 import { TemplateType } from "../schemas/template.schema";
 import { ICDDto } from "../../icd/icd.dto";
-import { ServiceSubgroupWithPriceItemsDto } from "../../price-list/dto/price-list.dtos";
+import { ServiceSubgroupDto, } from "../../price-list/dto/price-list.dtos";
 
 
 export class CreateTemplateDto {
@@ -17,5 +17,5 @@ export class TemplateDto {
     type: TemplateType
     name: string
     description: string
-    subgroups: ServiceSubgroupWithPriceItemsDto[]
+    subgroups: ServiceSubgroupDto[]
 }
