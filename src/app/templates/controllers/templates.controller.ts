@@ -7,7 +7,7 @@ import {
     UpdateTemplateDto,
     updateTemplateSchema
 } from "../dto/templates.dto";
-import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiProperty, ApiQuery } from "@nestjs/swagger";
+import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiProperty, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { TemplatesCrudUseCases } from "../use-cases/templates.crud-use-cases";
 import { AjvBody } from "../../common/decorators/ajv.decorators";
 import { ResponseMessages } from "../../../core/response-messages";
@@ -15,9 +15,9 @@ import { IdDto } from "../../common/dto/id.dto";
 import { Paginated, Pagination } from "../../../core/paginated";
 import { FilterQuery } from "mongoose";
 import { ITemplateSchema } from "../schemas/template.schema";
-import { filter } from "rxjs";
 
 class CreateTemplateResponseType extends CustomResponseType<TemplateDto> {
+    @ApiProperty({ type: TemplateDto })
     data: TemplateDto;
 }
 
@@ -31,11 +31,8 @@ class GetTemplatesResponseType extends CustomResponseType<PaginatedTemplates> {
     data: PaginatedTemplates;
 }
 
-class GetTemplateResponseType extends CustomResponseType<TemplateDto> {
-    data: TemplateDto;
-}
-
 @Controller("/templates")
+@ApiTags("Templates")
 export class TemplatesController {
 
     responseMessages: ResponseMessages;
@@ -92,7 +89,7 @@ export class TemplatesController {
     }
 
     @Get("")
-    @ApiOkResponse({ type: PaginatedTemplates })
+    @ApiOkResponse({ type: GetTemplatesResponseType})
     @ApiQuery({ type: GetTemplatesFilters })
     async getTemplates(
         @Query() filters: GetTemplatesFilters

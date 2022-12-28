@@ -12,6 +12,7 @@ import { ICD_COLLECTION, icdSchema } from "./icd.schema";
         ])
     ],
     providers: [ICDCrudUseCase],
-    controllers: [ICDController]
+    controllers: [ICDController],
+    exports: [ICDCrudUseCase]
 })
 export class ICDModule {}

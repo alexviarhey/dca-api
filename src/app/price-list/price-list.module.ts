@@ -27,6 +27,9 @@ import { PriceListCrudController } from "./controllers/price-list.crud-controlle
     ],
     controllers: [
         PriceListCrudController
+    ],
+    exports: [
+        ServiceSubgroupCrudUseCase
     ]
 })
 export class PriceListModule {

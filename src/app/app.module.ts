@@ -4,6 +4,7 @@ import { InfraModule } from "../infra/infra.module";
 import { PriceListModule } from "./price-list/price-list.module";
 import { PatientsModule } from "./patients/patients.module";
 import { ICDModule } from "./icd/icd.module";
+import { TemplatesModule } from "./templates/templates.module";
 
 @Module({
     imports: [
@@ -13,7 +14,8 @@ import { ICDModule } from "./icd/icd.module";
         InfraModule,
         PriceListModule,
         PatientsModule,
-        ICDModule
+        ICDModule,
+        TemplatesModule
     ],
 })
 export class AppModule {

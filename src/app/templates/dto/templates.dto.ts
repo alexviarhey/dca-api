@@ -28,10 +28,10 @@ export const updateTemplateSchema = {
 
 
 export class CreateTemplateDto {
-    @ApiProperty({ required: false, isArray: true })
+    @ApiProperty({ required: false, isArray: true, nullable: true })
     icdIds?: string[];
 
-    @ApiProperty({ enum: TemplateType })
+    @ApiProperty({ required: false, nullable: true, type: 'number' })
     type: TemplateType;
 
     @ApiProperty()
@@ -40,7 +40,7 @@ export class CreateTemplateDto {
     @ApiProperty()
     description: string;
 
-    @ApiProperty({ required: false, isArray: true })
+    @ApiProperty({ required: false, isArray: true, nullable: true })
     subgroupsIds?: string[];
 }
 
@@ -48,19 +48,19 @@ export class UpdateTemplateDto {
     @ApiProperty()
     _id: string
 
-    @ApiProperty({ required: false, isArray: true })
+    @ApiProperty({ required: false, isArray: true, nullable: true })
     icdIds?: string[];
 
-    @ApiProperty({required: false, enum: TemplateType })
+    @ApiProperty({ required: false, nullable: true})
     type?: TemplateType;
 
-    @ApiProperty({required: false})
+    @ApiProperty({required: false, nullable: true})
     name?: string;
 
-    @ApiProperty({required: false})
+    @ApiProperty({required: false, nullable: true})
     description?: string;
 
-    @ApiProperty({ required: false, isArray: true })
+    @ApiProperty({ required: false, isArray: true, nullable: true })
     subgroupsIds?: string[];
 }
 
@@ -71,7 +71,7 @@ export class TemplateDto {
     @ApiProperty({ type: () => ICDDto, isArray: true })
     icds: ICDDto[];
 
-    @ApiProperty({ enum: TemplateType })
+    @ApiProperty({ required: false, nullable: true })
     type: TemplateType;
 
     @ApiProperty()
@@ -87,12 +87,12 @@ export class TemplateDto {
 
 export class GetTemplatesFilters extends PaginatedFilters {
 
-    @ApiProperty({ required: false })
+    @ApiProperty({ required: false, nullable: true })
     searchQuery?: string
 
-    @ApiProperty({ required: false, enum: TemplateType })
+    @ApiProperty({ required: false, nullable: true })
     type?: TemplateType
 
-    @ApiProperty({ required: false, isArray: true })
-    icdIds: string[]
+    @ApiProperty({ required: false, isArray: true, nullable: true })
+    icdIds?: string[]
 }
