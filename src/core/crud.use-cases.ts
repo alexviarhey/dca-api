@@ -14,7 +14,7 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
     protected constructor(
         private readonly model: Model<T>,
         private readonly mapper: Mapper<T, Dto, CreateDto>,
-        private modelName: string
+        public modelName: string
     ) {
     }
 

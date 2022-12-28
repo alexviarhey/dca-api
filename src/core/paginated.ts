@@ -1,7 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-type PaginatedFilters = {
-    page: number,
+export class PaginatedFilters {
+    @ApiProperty()
+    page: number
+
+    @ApiProperty()
     size: number
 }
 
@@ -13,7 +16,11 @@ export class Pagination {
     }
 
     public static new(value?: { page: number, size: number }): Pagination {
-        return value ? new Pagination(value.page, value.size) : this.default()
+        if(!value || value.page === undefined || value.size === undefined) {
+           return this.default()
+        }
+
+        return new Pagination(value.page, value.size)
     }
 
     public static fromFilters<T extends PaginatedFilters>(filters: T): Pagination {
@@ -61,7 +68,4 @@ export abstract class Paginated<T> {
         };
     }
 
-    public static getSkip(paginatin) {
-
-    }
 }
