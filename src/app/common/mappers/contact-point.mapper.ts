@@ -4,7 +4,7 @@ import { ContactPointDto, CreateContactPointDto } from "../dto/contact-point.dto
 
 
 export class ContactPointMapper extends Mapper<IContactPointSchema, ContactPointDto, CreateContactPointDto> {
-    map(model: IContactPointSchema): ContactPointDto {
+    async map(model: IContactPointSchema) {
        return {
            system: model.system,
            use: model.use,
@@ -12,7 +12,7 @@ export class ContactPointMapper extends Mapper<IContactPointSchema, ContactPoint
        }
     }
 
-    mapToSchema(dto: CreateContactPointDto): IContactPointSchema {
+    async mapToSchema(dto: CreateContactPointDto){
         return {
             value: dto.value,
             use: dto.use,

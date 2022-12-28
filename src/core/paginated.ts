@@ -1,5 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
 
+export class PaginatedFilters {
+    @ApiProperty()
+    page: number
+
+    @ApiProperty()
+    size: number
+}
 
 export class Pagination {
     private constructor(
@@ -8,8 +15,20 @@ export class Pagination {
     ) {
     }
 
-    public static new(value: { page: number, size: number } = { page: 0, size: 10 }): Pagination {
-        return new Pagination(value.page, value.size);
+    public static new(value?: { page: number, size: number }): Pagination {
+        if(!value || value.page === undefined || value.size === undefined) {
+           return this.default()
+        }
+
+        return new Pagination(value.page, value.size)
+    }
+
+    public static fromFilters<T extends PaginatedFilters>(filters: T): Pagination {
+        return new Pagination(filters.page, filters.size);
+    }
+
+    public static default(): Pagination {
+        return new Pagination(0, 10);
     }
 
     public get skip(): number {
@@ -49,7 +68,4 @@ export abstract class Paginated<T> {
         };
     }
 
-    public static getSkip(paginatin) {
-
-    }
 }

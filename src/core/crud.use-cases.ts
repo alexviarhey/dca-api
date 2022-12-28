@@ -15,7 +15,7 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
     protected constructor(
         private readonly model: Model<T>,
         private readonly mapper: Mapper<T, Dto, CreateDto>,
-        private modelName: string
+        public modelName: string
     ) {
     }
 
@@ -26,7 +26,7 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
         options?: SaveOptions
     ): Promise<Result<Dto>> {
         try {
-            const schema = this.mapper.mapToSchema(dto);
+            const schema = await this.mapper.mapToSchema(dto);
 
             if (filterQuery || uniqueFields) {
                 const res = await this.checkUniqueness(schema, uniqueFields, filterQuery);
@@ -37,7 +37,7 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
             const items = await this.model.create([schema], options);
 
             return Result.ok(
-                this.mapper.map(items[0])
+                await this.mapper.map(items[0])
             );
         } catch (e) {
             return CrudUseCases.logErrorsAndReturnResult("create", e);
@@ -59,7 +59,7 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
         uniqueFields?: UniqueFields<T>
     ): Promise<Result<Dto>> {
         try {
-            let partialSchema = this.mapper.mapToSchemaPartial(dto);
+            let partialSchema = await this.mapper.mapToSchemaPartial(dto);
 
             if (filterQuery || uniqueFields) {
                 const res = await this.checkUniqueness(partialSchema, uniqueFields, filterQuery);
@@ -83,7 +83,7 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
                 return Result.err(`${this.modelName} с id ${id} не найден!`);
             }
 
-            return Result.ok(this.mapper.map(updatedItem));
+            return Result.ok(await this.mapper.map(updatedItem));
 
         } catch (e) {
             return CrudUseCases.logErrorsAndReturnResult("update", e);
@@ -139,7 +139,7 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
 
             return Result.ok(
                 Paginated.new({
-                    items: this.mapper.mapArray(items),
+                    items: await this.mapper.mapArray(items),
                     page: pagination.page,
                     size: pagination.size,
                     count
@@ -164,7 +164,7 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
                 )
                 .sort(sort);
 
-            return Result.ok(this.mapper.mapArray(items));
+            return Result.ok(await this.mapper.mapArray(items));
 
         } catch (e) {
             return CrudUseCases.logErrorsAndReturnResult("find", e);

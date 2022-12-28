@@ -8,24 +8,24 @@ import { contactPointMapper } from "../../common/mappers/contact-point.mapper";
 import { IContactSchema } from "../schemas/contact.schema";
 
 class ContactMapper extends Mapper<IContactSchema, ContactDto, CreateContactDto> {
-    map(model: IContactSchema): ContactDto {
+    async map(model: IContactSchema): Promise<ContactDto> {
         return {
             _id: model._id.toString(),
             gender: model.gender,
             relationship: model.relationship,
-            name: humanNameMapper.map(model.name),
-            address: addressMapper.mapArray(model.address),
-            telecom: contactPointMapper.mapArray(model.telecom)
+            name: await humanNameMapper.map(model.name),
+            address: await addressMapper.mapArray(model.address),
+            telecom: await contactPointMapper.mapArray(model.telecom)
         };
     }
 
-    mapToSchema(dto: CreateContactDto): IContactSchema {
+    async mapToSchema(dto: CreateContactDto): Promise<IContactSchema> {
         return {
             gender: dto.gender,
             relationship: dto.relationship,
-            name: humanNameMapper.mapToSchema(dto.name),
-            address: addressMapper.mapToSchemaArray(dto.address),
-            telecom: contactPointMapper.mapToSchemaArray(dto.telecom)
+            name: await humanNameMapper.mapToSchema(dto.name),
+            address: await addressMapper.mapToSchemaArray(dto.address),
+            telecom: await contactPointMapper.mapToSchemaArray(dto.telecom)
         };
     }
 }
@@ -33,29 +33,29 @@ class ContactMapper extends Mapper<IContactSchema, ContactDto, CreateContactDto>
 const contactMapper = new ContactMapper();
 
 class PatientMapper extends Mapper<IPatientSchema, PatientDto, CreatePatientDto> {
-    map(model: IPatientSchema) {
+    async map(model: IPatientSchema): Promise<PatientDto> {
         return {
             _id: model._id.toString(),
             active: model.active,
             birthDate: model.birthDate,
             gender: model.gender,
-            name: humanNameMapper.map(model.name),
-            address: addressMapper.mapArray(model.address),
-            telecom: contactPointMapper.mapArray(model.telecom),
-            contact: contactMapper.mapArray(model.contact)
+            name: await humanNameMapper.map(model.name),
+            address: await addressMapper.mapArray(model.address),
+            telecom: await contactPointMapper.mapArray(model.telecom),
+            contact: await contactMapper.mapArray(model.contact)
         };
     }
 
-    mapToSchema(dto: CreatePatientDto): IPatientSchema {
+    async mapToSchema(dto: CreatePatientDto): Promise<IPatientSchema> {
         return {
             //By default all patients is active
             active: dto.active !== undefined ? true : dto.active,
             birthDate: dto.birthDate,
             gender: dto.gender,
-            name: humanNameMapper.mapToSchema(dto.name),
-            address: addressMapper.mapToSchemaArray(dto.address),
-            telecom: contactPointMapper.mapToSchemaArray(dto.telecom),
-            contact: contactMapper.mapToSchemaArray(dto.contact)
+            name: await humanNameMapper.mapToSchema(dto.name),
+            address: await addressMapper.mapToSchemaArray(dto.address),
+            telecom: await contactPointMapper.mapToSchemaArray(dto.telecom),
+            contact: await contactMapper.mapToSchemaArray(dto.contact)
         };
     }
 }
