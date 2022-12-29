@@ -44,16 +44,16 @@ export class TemplatesMapper extends Mapper<ITemplateSchema, TemplateDto, Create
     }
 
     public async mapArray(models: ITemplateSchema[]): Promise<TemplateDto[]> {
-        const icdIds = [];
-        const subgroupIds = [];
+        let icdIds = [];
+        let subgroupIds = [];
 
         models.forEach(m => {
-            icdIds.concat(m.icdIds);
-            subgroupIds.concat(m.serviceSubgroupsIds);
+            icdIds = icdIds.concat(m.icdIds);
+            subgroupIds = subgroupIds.concat(m.serviceSubgroupsIds);
         });
 
         const icds = await this.icdCrudUseCase.find({ _id: { $in: icdIds } });
-        const subgroups = await this.subgroupCrudUseCase.find({ _id: { $in: icdIds } });
+        const subgroups = await this.subgroupCrudUseCase.find({ _id: { $in: subgroupIds} });
 
         const icdsMap = fromArrayToMap(icds.data);
         const subgroupsMap = fromArrayToMap(subgroups.data);
