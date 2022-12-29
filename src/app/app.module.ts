@@ -5,6 +5,7 @@ import { PriceListModule } from "./price-list/price-list.module";
 import { PatientsModule } from "./patients/patients.module";
 import { ICDModule } from "./icd/icd.module";
 import { TemplatesModule } from "./templates/templates.module";
+import { PatientCardModule } from "./patient-card/patient-card.module";
 
 @Module({
     imports: [
@@ -15,7 +16,8 @@ import { TemplatesModule } from "./templates/templates.module";
         PriceListModule,
         PatientsModule,
         ICDModule,
-        TemplatesModule
+        TemplatesModule,
+        PatientCardModule
     ],
 })
 export class AppModule {

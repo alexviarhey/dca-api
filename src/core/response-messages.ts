@@ -5,7 +5,6 @@ export class ResponseMessages {
 
     createdSuccessfully = `${this.modelName} успешно создан!`;
 
-
     updatedSuccessfully = `${this.modelName} успешно обновлен!`;
 
     deletedSuccessfully = `${this.modelName} успешно удален!`;

@@ -23,7 +23,7 @@ import { PriceListCrudController } from "./controllers/price-list.crud-controlle
         PriceItemsCrudUseCase,
         ServiceSubgroupCrudUseCase,
         ServiceGroupCrudUseCase,
-        GetPriceListUseCase
+        GetPriceListUseCase,
     ],
     controllers: [
         PriceListCrudController
