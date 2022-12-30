@@ -97,7 +97,7 @@ export interface XrayAndOtherResearchData {
 
 
 export interface IExternalExamination {
-    complaints: string
+    complaints: string | null
     faceConfiguration: FaceConfiguration[],
     conditionOfTheSkinRedBorder: string | null
     lymphNodes: LymphNodes[]

@@ -1,4 +1,5 @@
 import { Schema } from "mongoose"
+import { TemplatePlaceholdersTypes } from "./placeholder";
 
 export enum TemplateType {
     TREATMENT = 1,
@@ -12,7 +13,8 @@ export interface ITemplateSchema {
     serviceSubgroupsIds?: string[]
     type: TemplateType
     name: string
-    description: string
+    description: string,
+    placeholders: TemplatePlaceholdersTypes[]
 }
 
 export const templateSchema = new Schema<ITemplateSchema>({
@@ -21,6 +23,7 @@ export const templateSchema = new Schema<ITemplateSchema>({
     type: { type: Number, required: true },
     name: {type: String, required: true},
     description: {type: String, required: true},
+    placeholders: {type: [Number], required: false, default: null},
 })
 
 export const TEMPLATES_COLLECTION = 'templates'

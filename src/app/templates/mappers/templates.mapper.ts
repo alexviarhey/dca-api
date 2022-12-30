@@ -28,8 +28,8 @@ export class TemplatesMapper extends Mapper<ITemplateSchema, TemplateDto, Create
             type: model.type,
             name: model.name,
             description: model.description,
-            subgroups: subgroups.data
-
+            subgroups: subgroups.data,
+            placeholders: model.placeholders
         };
     }
 
@@ -39,7 +39,8 @@ export class TemplatesMapper extends Mapper<ITemplateSchema, TemplateDto, Create
             serviceSubgroupsIds: dto.subgroupsIds,
             type: dto.type,
             name: dto.name,
-            description: dto.description
+            description: dto.description,
+            placeholders: dto.placeholders
         };
     }
 
@@ -64,7 +65,8 @@ export class TemplatesMapper extends Mapper<ITemplateSchema, TemplateDto, Create
             type: model.type,
             name: model.name,
             description: model.description,
-            subgroups: model.serviceSubgroupsIds.map(id => subgroupsMap.get(id))
+            subgroups: model.serviceSubgroupsIds.map(id => subgroupsMap.get(id)),
+            placeholders: model.placeholders
         }));
     }
 }
