@@ -46,7 +46,10 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
 
     async findOne(filterQuery: FilterQuery<T>): Promise<Result<Dto | null>> {
         try {
-            return await this.model.findOne(filterQuery);
+            const model = await this.model.findOne(filterQuery);
+            return Result.ok(
+                await this.mapper.map(model)
+            )
         } catch (e) {
             return CrudUseCases.logErrorsAndReturnResult("findOne", e);
         }
