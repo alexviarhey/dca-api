@@ -26,7 +26,7 @@ export enum LymphNodes {
 }
 
 export const LymphNodesReadable = {
-   [LymphNodes.NOT_ENLARGED]: "не увеличены",
+    [LymphNodes.NOT_ENLARGED]: "не увеличены",
     [LymphNodes.ENLARGED]: "увеличены",
     [LymphNodes.ELASTIC]: "эластичные",
     [LymphNodes.MOBILE]: "подвижные",

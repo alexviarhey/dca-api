@@ -4,6 +4,7 @@ import { IPatientCardSchema, PATIENTS_CARDS_COLLECTION } from "../schemas/patien
 import { Model } from "mongoose";
 import { Result } from "../../../core/result";
 import { ICommonDiseasesSchema } from "../schemas/common-diseases.schema";
+import { CommonDiseasesService } from "../common-diseases/common-diseases.service";
 
 
 @Injectable()
@@ -12,35 +13,21 @@ export class CreateCardUseCase {
     constructor(
         @InjectModel(PATIENTS_CARDS_COLLECTION)
         private cardModel: Model<IPatientCardSchema>,
+        private commonDiseasesService: CommonDiseasesService
     ) {
     }
 
     async execute() {
-       try {
-           await this.cardModel.create({
-               commonDiseases: this.getDefaultCommonDiseases()
-           })
+        try {
+            await this.cardModel.create({
+                commonDiseases: this.commonDiseasesService.getDeafultCommonDiseases()
+            })
 
-           return Result.ok()
+            return Result.ok()
 
-       } catch (e) {
-           console.log('CreateCardUseCase error', e)
-           return Result.somethingWentWrong()
-       }
-    }
-
-    private getDefaultCommonDiseases(): ICommonDiseasesSchema {
-       return {
-           cardiovascularSystem: null,
-           nervousSystem: null,
-           endocrineSystem: null,
-           digestiveSystem: null,
-           respiratorySystem: null,
-           allergicReactions: null,
-           continuousUseOfMedicines: null,
-           harmfulFactors: null,
-           pregnancyOrPostpartumPeriod: null,
-           infectiousDiseases: null
-       }
+        } catch (e) {
+            console.log('CreateCardUseCase error', e)
+            return Result.somethingWentWrong()
+        }
     }
 }
