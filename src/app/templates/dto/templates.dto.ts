@@ -14,7 +14,6 @@ export const createTemplateSchema = {
         type: { enum: Object.values(TemplateType) },
         description: { type: 'string', transform: ['trim'], minLength: 3 },
         subgroupsIds: { type: 'array', items: { type: 'string' } },
-        placeholders: { type: 'array', items: { type: 'number' } },
     },
 }
 
@@ -43,9 +42,6 @@ export class CreateTemplateDto {
 
     @ApiProperty({ required: false, isArray: true, nullable: true })
     subgroupsIds?: string[];
-
-    @ApiProperty({ required: false, isArray: true, nullable: true })
-    placeholders?: number[];
 }
 
 export class UpdateTemplateDto {
@@ -66,9 +62,6 @@ export class UpdateTemplateDto {
 
     @ApiProperty({ required: false, isArray: true, nullable: true })
     subgroupsIds?: string[];
-
-    @ApiProperty({ required: false, isArray: true, nullable: true })
-    placeholders?: number[];
 }
 
 export class TemplateDto {
@@ -89,9 +82,6 @@ export class TemplateDto {
 
     @ApiProperty({ type: () => ServiceSubgroupDto, isArray: true })
     subgroups: ServiceSubgroupDto[];
-
-    @ApiProperty({ required: false, isArray: true, nullable: true })
-    placeholders: number[];
 }
 
 

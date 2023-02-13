@@ -9,7 +9,7 @@ describe("fillTemplatesGroups", () => {
     const mockModel = {
         async find() {
             return [
-                { _id: "1", description: "Первый длина: {{length}}, зуб: {{tooth}}." },
+                { _id: "1", description: "Первый длина: {{length}}, зуб: {{tooth}}. Второй длина: {{length}}, зуб: {{tooth}}." },
                 { _id: "2", description: "Второй высота: {{height}}, зуб: {{tooth}}." },
                 { _id: "3", description: "Обычный третий шаблон." }
             ];
@@ -20,19 +20,21 @@ describe("fillTemplatesGroups", () => {
         complains: [
             {
                 _id: "1",
-                placeholders: {
-                    [TemplatePlaceholdersTypes.LENGTH]: "10mm",
-                    [TemplatePlaceholdersTypes.TOOTH]: "23"
-                }
+                placeholders: [
+                    {[TemplatePlaceholdersTypes.LENGTH]: "10mm"},
+                    {[TemplatePlaceholdersTypes.TOOTH]: "23"},
+                    {[TemplatePlaceholdersTypes.LENGTH]: "20mm"},
+                    {[TemplatePlaceholdersTypes.TOOTH]: "12"}
+                ]
             }
         ],
         statusLocalis: [
             {
                 _id: "2",
-                placeholders: {
-                    [TemplatePlaceholdersTypes.TOOTH]: "14",
-                    [TemplatePlaceholdersTypes.HEIGHT]: "2sm"
-                }
+                placeholders: [
+                    {[TemplatePlaceholdersTypes.TOOTH]: "14"},
+                    {[TemplatePlaceholdersTypes.HEIGHT]: "2sm"}
+                ]
             },
             {
                 _id: "3"
@@ -45,7 +47,7 @@ describe("fillTemplatesGroups", () => {
         const res = await templatesService.fillTemplatesGroups(templatesGroup);
 
         expect(res).toEqual({
-            complains: "Первый длина: 10mm, зуб: 23.",
+            complains: "Первый длина: 10mm, зуб: 23. Второй длина: 20mm, зуб: 12.",
             statusLocalis: "Второй высота: 2sm, зуб: 14. Обычный третий шаблон."
         });
     });

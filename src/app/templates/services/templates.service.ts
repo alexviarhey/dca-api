@@ -6,7 +6,7 @@ import { templatePlaceholdersMap } from "../schemas/placeholder";
 
 type TemplatesForFill = Array<{
     _id: string,
-    placeholders?: { [key: number]: string }
+    placeholders?: Array<{ [key: string]: string }>
 }>
 
 export type TemplatesGroups = {
@@ -52,11 +52,14 @@ export class TemplatesService {
                     let filledTemplateDescription = template.description;
 
                     if (tForFill.placeholders) {
-                        for (let [placeholderType, v] of Object.entries(tForFill.placeholders)) {
-                            const placeholder = templatePlaceholdersMap.get(+placeholderType);
+                        tForFill.placeholders.forEach(p => {
+                            for (let [placeholderType, v] of Object.entries(p)) {
+                                const placeholder = templatePlaceholdersMap.get(+placeholderType);
 
-                            filledTemplateDescription = filledTemplateDescription.replace(new RegExp(placeholder, "g"), v);
-                        }
+                                filledTemplateDescription = filledTemplateDescription.replace(new RegExp(placeholder), v);
+                            }
+                        })
+
                     }
 
                     finalText += " " + filledTemplateDescription;
