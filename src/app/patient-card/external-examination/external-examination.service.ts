@@ -17,18 +17,21 @@ export class ExteranlExaminationService {
 
     public async getExternalExamination(): Promise<Result<ExternalExaminationDto>> {
         try {
+            return Result.ok()
         } catch(e) {
         }
     }
 
     public async updateExternalExamination(): Promise<Result<ExternalExaminationDto>> {
         try {
+            return Result.ok()
         } catch(e) {
         }
     }
 
     public async getDefaultExternalExamination(): Promise<Result<ExternalExaminationDto>> {
         try {
+            return Result.ok()
         } catch(e) {
         }
     }

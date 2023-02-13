@@ -4,7 +4,6 @@ import { patientCardSchema, PATIENTS_CARDS_COLLECTION } from "./schemas/patientC
 import { CommonDiseasesService } from "./common-diseases/common-diseases.service";
 import { CommonDiseasesMapper } from "./common-diseases/common-disesases.mapper";
 import { CommonDiseasesController } from "./common-diseases/common-diseases.controller";
-import { BioDataController } from "./bio-data/bio-data.controller";
 import { PatientsModule } from "../patients/patients.module";
 
 
@@ -20,7 +19,6 @@ import { PatientsModule } from "../patients/patients.module";
         CommonDiseasesMapper
     ],
     controllers: [
-        BioDataController,
         CommonDiseasesController
     ]
 })
