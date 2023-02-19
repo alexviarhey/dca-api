@@ -17,6 +17,13 @@ export const templatePlaceholdersMap: Map<number, string> = new Map([
     [TemplatePlaceholdersTypes.TOOTH, "{{tooth}}"],
 ]);
 
+export const templatePlaceholdersMapReadable: Map<number, { title: string, value: string }> = new Map([
+    [TemplatePlaceholdersTypes.LENGTH, { title: 'Длина', value: "{{length}}"}],
+    [TemplatePlaceholdersTypes.HEIGHT, { title: 'Высота', value: "{{height}}"}],
+    [TemplatePlaceholdersTypes.WIDTH, { title: 'Ширина', value: "{{width}}"}],
+    [TemplatePlaceholdersTypes.VOLUME, { title: 'Объем', value: "{{volume}}"}],
+    [TemplatePlaceholdersTypes.TOOTH, {title: 'Зуб', value: "{{tooth}}"}],
+]);
 export interface ITemplatePlaceholder {
     _id?: string,
     name: string,

@@ -11,15 +11,12 @@ import {
 } from "../dto/placeholders.dto";
 import { ResponseMessages } from "../../../core/response-messages";
 import { IdDto, idDtoSchema } from "../../common/dto/id.dto";
+import { templatePlaceholdersMapReadable } from "../schemas/placeholder";
+import { Result } from "../../../core/result";
 
 class PlaceholderResponseType extends CustomResponseType<PlaceholderDto> {
     @ApiProperty({type: PlaceholderDto})
     data: PlaceholderDto;
-}
-
-class PlaceholdersResponseType extends CustomResponseType<PlaceholderDto[]> {
-    @ApiProperty({type: PlaceholderDto, isArray: true})
-    data: PlaceholderDto[];
 }
 
 @Controller("/templates/placeholders")
@@ -82,10 +79,7 @@ export class PlaceholdersController {
     }
 
     @Get("")
-    @ApiOkResponse({ type: PlaceholdersResponseType })
     async getAll() {
-        return CustomResponse.fromResult(
-            await this.placeholdersCrudUseCases.find()
-        );
+        return CustomResponse.fromResult(Result.ok(templatePlaceholdersMapReadable));
     }
 }
