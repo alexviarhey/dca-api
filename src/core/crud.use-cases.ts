@@ -48,7 +48,7 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
         try {
             const model = await this.model.findOne(filterQuery);
             return Result.ok(
-                await this.mapper.map(model)
+                model ? await this.mapper.map(model) : null
             )
         } catch (e) {
             return CrudUseCases.logErrorsAndReturnResult("findOne", e);
@@ -231,9 +231,7 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
             }
 
             if (filter && Object.keys(filter).length) {
-                const exists = await this.findOne(filter);
-                console.log("FIlter", filter)
-                console.log("template", template)
+                const exists = await this.model.findOne(filter);
                 if (exists) return Result.err(`${this.modelName} c одним из переданных параметров уже существует!`);
             }
 
