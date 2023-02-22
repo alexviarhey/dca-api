@@ -232,6 +232,8 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
 
             if (filter && Object.keys(filter).length) {
                 const exists = await this.findOne(filter);
+                console.log("FIlter", filter)
+                console.log("template", template)
                 if (exists) return Result.err(`${this.modelName} c одним из переданных параметров уже существует!`);
             }
 
@@ -248,5 +250,3 @@ export abstract class CrudUseCases<T, CreateDto, Dto> {
     }
 
 }
-
-
