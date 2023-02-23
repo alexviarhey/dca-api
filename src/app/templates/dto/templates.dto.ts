@@ -22,7 +22,7 @@ export const updateTemplateSchema = {
     required: ['_id'],
     properties: {
         _id: { type: 'string' },
-        ...createTemplateSchema
+        ...createTemplateSchema.properties
     },
 }
 
