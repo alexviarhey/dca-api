@@ -74,7 +74,7 @@ export const externalExaminationSchema = new Schema<IExternalExaminationSchema>(
     conditionOfTheSkinRedBorder: { type: String, nullable: true, default: null },
     lymphNodes: { type: [Number], nullable: false },
     temporomandibularJoint: { type: [Number], nullable: false }
-})
+}, {_id: false})
 
 
   //  bite: string

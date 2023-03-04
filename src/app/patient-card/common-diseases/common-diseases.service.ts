@@ -2,19 +2,20 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { IPatientCardSchema, PATIENTS_CARDS_COLLECTION } from "../schemas/patientCard.schema";
 import { Model } from "mongoose";
-import { CommonDiseasesDto, UpdateCommonDiseasesDto } from "./dto";
-import { CommonDiseasesMapper } from "./common-disesases.mapper";
+import { UpdateCommonDiseasesDto } from "./dto";
+import { CommonDiseasesMapper } from "./common-diseases.mapper";
 import { Result } from "../../../core/result";
 import { ICommonDiseasesSchema } from "../schemas/common-diseases.schema";
-
+import { BaseService } from "../../../core/base.service";
 
 @Injectable()
-export class CommonDiseasesService {
+export class CommonDiseasesService extends BaseService {
     constructor(
         @InjectModel(PATIENTS_CARDS_COLLECTION)
         private cardModel: Model<IPatientCardSchema>,
         private mapper: CommonDiseasesMapper
     ) {
+        super("CommonDiseasesService")
     }
 
     async updateCommonDiseases(cardId: string, dto: UpdateCommonDiseasesDto): Promise<Result> {
@@ -28,9 +29,11 @@ export class CommonDiseasesService {
                 ? Result.ok()
                 : Result.err('Карточка не найдена!')
 
-        } catch (e) {
-            console.log("CommonDiseasesService:updateCommonDiseases ", e)
-            return Result.somethingWentWrong()
+        } catch (error) {
+            this.errorLogger.logErrorAndReturnSomethingWentWrongResult({
+                method: 'updateCommonDiseases',
+                error
+            })
         }
     }
 

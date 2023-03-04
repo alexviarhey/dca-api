@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Result } from "src/core/result";
-import { ErrorLogger } from "../../../core/errors";
+import { BaseService } from "../../../core/base.service";
 import { FaceConfiguration, LymphNodes, TemporomandibularJoint } from "../schemas/externalExamination";
 import { IPatientCardSchema, PATIENTS_CARDS_COLLECTION } from "../schemas/patientCard.schema";
 import { ExternalExaminationDto } from "./dto";
@@ -10,16 +10,14 @@ import { ExternalExaminationMapper } from "./external-examination.mapper";
 
 
 @Injectable()
-export class ExternalExaminationService {
-
-    private errorLogger: ErrorLogger
+export class ExternalExaminationService extends BaseService {
 
     constructor(
         @InjectModel(PATIENTS_CARDS_COLLECTION)
         private cardModel: Model<IPatientCardSchema>,
         private mapper: ExternalExaminationMapper
     ) {
-        this.errorLogger = new ErrorLogger("ExternalExaminationService")
+        super("ExternalExaminationService")
     }
 
     public async getExternalExamination(cardId: string): Promise<Result<ExternalExaminationDto>> {
