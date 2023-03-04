@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { logErrorsAndReturnSomethingWentWrongResult } from "../../../core/errors";
 import {
     PriceItemsCrudUseCase,
     ServiceGroupCrudUseCase,
@@ -7,9 +6,16 @@ import {
 } from "./price-list.crud-use-cases";
 import { PriceListDto, ServiceSubgroupWithPriceItemsDto } from "../dto/price-list.dtos";
 import { Result } from "../../../core/result";
+import { ErrorLogger } from "../../../core/errors";
 
 @Injectable()
 export class GetPriceListUseCase {
+
+    private errorLogger: ErrorLogger
+
+    constructor() {
+        this.errorLogger = new ErrorLogger("GetPriceListUseCase")
+    }
 
     async execute(
         priceItemsCrudUseCase: PriceItemsCrudUseCase,
@@ -65,12 +71,11 @@ export class GetPriceListUseCase {
             });
 
             return Result.ok(priceList)
-        } catch (e) {
-            return logErrorsAndReturnSomethingWentWrongResult(
-                "GetPriceListUseCase",
-                "execute",
-                e
-            );
+        } catch (error) {
+            return this.errorLogger.logErrorAndReturnSomethingWentWrongResult({
+                method: "execute",
+                error
+            });
         }
     }
 

@@ -34,7 +34,7 @@ export class CommonDiseasesService {
         }
     }
 
-    public getDeafultCommonDiseases(): ICommonDiseasesSchema {
+    public getDefaultCommonDiseases(): ICommonDiseasesSchema {
         return {
             cardiovascularSystem: null,
             nervousSystem: null,

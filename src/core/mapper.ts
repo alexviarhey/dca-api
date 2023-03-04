@@ -16,10 +16,11 @@ export abstract class Mapper<Model, Dto, CreateDto> {
 
         //remove undefined fields
         Object.keys(fullSchema).forEach(key => {
-            if(fullSchema[key] === undefined) {
+            if (fullSchema[key] === undefined) {
                 delete fullSchema[key]
             }
         })
 
         return fullSchema
-    }}
+    }
+}

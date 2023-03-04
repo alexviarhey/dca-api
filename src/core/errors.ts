@@ -1,11 +1,24 @@
 import { Result } from "./result";
 
+type LogErrorInfo = {
+    source?: string,
+    method?: string,
+    error: Error
+}
 
-export const logErrorsAndReturnSomethingWentWrongResult = (
-    source: string,
-    method: string,
-    err: any = "Что-то пошло не так!"
-): Result => {
-    console.log(`[${source} ${method} error]: `, err);
-    return Result.somethingWentWrong();
-};
+export class ErrorLogger {
+    constructor(private source: string) { }
+
+    public logError({
+        method,
+        error
+    }: LogErrorInfo) {
+        console.log(`[${this.source} ${method} error]: `, error);
+    };
+
+    public logErrorAndReturnSomethingWentWrongResult(errorInfo: LogErrorInfo): Result {
+        this.logError(errorInfo)
+        return Result.somethingWentWrong();
+    }
+
+}

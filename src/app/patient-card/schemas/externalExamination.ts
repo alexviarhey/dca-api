@@ -1,3 +1,5 @@
+import { Schema } from "mongoose";
+
 export enum FaceConfiguration {
     NOT_CHANGED = 1,
     ASYMMETRY,
@@ -36,39 +38,50 @@ export const LymphNodesReadable = {
     [LymphNodes.SWOLLEN]: "спаяные",
 }
 
-export interface IExternalExamination {
+export enum TemporomandibularJoint {
+    MOVEMENT_IN_FULL = 1,
+    MOVEMENT_ARE_DIFFICULT,
+    PAINLESS,
+    PAINFUL,
+    LIMITED_MOUTH_OPENING,
+    S_OFFSET_RIGHT,
+    S_OFFSET_LEFT,
+    WITH_CLICK_OR_CRUNCH
+}
+
+export const TemporomandibularJointReadable = {
+    [TemporomandibularJoint.MOVEMENT_IN_FULL]: "движения в полном объеме",
+    [TemporomandibularJoint.MOVEMENT_ARE_DIFFICULT]: "движения затруднены",
+    [TemporomandibularJoint.PAINLESS]: "безболезненные",
+    [TemporomandibularJoint.PAINFUL]: "болезненные",
+    [TemporomandibularJoint.LIMITED_MOUTH_OPENING]: "открывание рта ограничено",
+    [TemporomandibularJoint.S_OFFSET_RIGHT]: "с S-образным смещением право",
+    [TemporomandibularJoint.S_OFFSET_LEFT]: "с S-образным смещением влево",
+    [TemporomandibularJoint.WITH_CLICK_OR_CRUNCH]: "со щелчком/хрустом",
+}
+
+export interface IExternalExaminationSchema {
     complaints: string | null
     faceConfiguration: FaceConfiguration[],
     conditionOfTheSkinRedBorder: string | null
     lymphNodes: LymphNodes[]
+    temporomandibularJoint: TemporomandibularJoint[]
 }
 
-  //  temporomandibularJoint: TemporomandibularJoint[]
+export const externalExaminationSchema = new Schema<IExternalExaminationSchema>({
+    complaints: { type: String, nullable: true, default: null },
+    faceConfiguration: { type: [Number], nullable: false },
+    conditionOfTheSkinRedBorder: { type: String, nullable: true, default: null },
+    lymphNodes: { type: [Number], nullable: false },
+    temporomandibularJoint: { type: [Number], nullable: false }
+})
+
+
   //  bite: string
   //  hardTissuesOfTeethAndPeriodontiumCondtitions: IHardTissuesOfTeethAndPeriodontiumCondtitions
   //  xrayAndOtherResearchData: XrayAndOtherResearchData
 
-//export enum TemporomandibularJoint {
-//    MOVEMENT_IN_FULL = 1,
-//    MOVEMENT_ARE_DIFFICULT,
-//    PAINLESS,
-//    PAINFUL,
-//    LIMITED_MOUTH_OPENING,
-//    S_OFFSET_RIGHT,
-//    S_OFFSET_LEFT,
-//    WITH_CLICK_OR_CRUNCH
-//}
 
-//export const TemporomandibularJointReadable = {
-//    [TemporomandibularJoint.MOVEMENT_IN_FULL]: "движения в полном объеме",
-//    [TemporomandibularJoint.MOVEMENT_ARE_DIFFICULT]: "движения затруднены",
-//    [TemporomandibularJoint.PAINLESS]: "безболезненные",
-//    [TemporomandibularJoint.PAINFUL]: "болезненные",
-//    [TemporomandibularJoint.LIMITED_MOUTH_OPENING]: "открывание рта ограничено",
-//    [TemporomandibularJoint.S_OFFSET_RIGHT]: "с S-образным смещением право",
-//    [TemporomandibularJoint.S_OFFSET_LEFT]: "с S-образным смещением влево",
-//    [TemporomandibularJoint.WITH_CLICK_OR_CRUNCH]: "со щелчком/хрустом",
-//}
 
 //export enum Bite {
 //    ORTHOGNATHIC = 1,
@@ -106,5 +119,3 @@ export interface IExternalExamination {
 //    seeDiary: boolean
 //    pathologicalChanges: number[] | null
 //}
-
-
