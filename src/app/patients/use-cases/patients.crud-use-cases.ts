@@ -1,7 +1,7 @@
 import { CrudUseCases } from "../../../core/crud.use-cases";
 import { InjectModel } from "@nestjs/mongoose";
 import { IPatientSchema, PATIENTS } from "../schemas/patient.schema";
-import { FilterQuery, Model } from "mongoose";
+import { FilterQuery, Model, SaveOptions } from "mongoose";
 import { patientMapper } from "../mappers/patient.mapper";
 import { CreatePatientDto, PatientDto } from "../dto/patient.dtos";
 import { Result } from "../../../core/result";
@@ -9,6 +9,7 @@ import { ContactPointSystem } from "../../common/schemas/contact-point.schema";
 import { Injectable } from "@nestjs/common";
 import { Paginated, Pagination } from "../../../core/paginated";
 import { GetPatientsFilters } from "../dto/get-patients-filters";
+import { CreateCardUseCase } from "../../patient-card/use-cases/create-card.use-case";
 
 @Injectable()
 export class PatientsCrudUseCases extends CrudUseCases<IPatientSchema,
@@ -16,13 +17,29 @@ export class PatientsCrudUseCases extends CrudUseCases<IPatientSchema,
     PatientDto> {
     constructor(
         @InjectModel(PATIENTS)
-            patientModel: Model<IPatientSchema>
+        patientModel: Model<IPatientSchema>,
+        private readonly createCardUseCase: CreateCardUseCase
     ) {
         super(
             patientModel,
             patientMapper,
             "Пациент"
         );
+    }
+
+    async create(
+        dto: CreatePatientDto,
+        filterQuery?: FilterQuery<IPatientSchema>,
+        uniqueFields?: { and?: (keyof IPatientSchema)[]; or?: (keyof IPatientSchema)[]; },
+        options?: SaveOptions
+    ): Promise<Result<PatientDto>> {
+        const res = await super.create(dto, filterQuery, uniqueFields, options)
+
+        if (res.isSuccess) {
+            await this.createCardUseCase.execute(res.data._id)
+        }
+
+        return res
     }
 
     async findWithPagination(filters: GetPatientsFilters): Promise<Result<Paginated<PatientDto>>> {

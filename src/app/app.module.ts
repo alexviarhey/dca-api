@@ -14,10 +14,10 @@ import { PatientCardModule } from "./patient-card/use-cases/patient-card.module"
         }),
         InfraModule,
         PriceListModule,
+        PatientCardModule,
         PatientsModule,
         ICDModule,
         TemplatesModule,
-        PatientCardModule
     ],
 })
 export class AppModule {

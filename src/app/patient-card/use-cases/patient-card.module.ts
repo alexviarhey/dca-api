@@ -15,7 +15,6 @@ import { PatientCardController } from "../controllers/patient-card.controller";
         MongooseModule.forFeature([
             { schema: patientCardSchema, name: PATIENTS_CARDS_COLLECTION }
         ]),
-        PatientsModule
     ],
     providers: [
         CreateCardUseCase,
@@ -28,7 +27,8 @@ import { PatientCardController } from "../controllers/patient-card.controller";
     ],
     controllers: [
         PatientCardController
-    ]
+    ],
+    exports: [CreateCardUseCase]
 })
 export class PatientCardModule {
 }
