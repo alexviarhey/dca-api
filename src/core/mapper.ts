@@ -1,4 +1,4 @@
-export abstract class Mapper<Model, Dto, CreateDto> {
+export abstract class Mapper<Model, Dto, CreateDto = Dto> {
     abstract map(model: Model): Promise<Dto>
 
     abstract mapToSchema(dto: CreateDto | Partial<CreateDto>): Promise<Model>

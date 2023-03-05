@@ -1,5 +1,5 @@
 import { Mapper } from "../../../core/mapper";
-import { GeneralTreatmentPlanDto } from "./dto";
+import { GeneralTreatmentPlanDto } from "../dto/general-treatment-plan.dto";
 import { Injectable } from "@nestjs/common";
 import { GeneralTreatmentPlanSchema } from "../schemas/general-treatment-plan.schema";
 

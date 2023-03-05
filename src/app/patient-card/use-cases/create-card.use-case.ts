@@ -3,14 +3,12 @@ import { InjectModel } from "@nestjs/mongoose";
 import { IPatientCardSchema, PATIENTS_CARDS_COLLECTION } from "../schemas/patientCard.schema";
 import { Model } from "mongoose";
 import { Result } from "../../../core/result";
-import { CommonDiseasesService } from "../common-diseases/common-diseases.service";
-import { ExternalExaminationService } from "../external-examination/external-examination.service";
-import { GeneralTreatmentPlanService } from "../general-treatment-plan/general-treatment-plan.service";
 import { BaseService } from "../../../core/base.service";
+import { CommonDiseasesService, ExternalExaminationService, GeneralTreatmentPlanService } from "../services/card-tab.services";
 
 
 @Injectable()
-export class CreateCardUseCase extends BaseService{
+export class CreateCardUseCase extends BaseService {
     constructor(
         @InjectModel(PATIENTS_CARDS_COLLECTION)
         private cardModel: Model<IPatientCardSchema>,

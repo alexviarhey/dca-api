@@ -1,6 +1,6 @@
 import { Mapper } from "../../../core/mapper";
 import { ICommonDiseasesSchema } from "../schemas/common-diseases.schema";
-import { CommonDiseasesDto, CreateCommonDiseasesDto } from "./dto";
+import { CommonDiseasesDto, CreateCommonDiseasesDto } from "../dto/common-diseases.dto";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()

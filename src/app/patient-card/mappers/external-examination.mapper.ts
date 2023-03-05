@@ -1,7 +1,7 @@
 import { Mapper } from "../../../core/mapper";
 import { Injectable } from "@nestjs/common";
 import { IExternalExaminationSchema } from "../schemas/externalExamination";
-import { ExternalExaminationDto } from "./dto";
+import { ExternalExaminationDto } from "../dto/external-examination.dto";
 
 @Injectable()
 export class ExternalExaminationMapper extends Mapper<IExternalExaminationSchema, ExternalExaminationDto, ExternalExaminationDto> {
