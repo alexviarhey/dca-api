@@ -3,6 +3,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { ITemplateSchema, TEMPLATES_COLLECTION } from "../schemas/template.schema";
 import { Model } from "mongoose";
 import { templatePlaceholdersMap } from "../schemas/placeholder";
+import { Result } from "../../../core/result";
 
 type TemplatesForFill = Array<{
     _id: string,
@@ -22,8 +23,13 @@ export class TemplatesService {
     ) {
     }
 
-    async fillTemplatesGroups(groups: TemplatesGroups): Promise<{ [key: string]: string }> {
+    async fillTemplatesGroups(groups: TemplatesGroups): Promise<Result<{ [key: string]: string }>> {
         try {
+
+            if (!this.validateTemplateGroups(groups)) {
+                return Result.err("Invalid body!")
+            }
+
             const templatesIds = Object.values(groups)
                 .flat()
                 .map(t => t._id);
@@ -68,10 +74,28 @@ export class TemplatesService {
                 result[k] = finalText.trim();
             }
 
-            return result;
+            return Result.ok(result)
 
         } catch (e) {
-            console.log(e);
+            console.log('fillTemplatesGroups error', e);
+            return Result.err('Something went wrong!')
+        }
+    }
+
+    private validateTemplateGroups(groups: TemplatesGroups): boolean {
+        if (typeof groups !== 'object') return false
+
+        for (let [_, templates] of Object.entries(groups)) {
+            if (!Array.isArray(templates)) return false
+
+            for (let template of templates) {
+                if (!template._id) return false
+                if (!Array.isArray(template.placeholders)) return false
+
+                for (let [_, value] of Object.entries(template.placeholders)) {
+                    if (typeof value !== 'string') return false
+                }
+            }
         }
     }
 }

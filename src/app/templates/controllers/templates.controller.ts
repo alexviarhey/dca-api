@@ -15,6 +15,7 @@ import { IdDto } from "../../common/dto/id.dto";
 import { Paginated, Pagination } from "../../../core/paginated";
 import { FilterQuery } from "mongoose";
 import { ITemplateSchema } from "../schemas/template.schema";
+import { TemplatesGroups, TemplatesService } from "../services/templates.service";
 
 class CreateTemplateResponseType extends CustomResponseType<TemplateDto> {
     @ApiProperty({ type: TemplateDto })
@@ -38,7 +39,8 @@ export class TemplatesController {
     responseMessages: ResponseMessages;
 
     constructor(
-        private readonly templatesCrudUseCases: TemplatesCrudUseCases
+        private readonly templatesCrudUseCases: TemplatesCrudUseCases,
+        private readonly templateService: TemplatesService
     ) {
         this.responseMessages = new ResponseMessages(templatesCrudUseCases.modelName);
     }
@@ -114,5 +116,14 @@ export class TemplatesController {
         const res = await this.templatesCrudUseCases.findWithPagination(filterQuery, paginated);
 
         return CustomResponse.fromResult(res);
+    }
+
+    @Post("/templates/get-text")
+    public async generateTextFromTemplates(
+        @Body() templateGroups: TemplatesGroups
+    ): Promise<CustomResponse<{[key: string]: string}>> {
+        return CustomResponse.fromResult(
+            await this.templateService.fillTemplatesGroups(templateGroups)
+        )
     }
 }

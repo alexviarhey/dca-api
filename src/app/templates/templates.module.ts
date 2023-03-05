@@ -10,6 +10,7 @@ import { templatePlaceholderSchema, TEMPLATES_PLACEHOLDERS_COLLECTION } from "./
 import { PlaceholdersMapper } from "./mappers/placeholdres.mapper";
 import { PlaceholdersCrudUseCases } from "./use-cases/placeholders.crud-use-cases";
 import { PlaceholdersController } from "./controllers/placeholders.controller";
+import { TemplatesService } from "./services/templates.service";
 
 @Module({
     imports: [
@@ -24,7 +25,8 @@ import { PlaceholdersController } from "./controllers/placeholders.controller";
         TemplatesMapper,
         TemplatesCrudUseCases,
         PlaceholdersMapper,
-        PlaceholdersCrudUseCases
+        PlaceholdersCrudUseCases,
+        TemplatesService
     ],
     controllers: [
         TemplatesController,
