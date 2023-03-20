@@ -118,7 +118,7 @@ export class TemplatesController {
         return CustomResponse.fromResult(res);
     }
 
-    @Post("/templates/get-text")
+    @Post("/get-text")
     public async generateTextFromTemplates(
         @Body() templateGroups: TemplatesGroups
     ): Promise<CustomResponse<{[key: string]: string}>> {
