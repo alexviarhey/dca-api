@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { ObjectExpression, Schema } from "mongoose";
 
 
 export enum TemplatePlaceholdersTypes {
@@ -15,7 +15,7 @@ export const templatePlaceholdersMap: Map<number, string> = new Map([
     [TemplatePlaceholdersTypes.WIDTH, "{{width}}"],
     [TemplatePlaceholdersTypes.VOLUME, "{{volume}}"],
     [TemplatePlaceholdersTypes.TOOTH, "{{tooth}}"],
-]);
+])
 
 export const templatePlaceholdersMapReadable = {
     [TemplatePlaceholdersTypes.LENGTH]: { title: 'Длина', value: "{{length}}"},
@@ -24,6 +24,7 @@ export const templatePlaceholdersMapReadable = {
     [TemplatePlaceholdersTypes.VOLUME]:  { title: 'Объем', value: "{{volume}}"},
     [TemplatePlaceholdersTypes.TOOTH]: {title: 'Зуб', value: "{{tooth}}"},
 }
+
 export interface ITemplatePlaceholder {
     _id?: string,
     name: string,

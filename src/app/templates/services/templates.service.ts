@@ -34,12 +34,13 @@ export class TemplatesService {
                 .flat()
                 .map(t => t._id);
 
+
             const templates = await this.templatesModel.find({
                 _id: { $in: templatesIds }
             });
 
             const templatesMap = new Map(
-                templates.map(t => [t._id, t])
+                templates.map(t => [t._id.toString(), t])
             );
 
             const result = {};
