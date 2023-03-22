@@ -88,14 +88,18 @@ export class TemplatesService {
         for (let [_, templates] of Object.entries(groups)) {
             if (!Array.isArray(templates)) return false
 
+
             for (let template of templates) {
                 if (!template._id) return false
-                if (!Array.isArray(template.placeholders)) return false
 
-                for (let [_, value] of Object.entries(template.placeholders)) {
-                    if (typeof value !== 'string') return false
+                if (template.placeholders && Array.isArray(template.placeholders)) {
+                    for (let [_, value] of Object.entries(template.placeholders)) {
+                        if (typeof value !== 'object') return false
+                    }
                 }
             }
         }
+
+        return true
     }
 }

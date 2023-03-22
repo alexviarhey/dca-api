@@ -46,7 +46,7 @@ describe("fillTemplatesGroups", () => {
         const templatesService = new TemplatesService(mockModel as unknown as Model<ITemplateSchema>);
         const res = await templatesService.fillTemplatesGroups(templatesGroup);
 
-        expect(res).toEqual({
+        expect(res.data).toEqual({
             complains: "Первый длина: 10mm, зуб: 23. Второй длина: 20mm, зуб: 12.",
             statusLocalis: "Второй высота: 2sm, зуб: 14. Обычный третий шаблон."
         });
