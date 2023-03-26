@@ -118,8 +118,8 @@ export class ExternalExaminationService extends CardTabService<ExternalExaminati
         )
     }
 
-    public async getDefaultExternalExamination(): Promise<Result<ExternalExaminationDto>> {
-        return Result.ok({
+    public async getDefaultExternalExamination(): Promise<ExternalExaminationDto> {
+        return {
             complaints: null,
             conditionOfTheSkinRedBorder: null,
             faceConfiguration: [
@@ -136,7 +136,7 @@ export class ExternalExaminationService extends CardTabService<ExternalExaminati
                 TemporomandibularJoint.PAINLESS,
                 TemporomandibularJoint.MOVEMENT_IN_FULL
             ]
-        })
+        }
     }
 }
 
