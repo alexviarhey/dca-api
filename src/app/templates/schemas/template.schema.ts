@@ -3,7 +3,8 @@ import { Schema } from "mongoose"
 export enum TemplateType {
     TREATMENT = 1,
     LOCAL_STATUS,
-    RESEARCH
+    RESEARCH,
+    COMPLAINS
 }
 
 export interface ITemplateSchema {
