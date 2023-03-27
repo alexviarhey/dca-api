@@ -15,8 +15,8 @@ export const externalExaminationAjvSchema = {
     properties: {
         complains: { type: 'string', nullable: true },
         conditionOfTheSkinRedBorder: { type: 'string', nullable: true },
-        faceConfiguration: { type: 'int8', enum: Object.values(FaceConfiguration) },
-        lymphNodes: { type: 'int8', enum: Object.values(LymphNodes) },
-        temporomandibularJoint: { type: 'int8', enum: Object.values(TemporomandibularJoint) },
+        faceConfiguration: { enum: Object.values(FaceConfiguration) },
+        lymphNodes: {  enum: Object.values(LymphNodes) },
+        temporomandibularJoint: {  enum: Object.values(TemporomandibularJoint) },
     }
 };
