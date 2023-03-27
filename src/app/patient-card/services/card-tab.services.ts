@@ -48,13 +48,14 @@ class CardTabService<Dto, M extends Mapper<TabSchema, Dto>> extends BaseService 
 
     public async updateTabData(cardId: string, data: Dto): Promise<Result> {
         try {
+
             const updateRes = await this.cardModel.updateOne(
                 {
                     _id: cardId
                 },
                 {
                     $set: {
-                        [this.tabName]: this.mapper.mapToSchema(data)
+                        [this.tabName]: await this.mapper.mapToSchema(data)
                     }
                 }
             )
