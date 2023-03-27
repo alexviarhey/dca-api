@@ -13,10 +13,10 @@ export const externalExaminationAjvSchema = {
     additionalProperties: false,
     allRequired: true,
     properties: {
-        complains: { type: 'string', nullable: true },
+        complaints: { type: 'string', nullable: true },
         conditionOfTheSkinRedBorder: { type: 'string', nullable: true },
-        faceConfiguration: { enum: Object.values(FaceConfiguration) },
-        lymphNodes: {  enum: Object.values(LymphNodes) },
-        temporomandibularJoint: {  enum: Object.values(TemporomandibularJoint) },
+        faceConfiguration: { type: 'array', enum: Object.values(FaceConfiguration) },
+        lymphNodes: { type: 'array', enum: Object.values(LymphNodes) },
+        temporomandibularJoint: { type: 'array', enum: Object.values(TemporomandibularJoint) },
     }
 };
