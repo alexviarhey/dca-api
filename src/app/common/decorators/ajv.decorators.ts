@@ -17,6 +17,7 @@ const isValid = (
     data: any
 ) => {
     if (!ajv.validate(schema, data)) {
+        console.log("ERRORS", JSON.stringify(ajv.errors))
         throw new AjvException(ajv.errors);
     }
 };

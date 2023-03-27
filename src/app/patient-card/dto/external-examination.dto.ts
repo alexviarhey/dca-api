@@ -1,4 +1,4 @@
-import { FaceConfiguration, LymphNodes, TemporomandibularJoint} from "../schemas/externalExamination";
+import { FaceConfiguration, FaceConfigurationReadable, LymphNodes, LymphNodesReadable, TemporomandibularJoint, TemporomandibularJointReadable } from "../schemas/externalExamination";
 
 export type ExternalExaminationDto = {
     complaints: string | null
@@ -15,8 +15,21 @@ export const externalExaminationAjvSchema = {
     properties: {
         complaints: { type: 'string', nullable: true },
         conditionOfTheSkinRedBorder: { type: 'string', nullable: true },
-        faceConfiguration: { type: 'array', enum: Object.values(FaceConfiguration) },
-        lymphNodes: { type: 'array', enum: Object.values(LymphNodes) },
-        temporomandibularJoint: { type: 'array', enum: Object.values(TemporomandibularJoint) },
+        faceConfiguration: {
+            type: 'array',
+            items: { enum: Object.keys(FaceConfigurationReadable).map(k => +k) }
+        },
+        lymphNodes: {
+            type: 'array',
+            items: {
+                enum: Object.keys(LymphNodesReadable).map(k => +k)
+            }
+        },
+        temporomandibularJoint: {
+            type: 'array',
+            items: {
+                enum: Object.keys(TemporomandibularJointReadable).map(k => +k)
+            }
+        }
     }
 };
