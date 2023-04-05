@@ -13,31 +13,31 @@ export const dentalConditionValue = [
     "E"
 ]
 
-type DentalFormula = {
+export type DentalFormula = {
     top: Array<string | null>,
     bottom: Array<string | null>
 }
 
 export const ohisValues = [
-    "0",
-    "1",
-    "2",
-    "3"
+    0,
+    1,
+    2,
+    3
 ]
 
-type OHIS = Array<[string, string]>
+export type OHIS = Array<[number, number] | null>
 
 export const kpiValues = [
-    "0",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5"
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
 ]
 
-type KPI = [string]
-
+export type KPI = Array<string | null>
+export type KPU = Array<number>
 
 export enum Bites {
     ORTHOGNATIC = 1,
@@ -57,7 +57,9 @@ export const bitesReadable = {
     [Bites.CROSS]: 'Перекрестный',
 }
 
-type HardTissueConditions = {
+export type Bite = Array<number>
+
+export type HardTissueConditions = {
     largeFillings: string | null
     abrasion: string | null
     colorChange: string | null
@@ -72,8 +74,8 @@ export type DentalStatusSchema = {
     dentalFormula: DentalFormula
     ohis: OHIS
     kpi: KPI
-    kpu: Array<number>
-    bite: Array<number>,
+    kpu: KPI
+    bite: Bite
     hardTissueConditions: HardTissueConditions
     researchData: ResearchData
 }
@@ -81,7 +83,7 @@ export type DentalStatusSchema = {
 export type ResearchData = {
     notCarriedOut: boolean
     seeDiary: boolean
-    noPathologicalChanges: string
+    noPathologicalChanges: string | null
 }
 
 const dentalFormulaSchema = new Schema<DentalFormula>({
@@ -108,8 +110,8 @@ const researchDataSchema = new Schema<ResearchData>({
 
 export const dentalStatusSchema = new Schema<DentalStatusSchema>({
     dentalFormula: { type: dentalFormulaSchema, required: true },
-    ohis: { type: [[String]] },
-    kpi: { type: [String] },
+    ohis: { type: Schema.Types.Mixed, required: true},
+    kpi: { type: Schema.Types.Mixed, required: true },
     kpu: { type: [Number] },
     bite: { type: [Number] },
     hardTissueConditions: { type: hardTissueConditionsSchema, required: true },
