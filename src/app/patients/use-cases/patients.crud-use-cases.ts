@@ -90,5 +90,4 @@ export class PatientsCrudUseCases extends CrudUseCases<IPatientSchema,
 
         return filterQuery
     }
-
 }

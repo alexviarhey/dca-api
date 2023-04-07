@@ -1,5 +1,4 @@
 import { Schema } from "mongoose"
-import { GenderValues } from "../../patients/types/gender"
 import { addressSchema, IAddressSchema } from "../../common/schemas/address.schema"
 import { contactPointSchema, IContactPointSchema } from "../../common/schemas/contact-point.schema"
 import { humanNameSchema, IHumanNameSchema } from "../../common/schemas/human-name.schema"
@@ -29,27 +28,19 @@ const practitionerRoleSchema = new Schema<IPractitionerRole>({
     active: { type: Boolean, required: true },
 }, { _id: false })
 
-
-export interface IPractitioner {
-    _id: string
+export type PractitionerSchema = {
+    _id?: string
     active: boolean
     name: IHumanNameSchema
-    birthDate: string
-    gender: GenderValues
     telecom: IContactPointSchema[]
-    address?: IAddressSchema[]
-    role: IPractitionerRole[]
+    address: IAddressSchema[]
 }
 
-
-export const practitionerSchema = new Schema<IPractitioner>({
-    active: { type: Boolean, required: true },
+export const practitionerSchema = new Schema<PractitionerSchema>({
+    active: { type: Boolean, default: true },
     name: { type: humanNameSchema, required: true },
-    birthDate: { type: String, required: true },
-    gender: { type: String, enum: GenderValues, required: true },
-    address: { type: [addressSchema], required: true },
-    telecom: { type: [contactPointSchema], required: true },
-    role: { type: [practitionerRoleSchema], required: true }
+    address: { type: [addressSchema], default: [] },
+    telecom: { type: [contactPointSchema], default: [] },
 })
 
-export const PRACTITIONERS = 'practitioners'
+export const PRACTITIONERS_COLLECTION = 'practitioners'
