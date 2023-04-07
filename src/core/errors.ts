@@ -20,5 +20,4 @@ export class ErrorLogger {
         this.logError(errorInfo)
         return Result.somethingWentWrong();
     }
-
 }
