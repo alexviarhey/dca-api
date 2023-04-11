@@ -15,7 +15,7 @@ export class Pagination {
     ) {
     }
 
-    public static new(value?: { page: number, size: number }): Pagination {
+    public static new(value?: { page?: number, size?: number }): Pagination {
         if(!value || value.page === undefined || value.size === undefined) {
            return this.default()
         }
