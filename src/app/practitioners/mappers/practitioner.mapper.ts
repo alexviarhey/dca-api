@@ -22,9 +22,7 @@ export class PractitionersMapper extends Mapper<PractitionerSchema, Practitioner
     public async map(model: PractitionerSchema): Promise<PractitionerDto> {
 
         let roles = await this.practitionerModel.find({
-            where: {
-                id: { $in: model.roles }
-            }
+            _id: { $in: model.roles }
         })
 
         let rolesDto: Array<PractitionerRoleDto> = roles.map(r => ({

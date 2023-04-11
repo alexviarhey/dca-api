@@ -20,7 +20,7 @@ export const contactPointValidationSchema = {
     allOf: [
         {
             if: {properties: {system: {const: ContactPointSystem.PHONE}}},
-            then: {properties: {value: {type: "string", pattern: "^[0-9\s+()-]+$"}}},
+            then: {properties: {value: {type: "string", pattern: "^\+[0-9]+$"}}},
         },
         {
             if: {properties: {system: {const: ContactPointSystem.EMAIL}}},

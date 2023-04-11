@@ -19,6 +19,9 @@ export type PractitionerRoleSchema = {
     active: boolean
 }
 
+
+//"643587fd4c154dda959fddd9", 643587fd4c154dda959fddd9 643588724c154dda959fdddb 6435888b4c154dda959fdddc 643588ae4c154dda959fdddd
+
 export const practitionerRoleSchema = new Schema<PractitionerRoleSchema>({
     code: { type: String, enum: PractitionerCode, required: true },
     speciality: { type: String, enum: PractitionerSpeciality, required: false, nullable: true, default: null },

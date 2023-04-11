@@ -4,11 +4,11 @@ export abstract class Mapper<Model, Dto, CreateDto = Dto> {
     abstract mapToSchema(dto: CreateDto | Partial<CreateDto>): Promise<Model>
 
     public mapArray(models: Model[]): Promise<Dto[]> {
-        return Promise.all(models.map(this.map))
+        return Promise.all(models.map(this.map.bind(this)))
     }
 
     public mapToSchemaArray(dtos: CreateDto[]): Promise<Model[]> {
-        return Promise.all(dtos.map(this.mapToSchema))
+        return Promise.all(dtos.map(this.mapToSchema.bind(this)))
     }
 
     public mapToSchemaPartial(dto: Partial<CreateDto>): Promise<Partial<Model>> {

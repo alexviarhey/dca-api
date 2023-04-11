@@ -4,6 +4,7 @@ import { PractitionersMapper } from "./mappers/practitioner.mapper";
 import { MongooseModule } from "@nestjs/mongoose";
 import { PRACTITIONERS_COLLECTION, practitionerSchema } from "./schemas/practitioner.schema";
 import { PRACTITIONERS_ROLES_COLLECTIONS, practitionerRoleSchema } from "./schemas/practitioner-role.schema";
+import { PractitionersController } from "./controllers/practitioners.controller";
 
 
 @Module({
@@ -17,6 +18,8 @@ import { PRACTITIONERS_ROLES_COLLECTIONS, practitionerRoleSchema } from "./schem
         PractitionersCrudUseCases,
         PractitionersMapper
     ],
-    controllers: []
+    controllers: [
+        PractitionersController
+    ]
 })
 export class PractitionersModule { }

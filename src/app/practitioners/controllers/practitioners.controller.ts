@@ -5,7 +5,7 @@ import { PractitionersCrudUseCases } from "../use-cases/practitioners.crud.use-c
 import { GetPractitionersFilters, getPractitionersFiltersSchema } from "../dto/practitioner.dto";
 
 @Controller("/practitioners")
-export class PatientsController {
+export class PractitionersController {
     constructor(
         private readonly practitionersCrudUseCases: PractitionersCrudUseCases
     ) {

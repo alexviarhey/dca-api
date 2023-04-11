@@ -44,8 +44,8 @@ export class PractitionersCrudUseCases extends CrudUseCases<PractitionerSchema,
         if (filters.phone) {
             filterQuery.telecom = {
                 $elemMatch: {
-                    use: ContactPointSystem.PHONE,
-                    value: { $regex: filters.phone }
+                    system: ContactPointSystem.PHONE,
+                    value: { $regex: filters.phone, $options: "i"}
                 }
             };
         }
