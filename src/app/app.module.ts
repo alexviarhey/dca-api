@@ -6,6 +6,7 @@ import { PatientsModule } from "./patients/patients.module";
 import { ICDModule } from "./icd/icd.module";
 import { TemplatesModule } from "./templates/templates.module";
 import { PatientCardModule } from "./patient-card/use-cases/patient-card.module";
+import { PractitionersModule } from "./practitioners/practitioners.module";
 
 @Module({
     imports: [
@@ -18,6 +19,7 @@ import { PatientCardModule } from "./patient-card/use-cases/patient-card.module"
         PatientsModule,
         ICDModule,
         TemplatesModule,
+        PractitionersModule
     ],
 })
 export class AppModule {

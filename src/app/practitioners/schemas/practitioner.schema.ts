@@ -3,30 +3,6 @@ import { addressSchema, IAddressSchema } from "../../common/schemas/address.sche
 import { contactPointSchema, IContactPointSchema } from "../../common/schemas/contact-point.schema"
 import { humanNameSchema, IHumanNameSchema } from "../../common/schemas/human-name.schema"
 
-export enum PractitionerCode {
-    DOCTOR = 'doctor',
-    NURSE = 'nurse',
-    ADMINISTRATOR = 'administrator'
-}
-
-export enum PractitionerSpeciality {
-    SURGEON = 'surgeon',
-    ORTHOPEDIST = 'orthopedist',
-    ORTHODONTIST = 'orthodontist',
-    THERAPIST = 'therapist'
-}
-
-interface IPractitionerRole {
-    code: PractitionerCode
-    speciality: PractitionerSpeciality
-    active: boolean
-}
-
-const practitionerRoleSchema = new Schema<IPractitionerRole>({
-    code: { type: String, enum: PractitionerCode, required: true },
-    speciality: { type: String, enum: PractitionerSpeciality, required: true },
-    active: { type: Boolean, required: true },
-}, { _id: false })
 
 export type PractitionerSchema = {
     _id?: string
@@ -34,6 +10,7 @@ export type PractitionerSchema = {
     name: IHumanNameSchema
     telecom: IContactPointSchema[]
     address: IAddressSchema[]
+    roles: Array<string>
 }
 
 export const practitionerSchema = new Schema<PractitionerSchema>({
@@ -41,6 +18,7 @@ export const practitionerSchema = new Schema<PractitionerSchema>({
     name: { type: humanNameSchema, required: true },
     address: { type: [addressSchema], default: [] },
     telecom: { type: [contactPointSchema], default: [] },
+    roles: { type: [String], nullable: false, default: [] }
 })
 
 export const PRACTITIONERS_COLLECTION = 'practitioners'

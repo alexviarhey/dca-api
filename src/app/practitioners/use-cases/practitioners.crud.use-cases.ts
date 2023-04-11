@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { CrudUseCases } from "../../../core/crud.use-cases";
-import { Model} from "mongoose";
+import { Model } from "mongoose";
 import { CreatePractitionerDto, PractitionerDto } from "../dto/practitioner.dto";
 import { PRACTITIONERS_COLLECTION, PractitionerSchema } from "../schemas/practitioner.schema";
-import { practitionersMapper } from "../mappers/practitioner.mapper";
+import { PractitionersMapper } from "../mappers/practitioner.mapper";
 
 @Injectable()
 export class PractitionersCrudUseCases extends CrudUseCases<PractitionerSchema,
@@ -13,11 +13,12 @@ export class PractitionersCrudUseCases extends CrudUseCases<PractitionerSchema,
     constructor(
         @InjectModel(PRACTITIONERS_COLLECTION)
         practitionerModel: Model<PractitionerSchema>,
+        practitionersMapper: PractitionersMapper
     ) {
         super(
             practitionerModel,
             practitionersMapper,
-            "Работник"
+            "Сотрудник"
         );
     }
 }
