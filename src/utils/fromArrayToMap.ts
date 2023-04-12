@@ -9,3 +9,4 @@ export const fromArrayToMap = <T extends ArrayToMap>(array: T[]): Map<string, T>
         return map
     }, new Map())
 }
+

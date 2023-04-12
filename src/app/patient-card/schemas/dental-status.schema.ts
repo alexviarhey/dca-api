@@ -13,31 +13,44 @@ export const dentalConditionValue = [
     "E"
 ]
 
-export type DentalFormula = {
-    top: Array<string | null>,
-    bottom: Array<string | null>
+
+export class DentalFormula {
+    private static TEETH_IN_THE_JAW = 16
+
+    constructor(
+        public top: Array<string | null>,
+        public bottom: Array<string | null>
+    ) { }
+
+    public static default(): DentalFormula {
+        return new DentalFormula(
+            this.defaultForJaw(),
+            this.defaultForJaw(),
+        )
+    }
+
+    private static defaultForJaw(): Array<string | null> {
+        return Array(this.TEETH_IN_THE_JAW).fill(null)
+    }
 }
 
-export const ohisValues = [
-    0,
-    1,
-    2,
-    3
-]
-
 export type OHIS = Array<[number, number] | null>
-
-export const kpiValues = [
-    0,
-    1,
-    2,
-    3,
-    4,
-    5
-]
-
 export type KPI = Array<string | null>
-export type KPU = Array<number>
+export type KPU = Array<number | null>
+
+export class DentalIndexes {
+    public static defaultOhis(): OHIS {
+        return Array(6).fill(null)
+    }
+
+    public static defaultKpi(): KPI {
+        return Array(6).fill(null)
+    }
+
+    public static defaultKpu(): KPU {
+        return Array(3).fill(null)
+    }
+}
 
 export enum Bites {
     ORTHOGNATIC = 1,
@@ -74,8 +87,8 @@ export type DentalStatusSchema = {
     dentalFormula: DentalFormula
     ohis: OHIS
     kpi: KPI
-    kpu: KPI
-    bite: Bite
+    kpu: KPU
+    bite: Bite | null
     hardTissueConditions: HardTissueConditions
     researchData: ResearchData
 }
@@ -110,10 +123,10 @@ const researchDataSchema = new Schema<ResearchData>({
 
 export const dentalStatusSchema = new Schema<DentalStatusSchema>({
     dentalFormula: { type: dentalFormulaSchema, required: true },
-    ohis: { type: Schema.Types.Mixed, required: true},
+    ohis: { type: Schema.Types.Mixed, required: true },
     kpi: { type: Schema.Types.Mixed, required: true },
     kpu: { type: [Number] },
-    bite: { type: [Number] },
+    bite: { type: [Number], nullable: true, default: null },
     hardTissueConditions: { type: hardTissueConditionsSchema, required: true },
     researchData: { type: researchDataSchema, required: true },
 }, { _id: false })

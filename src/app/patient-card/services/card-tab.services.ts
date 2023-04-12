@@ -12,6 +12,9 @@ import { ExternalExaminationMapper } from "../mappers/external-examination.mappe
 import { GeneralTreatmentPlanMapper } from "../mappers/general-treatment-plan.mapper"
 import { FaceConfiguration, LymphNodes, TemporomandibularJoint } from "../schemas/externalExamination"
 import { IPatientCardSchema, PATIENTS_CARDS_COLLECTION } from "../schemas/patientCard.schema"
+import { DentalStatusDto } from "../dto/dental-status.dto"
+import { DentalStatusMapper } from "../mappers/dental-status.mapper"
+import { DentalFormula, DentalIndexes, DentalStatusSchema } from "../schemas/dental-status.schema"
 
 type TabSchema = (IPatientCardSchema)[keyof IPatientCardSchema]
 
@@ -169,6 +172,46 @@ export class GeneralTreatmentPlanService extends CardTabService<GeneralTreatment
             orthodonticTreatment: null,
             additionalDiagnosticMeasures: null,
             consultationOfOtherSpecialists: null
+        }
+    }
+}
+
+@Injectable()
+export class DentalStatusTabService extends CardTabService<DentalStatusDto, DentalStatusMapper> {
+    constructor(
+        @InjectModel(PATIENTS_CARDS_COLLECTION)
+        cardModel: Model<IPatientCardSchema>,
+        mapper: DentalStatusMapper,
+    ) {
+        super(
+            cardModel,
+            mapper,
+            "dentalStatus"
+        )
+    }
+
+    public getDefaultDentalStatus(): DentalStatusSchema {
+        return {
+            dentalFormula: DentalFormula.default(),
+            ohis: DentalIndexes.defaultOhis(),
+            kpi: DentalIndexes.defaultKpi(),
+            kpu: DentalIndexes.defaultKpu(),
+            bite: null,
+            hardTissueConditions: {
+                largeFillings: null,
+                abrasion: null,
+                colorChange: null,
+                shapeChange: null,
+                irops: null,
+                hyperemia: null,
+                recession: null,
+                toothAttachments: null
+            },
+            researchData: {
+                notCarriedOut: false,
+                seeDiary: false,
+                noPathologicalChanges: null
+            }
         }
     }
 }

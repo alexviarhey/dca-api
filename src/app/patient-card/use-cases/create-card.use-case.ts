@@ -4,7 +4,7 @@ import { IPatientCardSchema, PATIENTS_CARDS_COLLECTION } from "../schemas/patien
 import { Model } from "mongoose";
 import { Result } from "../../../core/result";
 import { BaseService } from "../../../core/base.service";
-import { CommonDiseasesService, ExternalExaminationService, GeneralTreatmentPlanService } from "../services/card-tab.services";
+import { CommonDiseasesService, DentalStatusTabService, ExternalExaminationService, GeneralTreatmentPlanService } from "../services/card-tab.services";
 
 
 @Injectable()
@@ -14,7 +14,8 @@ export class CreateCardUseCase extends BaseService {
         private cardModel: Model<IPatientCardSchema>,
         private commonDiseasesService: CommonDiseasesService,
         private externalExaminationService: ExternalExaminationService,
-        private generalTreatmentPlanService: GeneralTreatmentPlanService
+        private generalTreatmentPlanService: GeneralTreatmentPlanService,
+        private dentalStatusTabService: DentalStatusTabService
     ) {
         super("CreateCardUseCase")
     }
@@ -25,7 +26,8 @@ export class CreateCardUseCase extends BaseService {
                 patientId,
                 commonDiseases: this.commonDiseasesService.getDefaultCommonDiseases(),
                 externalExamination: this.externalExaminationService.getDefaultExternalExamination(),
-                generalTreatmentPlan: this.generalTreatmentPlanService.getDefaultGeneralTreatmentPlan()
+                generalTreatmentPlan: this.generalTreatmentPlanService.getDefaultGeneralTreatmentPlan(),
+                dentalStatus: this.dentalStatusTabService.getDefaultDentalStatus()
             })
 
             return Result.ok()

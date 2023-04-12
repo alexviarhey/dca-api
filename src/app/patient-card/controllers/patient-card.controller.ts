@@ -4,12 +4,14 @@ import { AjvBody } from "../../common/decorators/ajv.decorators";
 import { commonDiseasesAjvSchema, CommonDiseasesDto, UpdateCommonDiseasesDto } from "../dto/common-diseases.dto";
 import { externalExaminationAjvSchema, ExternalExaminationDto } from "../dto/external-examination.dto";
 import { generalTreatmentAjvSchema, GeneralTreatmentPlanDto } from "../dto/general-treatment-plan.dto";
-import { CommonDiseasesService, ExternalExaminationService, GeneralTreatmentPlanService } from "../services/card-tab.services";
+import { CommonDiseasesService, DentalStatusTabService, ExternalExaminationService, GeneralTreatmentPlanService } from "../services/card-tab.services";
+import { DentalStatusDto, dentalStatusAjvSchema } from "../dto/dental-status.dto";
 
 
 const commonDiseasesRoutingKey = '/common-diseases'
 const externalExaminationRoutingKey = '/external-examination'
 const generalTreatmentPlanRoutingKey = '/general-treatment-plan'
+const dentalStatusRoutingKey = '/dental-status'
 
 
 @Controller("/card/:id")
@@ -19,6 +21,7 @@ export class PatientCardController {
         private readonly generalTreatmentPlanService: GeneralTreatmentPlanService,
         private readonly commonDiseasesService: CommonDiseasesService,
         private readonly externalExaminationService: ExternalExaminationService,
+        private readonly dentalStatusTabService: DentalStatusTabService,
     ) { }
 
     @Get(commonDiseasesRoutingKey)
@@ -79,4 +82,22 @@ export class PatientCardController {
         )
     }
 
+    @Get(dentalStatusRoutingKey)
+    async getDentalStatus(
+        @Param("id") cardId: string
+    ): Promise<CustomResponse<DentalStatusDto>> {
+        return CustomResponse.fromResult(
+            await this.dentalStatusTabService.getTabData(cardId)
+        )
+    }
+
+    @Put(dentalStatusRoutingKey)
+    async updateDentalStatus(
+        @Param("id") cardId: string,
+        @AjvBody(dentalStatusAjvSchema) data: DentalStatusDto
+    ): Promise<CustomResponse> {
+        return CustomResponse.fromResult(
+            await this.dentalStatusTabService.updateTabData(cardId, data)
+        )
+    }
 }

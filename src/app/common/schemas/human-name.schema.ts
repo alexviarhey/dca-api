@@ -3,7 +3,7 @@ import { Schema } from "mongoose";
 export interface IHumanNameSchema {
     firstName: string
     lastName: string
-    given: string
+    given: string | null
     text: string
 }
 

@@ -17,7 +17,7 @@ export const dentalStatusAjvSchema = {
     properties: {
         ohis: { type: 'array', nullable: false, items: [{type: "array", items: {type: "number"}}, {type: "null"}]},
         kpi: { type: 'array', nullable: false, items: [{type: "number"}, {type: "null"}]},
-        kpu: { type: 'array', nullable: false, items: {type: "number"}},
+        kpu: { type: 'array', nullable: false, items: [{type: "number"}, {type: "null"}]},
         bite: { type: 'array', nullable: false, items: {type: "number"}},
         hardTissueConditions: {
             type: "object",
