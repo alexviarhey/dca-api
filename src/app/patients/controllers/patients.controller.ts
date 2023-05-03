@@ -11,6 +11,7 @@ import { PatientsCrudUseCases } from "../use-cases/patients.crud-use-cases";
 import { AjvBody, AjvQuery } from "../../common/decorators/ajv.decorators";
 import { GetPatientsFilters, getPatientsFiltersSchema } from "../dto/get-patients-filters";
 import { Paginated } from "../../../core/paginated";
+import { CreateCardUseCase } from "../../patient-card/use-cases/create-card.use-case";
 
 class CreatePatientResponse extends CustomResponseType<PatientDto> {
     @ApiProperty({ type: PatientDto })
@@ -34,7 +35,8 @@ const GetPatientResponse = CreatePatientResponse;
 export class PatientsController {
 
     constructor(
-        private readonly patientsCrudUseCases: PatientsCrudUseCases
+        private readonly patientsCrudUseCases: PatientsCrudUseCases,
+        private readonly createCardUseCase: CreateCardUseCase
     ) {
     }
 
@@ -88,6 +90,8 @@ export class PatientsController {
     async getPatients(
         @AjvQuery(getPatientsFiltersSchema) filters: GetPatientsFilters
     ) {
+        await this.createCardUseCase.execute("64202f3984b1fb067b81c543")
+        return
         const res = await this.patientsCrudUseCases.findWithPagination(filters);
         return CustomResponse.fromResult(res);
     }
