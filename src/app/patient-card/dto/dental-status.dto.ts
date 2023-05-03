@@ -15,10 +15,38 @@ export const dentalStatusAjvSchema = {
     additionalProperties: false,
     allRequired: true,
     properties: {
-        ohis: { type: 'array', nullable: false, items: [{type: "array", items: {type: "number"}}, {type: "null"}]},
-        kpi: { type: 'array', nullable: false, items: [{type: "number"}, {type: "null"}]},
-        kpu: { type: 'array', nullable: false, items: [{type: "number"}, {type: "null"}]},
-        bite: { type: 'array', nullable: false, items: {type: "number"}},
+        ohis: { type: 'array', nullable: false, items: [{ type: "array", items: { type: "number" } }, { type: "null" }] },
+        kpi: { type: 'array', nullable: false, items: [{ type: "number" }, { type: "null" }] },
+        kpu: { type: 'array', nullable: false, items: [{ type: "number" }, { type: "null" }] },
+        bite: { type: 'array', nullable: false, items: { type: "number" } },
+        dentalFormula: {
+            type: "object",
+            additionalProperties: false,
+            allRequired: true,
+            nullable: false,
+            properties: {
+                top: {
+                    type: 'array',
+                    nullable: false,
+                    items: [
+                        { type: "string" },
+                        { type: "null" }
+                    ],
+                    minItems: DentalFormula.TEETH_IN_THE_JAW,
+                    additionalItems: false
+                },
+                bottom: {
+                    type: 'array',
+                    nullable: false,
+                    items: [
+                        { type: "string" },
+                        { type: "null" }
+                    ],
+                    minItems: DentalFormula.TEETH_IN_THE_JAW,
+                    additionalItems: false
+                },
+            }
+        },
         hardTissueConditions: {
             type: "object",
             additionalProperties: false,
@@ -41,8 +69,8 @@ export const dentalStatusAjvSchema = {
             allRequired: true,
             nullable: false,
             properties: {
-                notCarriedOut: { type: 'boolean', nullable: false},
-                seeDiary: { type: 'boolean', nullable: false},
+                notCarriedOut: { type: 'boolean', nullable: false },
+                seeDiary: { type: 'boolean', nullable: false },
                 noPathologicalChanges: { type: 'string', nullable: true },
             }
         },

@@ -13,12 +13,11 @@ export const dentalConditionValue = [
     "E"
 ]
 
-
 export class DentalFormula {
-    private static TEETH_IN_THE_JAW = 16
+    public static TEETH_IN_THE_JAW = 16
 
     constructor(
-        public top: Array<string | null>,
+        public top: Array<string| null>,
         public bottom: Array<string | null>
     ) { }
 
@@ -35,7 +34,7 @@ export class DentalFormula {
 }
 
 export type OHIS = Array<[number, number] | null>
-export type KPI = Array<string | null>
+export type KPI = Array<number| null>
 export type KPU = Array<number | null>
 
 export class DentalIndexes {
