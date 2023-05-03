@@ -1,4 +1,3 @@
-import { AddressDto, CreateAddressDto } from "../../common/dto/adress.dtos"
 import { ContactPointDto, CreateContactPointDto } from "../../common/dto/contact-point.dtos"
 import { CreateHumanNameDto, HumanNameDto } from "../../common/dto/human-name.dtos"
 import { PractitionerRoleDto } from "./practitioner.role.dto"
@@ -7,7 +6,7 @@ export const getPractitionersFiltersSchema = {
     type: 'object',
     additionalProperties: false,
     properties: {
-        page: { type: "number",  minimum: 0 },
+        page: { type: "number", minimum: 0 },
         size: { type: "number", minimum: 1 },
         name: { type: "string" },
         address: { type: "string" },
@@ -21,23 +20,20 @@ export type PractitionerDto = {
     active: boolean
     name: HumanNameDto
     telecom: ContactPointDto[]
-    address: AddressDto[]
     roles: PractitionerRoleDto[]
 }
 
 export type CreatePractitionerDto = {
     name: CreateHumanNameDto
     telecom?: CreateContactPointDto[]
-    address?: CreateAddressDto[]
-    roles?: string[]
+    roles?: PractitionerRoleDto[]
 }
 
 export type UpdatePractitionerDto = {
     active?: boolean
     name?: CreateHumanNameDto,
     telecom?: CreateContactPointDto[]
-    address?: CreateAddressDto[]
-    roles?: string[]
+    roles?: PractitionerRoleDto[]
 }
 
 export type GetPractitionersFilters = {

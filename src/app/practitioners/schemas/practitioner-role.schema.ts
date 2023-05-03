@@ -1,4 +1,4 @@
-import { Schema } from "mongoose"
+import { Result } from "../../../core/result"
 
 export enum PractitionerCode {
     DOCTOR = 'doctor',
@@ -6,26 +6,111 @@ export enum PractitionerCode {
     ADMINISTRATOR = 'administrator'
 }
 
-export enum PractitionerSpeciality {
+export type PractitionerRole = {
+    code: PractitionerCode
+    speciality: string | null
+}
+
+enum PractitionerRoleValidationResult {
+    OK = 1,
+    INVALID_CODE,
+    INVALID_SPECIALITY,
+}
+
+abstract class PractitionerRoles {
+    constructor(
+        public readonly code: PractitionerCode,
+        public readonly specialties: string[] | null = null
+    ) { }
+
+    public validateCodeAndSpeciality(code: PractitionerCode, speciality: string | null): PractitionerRoleValidationResult {
+        if (code !== this.code) return PractitionerRoleValidationResult.INVALID_CODE
+        if (!this.specialties.includes(speciality)) return PractitionerRoleValidationResult.INVALID_SPECIALITY
+        return PractitionerRoleValidationResult.OK
+    }
+
+    public getCodeWithSpecialties() {
+        return {
+            code: this.code,
+            specialties: this.specialties
+        }
+    }
+}
+
+export enum DoctorsSpecialties {
     SURGEON = 'surgeon',
     ORTHOPEDIST = 'orthopedist',
     ORTHODONTIST = 'orthodontist',
     THERAPIST = 'therapist'
 }
 
-export type PractitionerRoleSchema = {
-    code: PractitionerCode
-    speciality?: PractitionerSpeciality
-    active: boolean
+class DoctorRole extends PractitionerRoles {
+    constructor() {
+        super(
+            PractitionerCode.DOCTOR,
+            Object.values(DoctorsSpecialties)
+        )
+    }
 }
 
+class NurseRole extends PractitionerRoles {
+    constructor() {
+        super(
+            PractitionerCode.DOCTOR
+        )
+    }
+}
 
-//"643587fd4c154dda959fddd9", 643587fd4c154dda959fddd9 643588724c154dda959fdddb 6435888b4c154dda959fdddc 643588ae4c154dda959fdddd
+class AdministratorRole extends PractitionerRoles {
+    constructor() {
+        super(
+            PractitionerCode.ADMINISTRATOR
+        )
+    }
+}
 
-export const practitionerRoleSchema = new Schema<PractitionerRoleSchema>({
-    code: { type: String, enum: PractitionerCode, required: true },
-    speciality: { type: String, enum: PractitionerSpeciality, required: false, nullable: true, default: null },
-    active: { type: Boolean, required: true },
-})
+export class PractitionerRoleHelper {
+    private constructor(
+        private readonly roles: PractitionerRoles[]
+    ) { }
 
-export const PRACTITIONERS_ROLES_COLLECTIONS = 'practitioners_roles'
+    public validate({ code, speciality }: { code: PractitionerCode, speciality: string }): Result {
+        for (let role of this.roles) {
+            const res = role.validateCodeAndSpeciality(code, speciality)
+
+            if (res === PractitionerRoleValidationResult.OK) {
+                return Result.ok()
+            }
+
+            if (res === PractitionerRoleValidationResult.INVALID_SPECIALITY) {
+                return Result.err(`
+                Invalid speciality! The valid are [${role.specialties.join(', ')}]
+            `)
+            }
+        }
+
+        return Result.err(`
+            Invalid code! The valid are [${this.roles.map(r => r.code).join(', ')}]
+        `)
+    }
+
+    public getAllRolesWithSpecialties() {
+        const res = []
+
+        this.roles.forEach(r => {
+            res.push(r.getCodeWithSpecialties())
+        })
+
+        return res
+    }
+
+    public static forRoles(roles: PractitionerRoles[]): PractitionerRoleHelper {
+        return new PractitionerRoleHelper(roles)
+    }
+}
+
+export const practitionerRoleHelper = PractitionerRoleHelper.forRoles([
+    new DoctorRole(),
+    new NurseRole(),
+    new AdministratorRole()
+])

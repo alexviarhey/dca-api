@@ -1,7 +1,7 @@
 import { Schema } from "mongoose"
-import { addressSchema, IAddressSchema } from "../../common/schemas/address.schema"
 import { contactPointSchema, IContactPointSchema } from "../../common/schemas/contact-point.schema"
 import { humanNameSchema, IHumanNameSchema } from "../../common/schemas/human-name.schema"
+import { PractitionerCode, PractitionerRole } from "./practitioner-role.schema"
 
 
 export type PractitionerSchema = {
@@ -9,16 +9,19 @@ export type PractitionerSchema = {
     active: boolean
     name: IHumanNameSchema
     telecom: IContactPointSchema[]
-    address: IAddressSchema[]
-    roles: Array<string>
+    roles: Array<PractitionerRole>
 }
+
+export const practitionerRoleSchema = new Schema<PractitionerRole>({
+    code: { type: String, enum: PractitionerCode, required: true },
+    speciality: { type: String, nullable: true, default: null },
+}, { _id: false })
 
 export const practitionerSchema = new Schema<PractitionerSchema>({
     active: { type: Boolean, default: true },
     name: { type: humanNameSchema, required: true },
-    address: { type: [addressSchema], default: [] },
     telecom: { type: [contactPointSchema], default: [] },
-    roles: { type: [String], nullable: false, default: [] }
+    roles: { type: [practitionerRoleSchema], nullable: false, default: [] }
 })
 
 export const PRACTITIONERS_COLLECTION = 'practitioners'

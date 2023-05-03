@@ -12,7 +12,7 @@ export abstract class BaseRepository<T> {
       return await this.model.findById(id);
     } catch (e) {
       console.log(e);
-    }
+  }
   }
 
   async findOne(

@@ -3,7 +3,6 @@ import { PractitionersCrudUseCases } from "./use-cases/practitioners.crud.use-ca
 import { PractitionersMapper } from "./mappers/practitioner.mapper";
 import { MongooseModule } from "@nestjs/mongoose";
 import { PRACTITIONERS_COLLECTION, practitionerSchema } from "./schemas/practitioner.schema";
-import { PRACTITIONERS_ROLES_COLLECTIONS, practitionerRoleSchema } from "./schemas/practitioner-role.schema";
 import { PractitionersController } from "./controllers/practitioners.controller";
 
 
@@ -11,7 +10,6 @@ import { PractitionersController } from "./controllers/practitioners.controller"
     imports: [
         MongooseModule.forFeature([
             { name: PRACTITIONERS_COLLECTION, schema: practitionerSchema },
-            { name: PRACTITIONERS_ROLES_COLLECTIONS, schema: practitionerRoleSchema },
         ]),
     ],
     providers: [
