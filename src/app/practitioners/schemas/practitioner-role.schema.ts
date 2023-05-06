@@ -26,7 +26,7 @@ abstract class PractitionerRoles {
 
     public validateCodeAndSpeciality(code: PractitionerCode, speciality: string | null): PractitionerRoleValidationResult {
         if (code !== this.code) return PractitionerRoleValidationResult.INVALID_CODE
-        if (!this.specialties.includes(speciality)) return PractitionerRoleValidationResult.INVALID_SPECIALITY
+        if (this.specialties && !this.specialties.includes(speciality)) return PractitionerRoleValidationResult.INVALID_SPECIALITY
         return PractitionerRoleValidationResult.OK
     }
 
