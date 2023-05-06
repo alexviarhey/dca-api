@@ -1,5 +1,5 @@
-import { ContactPointDto, CreateContactPointDto } from "../../common/dto/contact-point.dtos"
-import { CreateHumanNameDto, HumanNameDto } from "../../common/dto/human-name.dtos"
+import { ContactPointDto, CreateContactPointDto, contactPointValidationSchema } from "../../common/dto/contact-point.dtos"
+import { CreateHumanNameDto, HumanNameDto, humanNameValidationSchema } from "../../common/dto/human-name.dtos"
 import { PractitionerRoleDto } from "./practitioner.role.dto"
 
 export const getPractitionersFiltersSchema = {
@@ -15,6 +15,29 @@ export const getPractitionersFiltersSchema = {
     }
 }
 
+export const createPractitionerSchema = {
+    type: "object",
+    required: ["name", "telecom", "roles"],
+    properties: {
+        name: humanNameValidationSchema,
+        telecom: { type: "array", items: contactPointValidationSchema },
+        roles: {
+            type: 'array',
+            items: {
+                type: 'object',
+                required: ["code", "speciality"],
+                additionalProperties: false,
+                properties: {
+                    code: { type: 'string'},
+                    speciality: { type: 'string', nullable: true },
+                }
+            }
+
+        }
+    },
+    additionalProperties: true
+};
+
 export type PractitionerDto = {
     _id: string
     active: boolean
@@ -25,8 +48,8 @@ export type PractitionerDto = {
 
 export type CreatePractitionerDto = {
     name: CreateHumanNameDto
-    telecom?: CreateContactPointDto[]
-    roles?: PractitionerRoleDto[]
+    telecom: CreateContactPointDto[]
+    roles: PractitionerRoleDto[]
 }
 
 export type UpdatePractitionerDto = {

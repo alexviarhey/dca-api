@@ -10,6 +10,7 @@ import { Injectable } from "@nestjs/common";
 import { Paginated, Pagination } from "../../../core/paginated";
 import { GetPatientsFilters } from "../dto/get-patients-filters";
 import { CreateCardUseCase } from "../../patient-card/use-cases/create-card.use-case";
+import { ContactPointDto, ContactPointHelper } from "../../common/dto/contact-point.dtos";
 
 @Injectable()
 export class PatientsCrudUseCases extends CrudUseCases<IPatientSchema,
@@ -78,15 +79,12 @@ export class PatientsCrudUseCases extends CrudUseCases<IPatientSchema,
     public getFiltersForUniqueness(dto: Partial<CreatePatientDto>): FilterQuery<IPatientSchema> | null {
         let filterQuery: FilterQuery<IPatientSchema> = null
 
-        if (dto.telecom && dto.telecom.length) {
-            const phone = dto.telecom.find(t => t.system === ContactPointSystem.PHONE);
-            if (phone && dto.name) {
-                filterQuery = {
-                    name: dto.name,
-                    "telecom.value": phone.value
-                };
-            }
-        }
+        const phoneFilterQuery = ContactPointHelper.getFilterByPhone(dto)
+
+        filterQuery = {
+            name: dto.name,
+            ...phoneFilterQuery
+        };
 
         return filterQuery
     }

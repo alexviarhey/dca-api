@@ -13,7 +13,7 @@ export class HumanNameMapper extends Mapper<IHumanNameSchema, HumanNameDto, Crea
     }
 
     async mapToSchema(dto: CreateHumanNameDto): Promise<IHumanNameSchema> {
-        const text = dto.lastName + dto.firstName + (dto.given || "");
+        const text = dto.lastName + " " + dto.firstName + " " + (dto.given || "");
 
         return {
             firstName: dto.firstName,

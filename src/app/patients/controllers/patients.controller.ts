@@ -90,8 +90,6 @@ export class PatientsController {
     async getPatients(
         @AjvQuery(getPatientsFiltersSchema) filters: GetPatientsFilters
     ) {
-        await this.createCardUseCase.execute("64202f3984b1fb067b81c543")
-        return
         const res = await this.patientsCrudUseCases.findWithPagination(filters);
         return CustomResponse.fromResult(res);
     }

@@ -1,4 +1,5 @@
 import { Result } from "../../../core/result"
+import { PractitionerRoleDto } from "../dto/practitioner.role.dto"
 
 export enum PractitionerCode {
     DOCTOR = 'doctor',
@@ -56,7 +57,7 @@ class DoctorRole extends PractitionerRoles {
 class NurseRole extends PractitionerRoles {
     constructor() {
         super(
-            PractitionerCode.DOCTOR
+            PractitionerCode.NURSE
         )
     }
 }
@@ -74,8 +75,17 @@ export class PractitionerRoleHelper {
         private readonly roles: PractitionerRoles[]
     ) { }
 
-    public validate({ code, speciality }: { code: PractitionerCode, speciality: string }): Result {
-        for (let role of this.roles) {
+    public validateListOfRoles(roles: Array<PractitionerRoleDto>): Result {
+        for (const role of roles) {
+            const res = this.validate(role)
+            if (!res.isSuccess) return res
+        }
+
+        return Result.ok()
+    }
+
+    public validate({ code, speciality }: PractitionerRoleDto): Result {
+        for (const role of this.roles) {
             const res = role.validateCodeAndSpeciality(code, speciality)
 
             if (res === PractitionerRoleValidationResult.OK) {
@@ -83,15 +93,11 @@ export class PractitionerRoleHelper {
             }
 
             if (res === PractitionerRoleValidationResult.INVALID_SPECIALITY) {
-                return Result.err(`
-                Invalid speciality! The valid are [${role.specialties.join(', ')}]
-            `)
+                return Result.err(`Invalid speciality! The valid are [${role.specialties.join(', ')}]`)
             }
         }
 
-        return Result.err(`
-            Invalid code! The valid are [${this.roles.map(r => r.code).join(', ')}]
-        `)
+        return Result.err(`Invalid code! The valid are [${this.roles.map(r => r.code).join(', ')}]`)
     }
 
     public getAllRolesWithSpecialties() {
