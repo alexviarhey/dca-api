@@ -1,22 +1,27 @@
-FROM node:18-alpine as build
-
-WORKDIR /usr/app
-
-COPY --chown=node:node ["package.json", "yarn.lock", "./"]
-
-RUN yarn install --production
-
-COPY --chown=node:node . .
-
-RUN yarn build
-
-ENV NODE_ENV production
+FROM node:18.16.0-alpine as builder
 
 USER node
 
-FROM node:18-alpine as production
+WORKDIR /home/node/dca-api
 
-COPY --chown=node:node --from=build /usrapp/node_modules ./node_modules
-COPY --chown=node:node --from=build /usr/app/dist ./dist
+COPY ["package.json", "yarn.lock", "./"]
 
-CMD [ "node", "dist/main.js" ]
+RUN yarn install
+
+COPY . .
+
+ENV NODE_ENV=production
+
+RUN yarn build
+
+
+FROM node:18.16.0-alpine
+
+USER node
+
+WORKDIR /home/node/dca-api
+
+COPY --from=builder /home/node/dca-api/dist ./dist
+COPY --from=builder /home/node/dca-api/node_modules ./node_modules
+
+CMD ["yarn", "start:prod"]
