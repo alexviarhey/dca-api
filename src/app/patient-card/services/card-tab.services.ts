@@ -225,11 +225,4 @@ export class NewVisitTabService {
         private readonly cardModel: Model<IPatientCardSchema>,
         private readonly mapper: VisitMapper,
     ) {}
-
-    public async getVisit(id: string): Promise<Result<VisitDto>> {
-        try {
-
-        }
-    }
-
 }
