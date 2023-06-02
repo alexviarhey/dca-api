@@ -15,6 +15,8 @@ import { IPatientCardSchema, PATIENTS_CARDS_COLLECTION } from "../schemas/patien
 import { DentalStatusDto } from "../dto/dental-status.dto"
 import { DentalStatusMapper } from "../mappers/dental-status.mapper"
 import { DentalFormula, DentalIndexes, DentalStatusSchema } from "../schemas/dental-status.schema"
+import { VisitMapper } from "../mappers/visit.mapper"
+import { VisitDto } from "../dto/visit.dto"
 
 type TabSchema = (IPatientCardSchema)[keyof IPatientCardSchema]
 
@@ -214,4 +216,20 @@ export class DentalStatusTabService extends CardTabService<DentalStatusDto, Dent
             }
         }
     }
+}
+
+@Injectable()
+export class NewVisitTabService {
+    constructor(
+        @InjectModel(PATIENTS_CARDS_COLLECTION)
+        private readonly cardModel: Model<IPatientCardSchema>,
+        private readonly mapper: VisitMapper,
+    ) {}
+
+    public async getVisit(id: string): Promise<Result<VisitDto>> {
+        try {
+
+        }
+    }
+
 }
