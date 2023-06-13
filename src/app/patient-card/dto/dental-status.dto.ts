@@ -15,10 +15,29 @@ export const dentalStatusAjvSchema = {
     additionalProperties: false,
     allRequired: true,
     properties: {
-        ohis: { type: 'array', nullable: false, items: { type: "array", items: { anyOf: [{ type: "number" }, { type: "null" }] } } },
-        kpi: { type: 'array', nullable: false, items: { anyOf: [{ type: "number" }, { type: "null" }]}},
-        kpu: { type: 'array', nullable: false, items: [{ type: "number" }, { type: "null" }] },
-        bite: { type: 'array', nullable: false, items: { type: "number" } },
+        ohis: {
+            type: 'array',
+            nullable: false,
+            items: {
+                type: "array",
+                items: { anyOf: [{ type: "number" }, { type: "null" }] }
+            }
+        },
+        kpi: {
+            type: 'array',
+            nullable: false,
+            items: { anyOf: [{ type: "number" }, { type: "null" }] }
+        },
+        kpu: {
+            type: 'array',
+            nullable: false,
+            items: { anyOf: [{ type: "number" }, { type: "null" }] }
+        },
+        bite: {
+            type: 'array',
+            nullable: false,
+            items: { type: "number" }
+        },
         dentalFormula: {
             type: "object",
             additionalProperties: false,
@@ -28,22 +47,14 @@ export const dentalStatusAjvSchema = {
                 top: {
                     type: 'array',
                     nullable: false,
-                    items: [
-                        { type: "string" },
-                        { type: "null" }
-                    ],
+                    items: { anyOf: [{ type: "number" }, { type: "null" }] },
                     minItems: DentalFormula.TEETH_IN_THE_JAW,
-                    additionalItems: false
                 },
                 bottom: {
                     type: 'array',
                     nullable: false,
-                    items: [
-                        { type: "string" },
-                        { type: "null" }
-                    ],
+                    items: { anyOf: [{ type: "number" }, { type: "null" }] },
                     minItems: DentalFormula.TEETH_IN_THE_JAW,
-                    additionalItems: false
                 },
             }
         },

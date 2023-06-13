@@ -95,11 +95,9 @@ export class PatientCardController {
     async updateDentalStatus(
         @Param("id") cardId: string,
         @AjvBody(dentalStatusAjvSchema) data: DentalStatusDto
-    ): Promise<string> {
-
-        return "OK"
-        // return CustomResponse.fromResult(
-        //     await this.dentalStatusTabService.updateTabData(cardId, data)
-        // )
+    ): Promise<CustomResponse> {
+        return CustomResponse.fromResult(
+            await this.dentalStatusTabService.updateTabData(cardId, data)
+        )
     }
 }
