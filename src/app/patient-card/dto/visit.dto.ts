@@ -27,7 +27,8 @@ export const createVisitAjvSchema = {
 
 export type VisitDiagnosisDto = {
     tooth: number,
-    icdDto: ICDDto
+    icdName: string
+    icdCode: string
 }
 
 export type CreateVisitDiagnosisDto = {

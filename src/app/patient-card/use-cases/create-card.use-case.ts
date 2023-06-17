@@ -4,7 +4,10 @@ import { IPatientCardSchema, PATIENTS_CARDS_COLLECTION } from "../schemas/patien
 import { Model } from "mongoose";
 import { Result } from "../../../core/result";
 import { BaseService } from "../../../core/base.service";
-import { CommonDiseasesService, DentalStatusTabService, ExternalExaminationService, GeneralTreatmentPlanService } from "../services/card-tab.services";
+import { CommonDiseasesService } from "../services/common-diseases.service";
+import { ExternalExaminationService } from "../services/external-examination.service";
+import { GeneralTreatmentPlanService } from "../services/general-treatment-plan.service";
+import { DentalStatusTabService } from "../services/dental-status.service";
 
 
 @Injectable()

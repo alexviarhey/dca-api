@@ -17,24 +17,10 @@ export class VisitMapper extends Mapper<VisitSchema, VisitDto, CreateVisitDto> {
     }
 
     async map(model: VisitSchema): Promise<VisitDto> {
-
-        const diagnosisDto: Array<VisitDiagnosisDto> = []
-
-        for (const d of model.diagnosis) {
-            const icd = await this.icdModel.findById(d.icdId)
-
-            if (!icd) throw new Error(`Icd with id ${d.icdId} not found!`)
-
-            diagnosisDto.push({
-                tooth: d.tooth,
-                icdDto: await icdMapper.map(icd)
-            })
-        }
-
         return {
             date: model.date,
             complains: model.complains,
-            diagnosis: diagnosisDto,
+            diagnosis: model.diagnosis,
             localStatus: model.localStatus,
             treatment: model.treatment,
             other: model.other
@@ -42,10 +28,19 @@ export class VisitMapper extends Mapper<VisitSchema, VisitDto, CreateVisitDto> {
     }
 
     async mapToSchema(dto: Partial<CreateVisitDto>): Promise<VisitSchema> {
+
+        const icdIdToothMap = new Map(dto.diagnosis.map(d => [d.icdId, d.tooth]))
+
+        const icds = await this.icdModel.find({
+            _id: {$in: icdIdToothMap.keys()}
+        })
+
+        const diagnosis = icds.map(i => ({tooth: icdIdToothMap.get(i._id), icdName: i.name, icdCode: i.code}))
+
         return {
             date: new Date(dto.date),
             complains: dto.complains,
-            diagnosis: dto.diagnosis,
+            diagnosis,
             localStatus: dto.localStatus,
             treatment: dto.treatment,
             other: dto.other

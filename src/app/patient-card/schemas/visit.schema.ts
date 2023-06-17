@@ -2,7 +2,8 @@ import { Schema } from "mongoose"
 
 export type VisitDiagnosis = {
     tooth: number,
-    icdId: string
+    icdName: string
+    icdCode: string
 }
 
 export type VisitSchema = {
@@ -26,4 +27,4 @@ export const visitSchema = new Schema({
     localStatus: { type: String, nullable: false },
     treatment: { type: String, nullable: false },
     other: { type: String, nullable: true, default: null }
-}, { _id: false })
+})

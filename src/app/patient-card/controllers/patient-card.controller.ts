@@ -4,8 +4,11 @@ import { AjvBody } from "../../common/decorators/ajv.decorators";
 import { commonDiseasesAjvSchema, CommonDiseasesDto, UpdateCommonDiseasesDto } from "../dto/common-diseases.dto";
 import { externalExaminationAjvSchema, ExternalExaminationDto } from "../dto/external-examination.dto";
 import { generalTreatmentAjvSchema, GeneralTreatmentPlanDto } from "../dto/general-treatment-plan.dto";
-import { CommonDiseasesService, DentalStatusTabService, ExternalExaminationService, GeneralTreatmentPlanService } from "../services/card-tab.services";
 import { DentalStatusDto, dentalStatusAjvSchema } from "../dto/dental-status.dto";
+import { GeneralTreatmentPlanService } from "../services/general-treatment-plan.service";
+import { CommonDiseasesService } from "../services/common-diseases.service";
+import { ExternalExaminationService } from "../services/external-examination.service";
+import { DentalStatusTabService } from "../services/dental-status.service";
 
 
 const commonDiseasesRoutingKey = '/common-diseases'

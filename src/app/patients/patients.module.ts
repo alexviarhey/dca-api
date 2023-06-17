@@ -3,7 +3,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { PATIENTS, patientSchema } from "./schemas/patient.schema";
 import { PatientsCrudUseCases } from "./use-cases/patients.crud-use-cases";
 import { PatientsController } from "./controllers/patients.controller";
-import { PatientCardModule } from "../patient-card/use-cases/patient-card.module";
+import { PatientCardModule } from "../patient-card/patient-card.module";
 
 
 @Module({
