@@ -1,6 +1,6 @@
 import { TemplateType } from "../schemas/template.schema";
 import { ICDDto } from "../../icd/icd.dto";
-import { ServiceSubgroupDto } from "../../price-list/dto/price-list.dtos";
+import { ServiceSubgroupDto } from "../../practitioners/price-list/dto/price-list.dtos";
 import { ApiProperty } from "@nestjs/swagger";
 import { PaginatedFilters } from "../../../core/paginated";
 

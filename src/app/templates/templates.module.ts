@@ -5,7 +5,7 @@ import { TemplatesMapper } from "./mappers/templates.mapper";
 import { TemplatesCrudUseCases } from "./use-cases/templates.crud-use-cases";
 import { TemplatesController } from "./controllers/templates.controller";
 import { ICDModule } from "../icd/icd.module";
-import { PriceListModule } from "../price-list/price-list.module";
+import { PriceListModule } from "../practitioners/price-list/price-list.module";
 import { templatePlaceholderSchema, TEMPLATES_PLACEHOLDERS_COLLECTION } from "./schemas/placeholder";
 import { PlaceholdersMapper } from "./mappers/placeholdres.mapper";
 import { PlaceholdersCrudUseCases } from "./use-cases/placeholders.crud-use-cases";

@@ -1,4 +1,4 @@
-import { CustomResponseType } from "../../../core/custom-response";
+import { CustomResponseType } from "../../../../core/custom-response";
 import {
     CreatePriceItemDto, PriceItemDto,
     ServiceGroupDto,
@@ -42,4 +42,3 @@ export class GetPriceItemsResponse extends CustomResponseType<PriceItemDto[]> {
     @ApiProperty({ type: PriceItemDto, isArray: true})
     data: PriceItemDto[]
 }
-

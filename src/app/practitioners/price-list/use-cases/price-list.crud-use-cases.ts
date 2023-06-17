@@ -1,4 +1,4 @@
-import { CrudUseCases } from "../../../core/crud.use-cases";
+import { CrudUseCases } from "../../../../core/crud.use-cases";
 import { Injectable } from "@nestjs/common";
 import { IPriceItemSchema, PRICE_ITEMS } from "../schemas/price-item.schema";
 import { InjectConnection, InjectModel } from "@nestjs/mongoose";
@@ -171,5 +171,3 @@ const deletePriceListChildElement = async <ParentModel>(
         await session.endSession();
     }
 };
-
-

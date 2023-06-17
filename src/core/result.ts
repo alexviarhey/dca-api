@@ -39,3 +39,7 @@ export class Result<T = null> {
     }
 
 }
+
+
+
+export type PromiseResult<T = null> = Promise<Result<T>>

@@ -7,6 +7,10 @@ export abstract class Mapper<Model, Dto, CreateDto = Dto> {
         return Promise.all(models.map(this.map.bind(this)))
     }
 
+    public mapArrayCustom<T>(models: Model[], cb: (model) => T): Promise<T[]> {
+        return Promise.all(models.map(cb))
+    }
+
     public mapToSchemaArray(dtos: CreateDto[]): Promise<Model[]> {
         return Promise.all(dtos.map(this.mapToSchema.bind(this)))
     }

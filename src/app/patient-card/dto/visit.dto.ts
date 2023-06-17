@@ -1,5 +1,3 @@
-import { ICDDto } from "../../icd/icd.dto"
-
 export const createVisitAjvSchema = {
     type: "object",
     additionalProperties: false,
@@ -10,7 +8,7 @@ export const createVisitAjvSchema = {
         localStatus: { type: 'string' },
         treatment: { type: 'string' },
         other: { type: 'string', nullable: true },
-        faceConfiguration: {
+        diagnosis: {
             type: 'array',
             items: {
                 type: 'object',
@@ -37,12 +35,19 @@ export type CreateVisitDiagnosisDto = {
 }
 
 export type VisitDto = {
+    _id: string
     date: Date
     complains: string
     diagnosis: Array<VisitDiagnosisDto>
     localStatus: string
     treatment: string
     other: string | null
+}
+
+export type ShortVisitDto = {
+    _id: string
+    date: Date
+    diagnosis: Array<VisitDiagnosisDto>
 }
 
 export type CreateVisitDto = {

@@ -11,7 +11,7 @@ import {
     ServiceGroupCrudUseCase,
     ServiceSubgroupCrudUseCase
 } from "../use-cases/price-list.crud-use-cases";
-import { CustomResponse, CustomResponseType } from "../../../core/custom-response";
+import { CustomResponse, CustomResponseType } from "../../../../core/custom-response";
 import {
     createGroupSchema,
     CreatePriceItemDto,
@@ -23,7 +23,7 @@ import {
     updatePriceItemSchema, UpdateServiceSubgroupDto, updateSubgroupSchema
 } from "../dto/price-list.dtos";
 import { GetPriceListUseCase } from "../use-cases/get-price-list.use-case";
-import { AjvBody } from "../../common/decorators/ajv.decorators";
+import { AjvBody } from "../../../common/decorators/ajv.decorators";
 import { ApiBody, ApiOkResponse, ApiTags } from "@nestjs/swagger";
 import {
     CreateGroupResponse,
@@ -31,7 +31,7 @@ import {
     CreateSubgroupResponse, GetGroupsResponse, GetPriceItemsResponse, GetSubgroupsResponse,
     PriceListResponse
 } from "./types-for-swagger";
-import { IdDto } from "../../common/dto/id.dto";
+import { IdDto } from "../../../common/dto/id.dto";
 
 
 @ApiTags("Price List")

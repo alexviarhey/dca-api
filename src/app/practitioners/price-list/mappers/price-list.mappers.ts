@@ -8,7 +8,7 @@ import {
 } from "../dto/price-list.dtos";
 import { IServiceSubgroup } from "../schemas/service-subgroup.schema";
 import { IServiceGroup } from "../schemas/service-group.schema";
-import { Mapper } from "../../../core/mapper";
+import { Mapper } from "../../../../core/mapper";
 
  class PriceItemMapper extends Mapper<IPriceItemSchema, PriceItemDto, CreatePriceItemDto> {
     async map(model: IPriceItemSchema): Promise<PriceItemDto> {

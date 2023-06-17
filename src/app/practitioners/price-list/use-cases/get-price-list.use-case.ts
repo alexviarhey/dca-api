@@ -5,8 +5,8 @@ import {
     ServiceSubgroupCrudUseCase
 } from "./price-list.crud-use-cases";
 import { PriceListDto, ServiceSubgroupWithPriceItemsDto } from "../dto/price-list.dtos";
-import { Result } from "../../../core/result";
-import { ErrorLogger } from "../../../core/errors";
+import { Result } from "../../../../core/result";
+import { ErrorLogger } from "../../../../core/errors";
 
 @Injectable()
 export class GetPriceListUseCase {

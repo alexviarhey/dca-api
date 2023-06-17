@@ -11,12 +11,19 @@ import { CommonDiseasesService } from "./services/common-diseases.service";
 import { ExternalExaminationService } from "./services/external-examination.service";
 import { GeneralTreatmentPlanService } from "./services/general-treatment-plan.service";
 import { DentalStatusTabService } from "./services/dental-status.service";
+import { CreateVisitUseCase } from "./use-cases/create-visit.use-case";
+import { VisitMapper } from "./mappers/visit.mapper";
+import { GetVisitUseCase } from "./use-cases/get-visit.use-case";
+import { UpdateVisitUseCase } from "./use-cases/update-visit.use-case";
+import { ICD_COLLECTION, icdSchema } from "../icd/icd.schema";
+import { GetAllVisitsUseCase } from "./use-cases/get-all-visits.use-case";
 
 
 @Module({
     imports: [
         MongooseModule.forFeature([
-            { schema: patientCardSchema, name: PATIENTS_CARDS_COLLECTION }
+            { schema: patientCardSchema, name: PATIENTS_CARDS_COLLECTION },
+            { schema: icdSchema, name: ICD_COLLECTION }
         ]),
     ],
     providers: [
@@ -28,12 +35,16 @@ import { DentalStatusTabService } from "./services/dental-status.service";
         GeneralTreatmentPlanService,
         GeneralTreatmentPlanMapper,
         DentalStatusTabService,
-        DentalStatusMapper
+        DentalStatusMapper,
+        CreateVisitUseCase,
+        GetVisitUseCase,
+        GetAllVisitsUseCase,
+        UpdateVisitUseCase,
+        VisitMapper
     ],
     controllers: [
         PatientCardController
     ],
     exports: [CreateCardUseCase]
 })
-export class PatientCardModule {
-}
+export class PatientCardModule { }

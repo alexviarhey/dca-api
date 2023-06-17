@@ -3,7 +3,7 @@ import { ITemplateSchema } from "../schemas/template.schema";
 import { CreateTemplateDto, TemplateDto } from "../dto/templates.dto";
 import { Injectable } from "@nestjs/common";
 import { ICDCrudUseCase } from "../../icd/icd.crud-use-case";
-import { ServiceSubgroupCrudUseCase } from "../../price-list/use-cases/price-list.crud-use-cases";
+import { ServiceSubgroupCrudUseCase } from "../../practitioners/price-list/use-cases/price-list.crud-use-cases";
 import { fromArrayToMap } from "../../../utils/fromArrayToMap";
 
 @Injectable()

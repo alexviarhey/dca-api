@@ -8,7 +8,7 @@ import { CreateVisitDto } from "../dto/visit.dto";
 import { VisitMapper } from "../mappers/visit.mapper";
 
 @Injectable()
-export class CreateVisitUseCase extends BaseService {
+export class UpdateVisitUseCase extends BaseService {
     constructor(
         @InjectModel(PATIENTS_CARDS_COLLECTION)
         private cardModel: Model<IPatientCardSchema>,
@@ -18,16 +18,26 @@ export class CreateVisitUseCase extends BaseService {
         super("CreateVisitUseCase")
     }
 
-    async execute(cardId: string, dto: CreateVisitDto): PromiseResult {
+    async execute(cardId: string, visitId: string, dto: CreateVisitDto): PromiseResult {
         try {
             const card = await this.cardModel.findOne({ _id: cardId }, { _id: true })
-            if(card) {
+            if (card) {
                 return Result.err(`Card with id ${cardId} not found!`)
             }
 
+            const visitSchema = await this.visitMapper.mapToSchema(dto)
+
+            const setObject =
+                Object
+                    .keys(visitSchema)
+                    .reduce((acc, k) => {
+                        acc[`visits.$.${k}`] = visitSchema[k]
+                        return acc
+                    }, {})
+
             await this.cardModel.updateOne(
-                { _id: cardId },
-                { $push: {visits: await this.visitMapper.mapToSchema(dto)} }
+                { _id: cardId, "visits._id": visitId },
+                { $set: setObject }
             )
 
             return Result.ok()

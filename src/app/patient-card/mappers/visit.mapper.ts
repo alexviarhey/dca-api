@@ -1,11 +1,10 @@
 import { Injectable } from "@nestjs/common"
 import { Mapper } from "../../../core/mapper"
 import { VisitSchema } from "../schemas/visit.schema"
-import { CreateVisitDto, VisitDiagnosisDto, VisitDto } from "../dto/visit.dto"
+import { CreateVisitDto, ShortVisitDto, VisitDto } from "../dto/visit.dto"
 import { InjectModel } from "@nestjs/mongoose"
 import { ICDSchema, ICD_COLLECTION } from "../../icd/icd.schema"
 import { Model } from "mongoose"
-import { icdMapper } from "../../icd/icd.mapper"
 
 @Injectable()
 export class VisitMapper extends Mapper<VisitSchema, VisitDto, CreateVisitDto> {
@@ -18,12 +17,21 @@ export class VisitMapper extends Mapper<VisitSchema, VisitDto, CreateVisitDto> {
 
     async map(model: VisitSchema): Promise<VisitDto> {
         return {
+            _id: model._id,
             date: model.date,
             complains: model.complains,
             diagnosis: model.diagnosis,
             localStatus: model.localStatus,
             treatment: model.treatment,
             other: model.other
+        }
+    }
+
+    shortMap(model: VisitSchema): ShortVisitDto {
+        return {
+            _id: model._id,
+            date: model.date,
+            diagnosis: model.diagnosis,
         }
     }
 

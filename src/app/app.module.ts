@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { InfraModule } from "../infra/infra.module";
-import { PriceListModule } from "./price-list/price-list.module";
+import { PriceListModule } from "./practitioners/price-list/price-list.module";
 import { PatientsModule } from "./patients/patients.module";
 import { ICDModule } from "./icd/icd.module";
 import { TemplatesModule } from "./templates/templates.module";

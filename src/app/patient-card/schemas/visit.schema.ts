@@ -7,6 +7,7 @@ export type VisitDiagnosis = {
 }
 
 export type VisitSchema = {
+    _id?: string
     date: Date
     complains: string
     diagnosis: Array<VisitDiagnosis>
