@@ -17,6 +17,7 @@ import { GetVisitUseCase } from "./use-cases/get-visit.use-case";
 import { UpdateVisitUseCase } from "./use-cases/update-visit.use-case";
 import { ICD_COLLECTION, icdSchema } from "../icd/icd.schema";
 import { GetAllVisitsUseCase } from "./use-cases/get-all-visits.use-case";
+import { PrintController } from "./controllers/print.controller";
 
 
 @Module({
@@ -43,7 +44,8 @@ import { GetAllVisitsUseCase } from "./use-cases/get-all-visits.use-case";
         VisitMapper
     ],
     controllers: [
-        PatientCardController
+        PatientCardController,
+        PrintController
     ],
     exports: [CreateCardUseCase]
 })
