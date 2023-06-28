@@ -11,7 +11,7 @@ import { PatientsCrudUseCases } from "../use-cases/patients.crud-use-cases";
 import { AjvBody, AjvQuery } from "../../common/decorators/ajv.decorators";
 import { GetPatientsFilters, getPatientsFiltersSchema } from "../dto/get-patients-filters";
 import { Paginated } from "../../../core/paginated";
-import { CreateCardUseCase } from "../../patient-card/use-cases/create-card.use-case";
+import { GetPatientCardsUserCase } from "../use-cases/get-patient-cards.use-case";
 
 class CreatePatientResponse extends CustomResponseType<PatientDto> {
     @ApiProperty({ type: PatientDto })
@@ -36,7 +36,7 @@ export class PatientsController {
 
     constructor(
         private readonly patientsCrudUseCases: PatientsCrudUseCases,
-        private readonly createCardUseCase: CreateCardUseCase
+        private readonly getPatientCardsUseCase: GetPatientCardsUserCase
     ) {
     }
 
@@ -101,5 +101,14 @@ export class PatientsController {
     ) {
         const res = await this.patientsCrudUseCases.findById(id);
         return CustomResponse.fromResult(res);
+    }
+
+    @Get("/:id/cards")
+    async getPatientCards(
+        @Param("id") id: string
+    ) {
+        return CustomResponse.fromResult(
+            await this.getPatientCardsUseCase.execute(id)
+        )
     }
 }

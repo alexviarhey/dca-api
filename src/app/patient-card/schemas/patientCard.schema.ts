@@ -12,7 +12,9 @@ export interface IPatientCardSchema {
     externalExamination: IExternalExaminationSchema,
     generalTreatmentPlan: GeneralTreatmentPlanSchema,
     dentalStatus: DentalStatusSchema
-    visits: VisitSchema[]
+    visits: VisitSchema[],
+    createdAt?: Date,
+    updatedAt?: Date
 }
 
 export const patientCardSchema = new Schema<IPatientCardSchema>({
@@ -22,6 +24,8 @@ export const patientCardSchema = new Schema<IPatientCardSchema>({
     generalTreatmentPlan: { type: generalTreatmentSchema, nullable: false },
     dentalStatus: { type: dentalStatusSchema },
     visits: { type: [visitSchema], default: [] },
+}, {
+    timestamps: true
 });
 
 export const PATIENTS_CARDS_COLLECTION = 'patients_cards'
