@@ -10,7 +10,7 @@ export const getPatientsFiltersSchema = {
         size: { type: "number", minimum: 1 },
         name: { type: "string" },
         address: { type: "string" },
-        active: { type: "boolean" },
+        active: { type: "integer" },
         gender: { enum: Object.values(GenderValues) },
         phone: { type: "string" }
     }

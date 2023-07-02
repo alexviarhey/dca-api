@@ -17,7 +17,7 @@ export const createPatientValidationSchema = {
         birthDate: { type: "string", pattern: "^\\d{4}-\\d{2}-\\d{2}$" },
         gender: { type: "string", enum: Object.values(GenderValues) },
         name: humanNameValidationSchema,
-        active: { type: 'integer' },
+        active: { type: 'boolean' },
         telecom: { type: "array", items: contactPointValidationSchema },
         address: { type: "array", items: addressValidationSchema },
         contact: { type: "array", items: contactValidationSchema }

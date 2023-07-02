@@ -56,6 +56,7 @@ export class PatientsCrudUseCases extends CrudUseCases<IPatientSchema,
 
         if (filters.gender) filterQuery.gender = filters.gender;
 
+        console.log('FILTERS', filters)
         if (filters.name) filterQuery["name.text"] = { $regex: filters.name };
 
         if (filters.address) filterQuery["address.text"] = { $regex: filters.address };

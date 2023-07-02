@@ -27,7 +27,7 @@ export class PrintController {
 
             // Render the document (Replace {first_name} by John, {last_name} by Doe, ...)
             doc.render({
-                first_name: `<w:u w:val="double"><w:b>Иванов Иван Иванович<w:b /><w:u w:val="double"/>`,
+                first_name: `<w:b><w:u w:val="double"/>Иванов Иван Иванович><w:b/>`,
                 date_of_birth: `"23" января 2021 года`
             });
 
