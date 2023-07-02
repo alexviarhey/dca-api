@@ -49,7 +49,7 @@ export class PatientsCrudUseCases extends CrudUseCases<IPatientSchema,
         const filterQuery: FilterQuery<IPatientSchema> = {};
 
         if (filters.active !== undefined) {
-            filterQuery.active = filters.active
+            filterQuery.active = !!filters.active
         } else {
             filterQuery.active = true
         }
