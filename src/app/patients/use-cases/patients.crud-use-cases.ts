@@ -63,7 +63,7 @@ export class PatientsCrudUseCases extends CrudUseCases<IPatientSchema,
         if (filters.phone) {
             filterQuery.telecom = {
                 $elemMatch: {
-                    use: ContactPointSystem.PHONE,
+                    system: ContactPointSystem.PHONE,
                     value: { $regex: filters.phone }
                 }
             };
