@@ -55,12 +55,9 @@ class PatientMapper extends Mapper<IPatientSchema, PatientDto, CreatePatientDto>
             name: await humanNameMapper.mapToSchema(dto.name),
             address: await addressMapper.mapToSchemaArray(dto.address),
             telecom: await contactPointMapper.mapToSchemaArray(dto.telecom),
-            contact: await contactMapper.mapToSchemaArray(dto.contact)
+            contact: dto.contact?.length ? await contactMapper.mapToSchemaArray(dto.contact) : []
         };
     }
 }
 
 export const patientMapper = new PatientMapper();
-
-
-
