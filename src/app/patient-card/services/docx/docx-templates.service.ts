@@ -12,7 +12,7 @@ export type GeneralInfoDocxData = {
     gender: GenderValues
     address: string
     phone: string
-    fioShort: string
+    shortFio: string
 }
 
 

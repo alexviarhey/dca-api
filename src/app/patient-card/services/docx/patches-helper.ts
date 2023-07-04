@@ -28,7 +28,7 @@ export class PatchesHelper {
         const fullName: IPatch = {
             type: PatchType.PARAGRAPH,
             children: [new TextRun({
-                text: 'Иванов Иван Иванович',
+                text: data.fullPatientName,
                 ...this.getBasicTextSettings()
             })]
         }
@@ -70,10 +70,10 @@ export class PatchesHelper {
             })]
         }
 
-        const fioShort: IPatch = {
+        const shortFio: IPatch = {
             type: PatchType.PARAGRAPH,
             children: [new TextRun({
-                text: data.fioShort,
+                text: data.shortFio,
                 ...this.getBasicTextSettings()
             })]
         }
@@ -85,7 +85,7 @@ export class PatchesHelper {
             gender,
             address,
             phone,
-            fioShort
+            shortFio: shortFio
         }
     }
 
@@ -98,13 +98,13 @@ export class PatchesHelper {
         let bold = true
         let underline = true
 
-        if (typeof params.bold === 'boolean') {
+        if (typeof params?.bold === 'boolean') {
             bold = params.bold
         }
 
         res.bold = bold
 
-        if (typeof params.underline === 'boolean') {
+        if (typeof params?.underline === 'boolean') {
             underline = params.underline
         }
 

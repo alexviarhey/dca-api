@@ -26,7 +26,7 @@ export class DocxService extends BaseService {
     }
 
     public async getDocx(cardId: string, page: DocxPages): Promise<Result<Buffer>> {
-        switch(page) {
+        switch (page) {
             case DocxPages.GENERAL_INFO:
                 return await this.getGeneralInfoDocxPage(cardId)
         }
@@ -50,15 +50,17 @@ export class DocxService extends BaseService {
             const { name, address, telecom, birthDate, gender, createdAt } = patient
 
 
-            return await this.docxTemplatesService.fillAndGetGeneralInfoPage({
+            const doc = await this.docxTemplatesService.fillAndGetGeneralInfoPage({
                 createAt: new Date(createdAt),
                 fullPatientName: name.text,
                 dateOfBirth: new Date(birthDate),
                 gender: gender,
                 address: address[0]?.text || '-',
                 phone: telecom.find(t => t.system === ContactPointSystem.PHONE)?.value || '-',
-                fioShort: `${name.given} ${name.firstName.charAt(0)}. ${name.lastName ? name.lastName.charAt(0) + '.' : ''}`
+                shortFio: `${name.lastName} ${name.firstName.charAt(0)}. ${name.given ? name.given.charAt(0) + '.' : ''}`
             })
+
+            return doc
 
         } catch (e) {
             return this.errorLogger.logErrorAndReturnSomethingWentWrongResult(e)

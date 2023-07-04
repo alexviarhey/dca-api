@@ -1,5 +1,5 @@
 export enum DocxPages {
-    GENERAL_INFO = 'general_info'
+    GENERAL_INFO = "general_info"
 }
 
 export type GetDocxQuery = {
@@ -11,6 +11,6 @@ export const getDocxQuerySchema = {
     required: ["page"],
     additionalProperties: false,
     properties: {
-        page: { enum: Object.values(DocxPages) },
+        page: { type: "string", enum: Object.values(DocxPages) },
     }
 }
