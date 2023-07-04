@@ -1,8 +1,8 @@
 import { Controller, Get } from "@nestjs/common";
-const PizZip = require("pizzip");
-const Docxtemplater = require("docxtemplater");
 import * as fs from 'fs';
-import * as path from "path";
+import { PatchType, TextRun, UnderlineType, patchDocument } from "docx";
+
+
 
 
 @Controller("print/test")
@@ -18,29 +18,28 @@ export class PrintController {
         try {
             const content = fs.readFileSync(process.cwd() + '/templates/first.docx')
 
-            const zip = new PizZip(content);
-
-            const doc = new Docxtemplater(zip, {
-                paragraphLoop: true,
-                linebreaks: true,
+            const doc = await patchDocument(content, {
+                patches: {
+                    full_name: {
+                        type: PatchType.PARAGRAPH,
+                        children: [new TextRun({
+                            text: 'Иванов Иван Иванович',
+                            bold: true,
+                            font: 'Times New Roman',
+                            size: '16pt',
+                            underline: {
+                                color: '#000000',
+                                type: UnderlineType.SINGLE
+                            }
+                        })]
+                    }
+                },
             });
 
-            // Render the document (Replace {first_name} by John, {last_name} by Doe, ...)
-            doc.render({
-                first_name: `<w:b><w:u w:val="double"/>Иванов Иван Иванович><w:b/>`,
-                date_of_birth: `"23" января 2021 года`
-            });
+            fs.writeFileSync("out.docx", doc);
 
-            const buf = doc.getZip().generate({
-                type: "nodebuffer",
-                // compression: DEFLATE adds a compression step.
-                // For a 50MB output document, expect 500ms additional CPU time
-                compression: "DEFLATE",
-            });
+            return "SUCCESS"
 
-            fs.writeFileSync(path.resolve(__dirname, "output.docx"), buf);
-
-            return buf
         } catch (err) {
             console.error("OPEN TEMPLATE ERROR: ", err);
         }

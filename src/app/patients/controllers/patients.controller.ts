@@ -56,7 +56,7 @@ export class PatientsController {
             .withSuccessMessage("Пациент успешно создан!");
     }
 
-    @Put()
+    @Put("/inactivate")
     @ApiOkResponse({ type: CustomResponseType<null> })
     async inactivate(
         @AjvBody(inactivatePatientSchema) dto: InactivatePatientDto
