@@ -59,7 +59,7 @@ export class CardDocxService {
                 })]
             }
 
-            const full_name: {
+            const full_name: IPatch = {
                 type: PatchType.PARAGRAPH,
                 children: [new TextRun({
                     text: 'Иванов Иван Иванович',
