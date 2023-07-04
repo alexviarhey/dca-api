@@ -21,7 +21,7 @@ export class ExternalExaminationService extends CardTabService<ExternalExaminati
         )
     }
 
-    public async getDefaultExternalExamination(): Promise<ExternalExaminationDto> {
+    public getDefaultExternalExamination(): ExternalExaminationDto {
         return {
             complaints: null,
             conditionOfTheSkinRedBorder: null,
