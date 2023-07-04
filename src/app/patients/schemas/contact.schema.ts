@@ -19,7 +19,6 @@ export enum ContactRelationship {
 }
 
 export interface IContactSchema {
-    _id?: string
     relationship: ContactRelationship,
     gender: GenderValues
     name: IHumanNameSchema
@@ -35,4 +34,3 @@ export const contactSchema = new Schema<IContactSchema>({
     address: { type: [addressSchema], required: false, default: [] },
     telecom: { type: [contactPointSchema], required: true }
 }, { _id: false })
-

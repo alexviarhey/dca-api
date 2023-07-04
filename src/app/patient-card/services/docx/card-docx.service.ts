@@ -2,14 +2,10 @@ import { IPatch, PatchType, TextRun, UnderlineType, patchDocument } from "docx";
 import { Result } from "../../../../core/result";
 import { GenderValues } from "../../../patients/types/gender";
 import * as fs from 'fs'
+import { PatchesHelper } from "./patches-helper";
 
 
-
-
-
-
-
-export type GeneralInfoCardPageData = {
+export type GeneralInfoDocxData = {
     createAt: Date,
     fullPatientName: string
     dateOfBirth: Date
@@ -18,77 +14,18 @@ export type GeneralInfoCardPageData = {
     phone: string
 }
 
-
-
 export class CardDocxService {
 
-    public async getGeneralInfoPage(data: GeneralInfoCardPageData): Promise<Result<Buffer>> {
+    constructor(
+        private readonly patchesHelper: PatchesHelper
+    ) {}
+
+    public async getGeneralInfoPage(data: GeneralInfoDocxData): Promise<Result<Buffer>> {
         try {
-            let content;
-
-            try {
-                content = fs.readFileSync(process.cwd() + '/templates/first.docx')
-            } catch (e) {
-                console.log('CardDocxService getGeneralInfoPage load template error: ', e)
-                return Result.err('Template not found!')
-            }
-
-            const createdAt: IPatch = {
-                type: PatchType.PARAGRAPH,
-                children: [new TextRun({
-                    text: data.createAt.toLocaleString("ru", {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                    }),
-                    font: 'Times New Roman',
-                    size: '16pt',
-                })]
-            }
-
-            const dateOfBirth: IPatch = {
-                type: PatchType.PARAGRAPH,
-                children: [new TextRun({
-                    text: data.dateOfBirth.toLocaleString("ru", {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                    }),
-                    font: 'Times New Roman',
-                    size: '16pt',
-                })]
-            }
-
-            const full_name: IPatch = {
-                type: PatchType.PARAGRAPH,
-                children: [new TextRun({
-                    text: 'Иванов Иван Иванович',
-                    bold: true,
-                    font: 'Times New Roman',
-                    size: '16pt',
-                    underline: {
-                        color: '#000000',
-                        type: UnderlineType.SINGLE
-                    }
-                })]
-            }
+            const content = fs.readFileSync(process.cwd() + '/templates/first.docx')
 
             const doc = await patchDocument(content, {
-                patches: {
-                    full_name: {
-                        type: PatchType.PARAGRAPH,
-                        children: [new TextRun({
-                            text: 'Иванов Иван Иванович',
-                            bold: true,
-                            font: 'Times New Roman',
-                            size: '16pt',
-                            underline: {
-                                color: '#000000',
-                                type: UnderlineType.SINGLE
-                            }
-                        })]
-                    }
-                },
+                patches: this.patchesHelper.getGeneralInfoPatches(data)
             });
 
             return Result.ok(doc)
@@ -97,6 +34,4 @@ export class CardDocxService {
             console.log('CardDocxService getGeneralInfoPage error: ', e)
         }
     }
-
-
 }

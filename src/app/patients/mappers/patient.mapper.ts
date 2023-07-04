@@ -10,7 +10,6 @@ import { IContactSchema } from "../schemas/contact.schema";
 class ContactMapper extends Mapper<IContactSchema, ContactDto, CreateContactDto> {
     async map(model: IContactSchema): Promise<ContactDto> {
         return {
-            _id: model._id.toString(),
             gender: model.gender,
             relationship: model.relationship,
             name: await humanNameMapper.map(model.name),

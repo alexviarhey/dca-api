@@ -39,9 +39,6 @@ export class CreateContactDto {
 }
 
 export class ContactDto {
-    @ApiProperty()
-    _id: string
-
     @ApiProperty({enum: ContactRelationship})
     relationship: ContactRelationship
 
