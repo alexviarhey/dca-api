@@ -1,5 +1,5 @@
 export enum DocxPages {
-    GENERAL_INFO
+    GENERAL_INFO = 'general_info'
 }
 
 export type GetDocxQuery = {
