@@ -4,7 +4,7 @@ import { AjvBody, AjvQuery } from "../../common/decorators/ajv.decorators";
 import { commonDiseasesAjvSchema, CommonDiseasesDto, UpdateCommonDiseasesDto } from "../dto/common-diseases.dto";
 import { externalExaminationAjvSchema, ExternalExaminationDto } from "../dto/external-examination.dto";
 import { generalTreatmentAjvSchema, GeneralTreatmentPlanDto } from "../dto/general-treatment-plan.dto";
-import { DentalStatusDto } from "../dto/dental-status.dto";
+import { DentalStatusDto, dentalStatusAjvSchema } from "../dto/dental-status.dto";
 import { GeneralTreatmentPlanService } from "../services/general-treatment-plan.service";
 import { CommonDiseasesService } from "../services/common-diseases.service";
 import { ExternalExaminationService } from "../services/external-examination.service";
@@ -103,6 +103,16 @@ export class PatientCardController {
     ): Promise<CustomResponse<DentalStatusDto>> {
         return CustomResponse.fromResult(
             await this.dentalStatusTabService.getTabData(cardId)
+        )
+    }
+
+    @Put(dentalStatusRoutingKey)
+    async updateDentalStatus(
+        @Param("id") cardId: string,
+        @AjvBody(dentalStatusAjvSchema) data: DentalStatusDto
+    ): Promise<CustomResponse<DentalStatusDto>> {
+        return CustomResponse.fromResult(
+            await this.dentalStatusTabService.updateTabData(cardId, data)
         )
     }
 
