@@ -17,11 +17,11 @@ export class AddressMapper extends Mapper<IAddressSchema, AddressDto, CreateAddr
 
     async mapToSchema(dto: CreateAddressDto): Promise<IAddressSchema> {
         const text =
-            dto.country +
-            dto.city +
-            dto.street +
+            dto.country + ' ' +
+            dto.city + ' ' +
+            dto.street + ' ' +
             dto.house +
-            (dto.apartment ? dto.apartment : "");
+            (dto.apartment ? (' ' + dto.apartment) : "");
 
         return {
             country: dto.country,

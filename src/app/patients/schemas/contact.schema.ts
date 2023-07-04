@@ -15,7 +15,11 @@ export enum ContactRelationship {
     SISTER = 'sister',
     GRANDMOTHER = 'grandmother',
     GRANDFATHER = 'grandfather',
-    CUSTODIAN = 'custodian'
+    CUSTODIAN = 'custodian',
+    HUSBAND = 'husband',
+    WIFE = 'wife',
+    DAUGHTER = 'daughter',
+    SON = 'son'
 }
 
 export interface IContactSchema {
