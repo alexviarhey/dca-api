@@ -13,7 +13,9 @@ export interface IPatientSchema {
     name: IHumanNameSchema
     address: IAddressSchema[]
     telecom: IContactPointSchema[]
-    contact: IContactSchema[]
+    contact: IContactSchema[],
+    createdAt?: Date,
+    updatedAt?: Date
 }
 
 export const patientSchema = new Schema<IPatientSchema>({
@@ -24,6 +26,6 @@ export const patientSchema = new Schema<IPatientSchema>({
     address: { type: [addressSchema], required: false, default: []},
     telecom: { type: [contactPointSchema], required: false, default: []},
     contact: { type: [contactSchema], required: false, default: []}
-})
+}, {timestamps: true})
 
 export const PATIENTS = 'patients'

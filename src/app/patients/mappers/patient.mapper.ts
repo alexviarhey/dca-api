@@ -41,7 +41,9 @@ class PatientMapper extends Mapper<IPatientSchema, PatientDto, CreatePatientDto>
             name: await humanNameMapper.map(model.name),
             address: await addressMapper.mapArray(model.address),
             telecom: await contactPointMapper.mapArray(model.telecom),
-            contact: await contactMapper.mapArray(model.contact)
+            contact: await contactMapper.mapArray(model.contact),
+            createdAt: model.createdAt,
+            updatedAt: model.updatedAt
         };
     }
 

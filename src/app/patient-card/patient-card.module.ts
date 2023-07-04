@@ -17,13 +17,17 @@ import { GetVisitUseCase } from "./use-cases/get-visit.use-case";
 import { UpdateVisitUseCase } from "./use-cases/update-visit.use-case";
 import { ICD_COLLECTION, icdSchema } from "../icd/icd.schema";
 import { GetAllVisitsUseCase } from "./use-cases/get-all-visits.use-case";
-import { PrintController } from "./controllers/print.controller";
+import { DocxService } from "./services/docx/docx.service";
+import { DocxTemplatesService } from "./services/docx/docx-templates.service";
+import { PatchesHelper } from "./services/docx/patches-helper";
+import { PATIENTS, patientSchema } from "../patients/schemas/patient.schema";
 
 
 @Module({
     imports: [
         MongooseModule.forFeature([
             { schema: patientCardSchema, name: PATIENTS_CARDS_COLLECTION },
+            {schema: patientSchema, name: PATIENTS},
             { schema: icdSchema, name: ICD_COLLECTION }
         ]),
     ],
@@ -41,11 +45,13 @@ import { PrintController } from "./controllers/print.controller";
         GetVisitUseCase,
         GetAllVisitsUseCase,
         UpdateVisitUseCase,
-        VisitMapper
+        VisitMapper,
+        PatchesHelper,
+        DocxTemplatesService,
+        DocxService
     ],
     controllers: [
-        PatientCardController,
-        PrintController
+        PatientCardController
     ],
     exports: [CreateCardUseCase]
 })

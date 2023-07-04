@@ -68,7 +68,6 @@ export class CreatePatientDto {
 }
 
 
-
 export class UpdatePatientDto {
     @ApiProperty()
     _id: string;
@@ -116,6 +115,10 @@ export class PatientDto {
 
     @ApiProperty({type: ContactDto, isArray: true})
     contact: ContactDto[];
+
+    createdAt: Date
+
+    updatedAt: Date
 }
 
 export class InactivatePatientDto {

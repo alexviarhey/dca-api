@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Post, Put } from "@nestjs/common";
 import { CustomResponse } from "../../../core/custom-response";
-import { AjvBody } from "../../common/decorators/ajv.decorators";
+import { AjvBody, AjvQuery } from "../../common/decorators/ajv.decorators";
 import { commonDiseasesAjvSchema, CommonDiseasesDto, UpdateCommonDiseasesDto } from "../dto/common-diseases.dto";
 import { externalExaminationAjvSchema, ExternalExaminationDto } from "../dto/external-examination.dto";
 import { generalTreatmentAjvSchema, GeneralTreatmentPlanDto } from "../dto/general-treatment-plan.dto";
@@ -14,6 +14,8 @@ import { CreateVisitUseCase } from "../use-cases/create-visit.use-case";
 import { GetVisitUseCase } from "../use-cases/get-visit.use-case";
 import { GetAllVisitsUseCase } from "../use-cases/get-all-visits.use-case";
 import { UpdateVisitUseCase } from "../use-cases/update-visit.use-case";
+import { GetDocxQuery, getDocxQuerySchema } from "../dto/docx.dto";
+import { DocxService } from "../services/docx/docx.service";
 
 
 const commonDiseasesRoutingKey = '/common-diseases'
@@ -34,6 +36,7 @@ export class PatientCardController {
         private readonly getVisitUseCase: GetVisitUseCase,
         private readonly getAllVisitsUseCase: GetAllVisitsUseCase,
         private readonly updateVisitUseCase: UpdateVisitUseCase,
+        private readonly docxService: DocxService
     ) { }
 
     @Get(commonDiseasesRoutingKey)
@@ -140,6 +143,16 @@ export class PatientCardController {
     ): Promise<CustomResponse<ShortVisitDto[]>> {
         return CustomResponse.fromResult(
             await this.getAllVisitsUseCase.execute(cardId)
+        )
+    }
+
+    @Get('/docx')
+    async getDocx(
+        @Param("id") cardId: string,
+        @AjvQuery(getDocxQuerySchema) query: GetDocxQuery
+    ) {
+        return CustomResponse.fromResult(
+            await this.docxService.getDocx(cardId, query.page)
         )
     }
 }

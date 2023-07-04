@@ -1,9 +1,9 @@
-import { IPatch, PatchType, TextRun, UnderlineType, patchDocument } from "docx";
+import { patchDocument } from "docx";
 import { Result } from "../../../../core/result";
 import { GenderValues } from "../../../patients/types/gender";
 import * as fs from 'fs'
 import { PatchesHelper } from "./patches-helper";
-
+import { Injectable } from "@nestjs/common";
 
 export type GeneralInfoDocxData = {
     createAt: Date,
@@ -12,17 +12,20 @@ export type GeneralInfoDocxData = {
     gender: GenderValues
     address: string
     phone: string
+    fioShort: string
 }
 
-export class CardDocxService {
+
+@Injectable()
+export class DocxTemplatesService {
 
     constructor(
         private readonly patchesHelper: PatchesHelper
     ) {}
 
-    public async getGeneralInfoPage(data: GeneralInfoDocxData): Promise<Result<Buffer>> {
+    public async fillAndGetGeneralInfoPage(data: GeneralInfoDocxData): Promise<Result<Buffer>> {
         try {
-            const content = fs.readFileSync(process.cwd() + '/templates/first.docx')
+            const content = fs.readFileSync(process.cwd() + '/templates/generalInfo.docx')
 
             const doc = await patchDocument(content, {
                 patches: this.patchesHelper.getGeneralInfoPatches(data)

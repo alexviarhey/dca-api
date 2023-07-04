@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { IPatch, IRunOptions, PatchType, TextRun, UnderlineType } from "docx";
-import { GeneralInfoDocxData } from "./card-docx.service";
+import { IPatch, PatchType, TextRun, UnderlineType } from "docx";
+import { GeneralInfoDocxData } from "./docx-templates.service";
+import { GenderValues } from "../../../patients/types/gender";
 
 export type PatchObj = {
     [key: string]: IPatch
@@ -15,6 +16,7 @@ type BasicTextSettingsParams = {
 export class PatchesHelper {
 
     public getGeneralInfoPatches(data: GeneralInfoDocxData): PatchObj {
+
         const createdAt: IPatch = {
             type: PatchType.PARAGRAPH,
             children: [new TextRun({
@@ -23,38 +25,67 @@ export class PatchesHelper {
             })]
         }
 
-        const dateOfBirth: IPatch = {
-            type: PatchType.PARAGRAPH,
-            children: [new TextRun({
-                text: data.dateOfBirth.toLocaleString("ru", {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                }),
-                bold: true,
-                font: 'Times New Roman',
-                size: '16pt',
-            })]
-        }
-
         const fullName: IPatch = {
             type: PatchType.PARAGRAPH,
             children: [new TextRun({
                 text: 'Иванов Иван Иванович',
-                bold: true,
-                font: 'Times New Roman',
-                size: '16pt',
-                underline: {
-                    color: '#000000',
-                    type: UnderlineType.SINGLE
-                }
+                ...this.getBasicTextSettings()
+            })]
+        }
+
+        const dateOfBirth: IPatch = {
+            type: PatchType.PARAGRAPH,
+            children: [new TextRun({
+                text: this.formatDate(data.dateOfBirth),
+                ...this.getBasicTextSettings({ bold: true })
+            })]
+        }
+
+        const isMale = data.gender === GenderValues.MALE
+        const size = '18pt'
+        const bold = true
+
+        const gender: IPatch = {
+            type: PatchType.PARAGRAPH,
+            children: [
+                new TextRun({ text: 'M', size, bold, strike: isMale }),
+                new TextRun({ text: '/', size, bold: false }),
+                new TextRun({ text: 'Ж', size, bold, strike: !isMale })
+            ]
+        }
+
+        const address: IPatch = {
+            type: PatchType.PARAGRAPH,
+            children: [new TextRun({
+                text: data.address,
+                ...this.getBasicTextSettings()
+            })]
+        }
+
+        const phone: IPatch = {
+            type: PatchType.PARAGRAPH,
+            children: [new TextRun({
+                text: data.phone,
+                ...this.getBasicTextSettings()
+            })]
+        }
+
+        const fioShort: IPatch = {
+            type: PatchType.PARAGRAPH,
+            children: [new TextRun({
+                text: data.fioShort,
+                ...this.getBasicTextSettings()
             })]
         }
 
         return {
             createdAt,
+            fullName,
             dateOfBirth,
-            fullName
+            gender,
+            address,
+            phone,
+            fioShort
         }
     }
 
@@ -77,9 +108,12 @@ export class PatchesHelper {
             underline = params.underline
         }
 
+        underline && (res.underline = {
+            color: '#000000',
+            type: UnderlineType.SINGLE
+        })
 
         return res
-
     }
 
     private formatDate(date: Date): string {
@@ -89,5 +123,4 @@ export class PatchesHelper {
             day: 'numeric',
         })
     }
-
 }
