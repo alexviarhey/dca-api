@@ -21,7 +21,7 @@ export class GetAllVisitsUseCase extends BaseService {
     async execute(cardId: string): PromiseResult<ShortVisitDto[]> {
         try {
             const card = await this.cardModel.findOne({ _id: cardId }, { visits: 1 })
-            if (card) {
+            if (!card) {
                 return Result.err(`Card with id ${cardId} not found!`)
             }
 
