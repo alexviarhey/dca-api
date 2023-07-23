@@ -36,7 +36,7 @@ export const updatePatientValidationSchema = {
 
 export const inactivatePatientSchema = {
     type: "object",
-    requiredAll: true,
+    allRequired: true,
     additionalProperties: false,
     properties: {
         _id: { type: "string" }
