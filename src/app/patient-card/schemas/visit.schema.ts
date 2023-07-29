@@ -18,7 +18,8 @@ export type VisitSchema = {
 
 const visitDiagnosisSchema = new Schema({
     tooth: { type: Number, nullable: false },
-    icdIds: { type: [String], nullable: false }
+    icdName: { type: String, nullable: false },
+    icdCode: { type: String, nullable: false }
 }, { _id: false })
 
 export const visitSchema = new Schema({
