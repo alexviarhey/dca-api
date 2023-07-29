@@ -126,7 +126,7 @@ export class PatientCardController {
             .withSuccessMessage('Визит успешно добавлен!')
     }
 
-    @Put(`${visitsRoutingKey}/visitId`)
+    @Put(`${visitsRoutingKey}/:visitId`)
     async updateVisit(
         @Param("id") cardId: string,
         @Param("visitId") visitId: string,
@@ -137,7 +137,7 @@ export class PatientCardController {
             .withSuccessMessage('Визит успешно обновлен!')
     }
 
-    @Get(`${visitsRoutingKey}/visitId`)
+    @Get(`${visitsRoutingKey}/:visitId`)
     async getVisit(
         @Param("id") cardId: string,
         @Param("visitId") visitId: string,
