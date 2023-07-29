@@ -43,7 +43,7 @@ export class VisitMapper extends Mapper<VisitSchema, VisitDto, CreateVisitDto> {
             _id: {$in: icdIdToothMap.keys()}
         })
 
-        const diagnosis = icds.map(i => ({tooth: icdIdToothMap.get(i._id), icdName: i.name, icdCode: i.code}))
+        const diagnosis = icds.map(i => ({tooth: icdIdToothMap.get(i._id.toString()), icdName: i.name, icdCode: i.code}))
 
         return {
             date: new Date(dto.date),
