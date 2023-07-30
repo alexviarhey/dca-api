@@ -2,6 +2,7 @@ import { FaceConfiguration, FaceConfigurationReadable, LymphNodes, LymphNodesRea
 
 export type ExternalExaminationDto = {
     complaints: string | null
+    stateOfHealth: string | null
     conditionOfTheSkinRedBorder: string | null
     faceConfiguration: FaceConfiguration[]
     lymphNodes: LymphNodes[]
@@ -14,6 +15,7 @@ export const externalExaminationAjvSchema = {
     allRequired: true,
     properties: {
         complaints: { type: 'string', nullable: true },
+        stateOfHealth: { type: 'string', nullable: false },
         conditionOfTheSkinRedBorder: { type: 'string', nullable: true },
         faceConfiguration: {
             type: 'array',

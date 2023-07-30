@@ -16,7 +16,8 @@ export class CommonDiseasesMapper extends Mapper<ICommonDiseasesSchema, CommonDi
             continuousUseOfMedicines: model.continuousUseOfMedicines,
             harmfulFactors: model.harmfulFactors,
             pregnancyOrPostpartumPeriod: model.pregnancyOrPostpartumPeriod,
-            infectiousDiseases: model.infectiousDiseases
+            infectiousDiseases: model.infectiousDiseases,
+            other: model.other
         }
     }
 
@@ -31,7 +32,8 @@ export class CommonDiseasesMapper extends Mapper<ICommonDiseasesSchema, CommonDi
             continuousUseOfMedicines: dto.continuousUseOfMedicines,
             harmfulFactors: dto.harmfulFactors,
             pregnancyOrPostpartumPeriod: dto.pregnancyOrPostpartumPeriod,
-            infectiousDiseases: dto.infectiousDiseases
+            infectiousDiseases: dto.infectiousDiseases,
+            other: dto.other
         }
     }
 }

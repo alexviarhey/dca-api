@@ -11,6 +11,7 @@ export interface ICommonDiseasesSchema {
     harmfulFactors: string | null;
     pregnancyOrPostpartumPeriod: string | null;
     infectiousDiseases: string | null;
+    other: string | null
 }
 
 
@@ -24,5 +25,6 @@ export const commonDiseasesSchema = new Schema<ICommonDiseasesSchema>({
     continuousUseOfMedicines: { type: String, nullable: true, default: null },
     harmfulFactors: { type: String, nullable: true, default: null },
     pregnancyOrPostpartumPeriod: { type: String, nullable: true, default: null },
-    infectiousDiseases: { type: String, nullable: true, default: null }
+    infectiousDiseases: { type: String, nullable: true, default: null },
+    other: { type: String, nullable: true, default: null }
 }, { _id: false });

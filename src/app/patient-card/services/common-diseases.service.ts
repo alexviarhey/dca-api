@@ -31,7 +31,8 @@ export class CommonDiseasesService extends CardTabService<CommonDiseasesDto, Com
             continuousUseOfMedicines: null,
             harmfulFactors: null,
             pregnancyOrPostpartumPeriod: null,
-            infectiousDiseases: null
+            infectiousDiseases: null,
+            other: null
         }
     }
 }

@@ -1,5 +1,6 @@
 export enum DocxPages {
-    GENERAL_INFO = "general_info"
+    GENERAL_INFO = "general_info",
+    PATIENT_EXAMINATION_AT_INITIAL_PLACEMENT = "patient_examination_at_initial_placement"
 }
 
 export type GetDocxQuery = {

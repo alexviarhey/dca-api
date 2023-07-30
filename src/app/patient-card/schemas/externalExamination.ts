@@ -62,6 +62,7 @@ export const TemporomandibularJointReadable = {
 
 export interface IExternalExaminationSchema {
     complaints: string | null
+    stateOfHealth: string | null
     faceConfiguration: FaceConfiguration[],
     conditionOfTheSkinRedBorder: string | null
     lymphNodes: LymphNodes[]
@@ -70,6 +71,7 @@ export interface IExternalExaminationSchema {
 
 export const externalExaminationSchema = new Schema<IExternalExaminationSchema>({
     complaints: { type: String, nullable: true, default: null },
+    stateOfHealth: { type: String, nullable: true, default: null },
     faceConfiguration: { type: [Number], nullable: false },
     conditionOfTheSkinRedBorder: { type: String, nullable: true, default: null },
     lymphNodes: { type: [Number], nullable: false },
