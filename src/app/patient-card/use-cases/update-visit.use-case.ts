@@ -21,7 +21,7 @@ export class UpdateVisitUseCase extends BaseService {
     async execute(cardId: string, visitId: string, dto: CreateVisitDto): PromiseResult {
         try {
             const card = await this.cardModel.findOne({ _id: cardId }, { _id: true })
-            if (card) {
+            if (!card) {
                 return Result.err(`Card with id ${cardId} not found!`)
             }
 

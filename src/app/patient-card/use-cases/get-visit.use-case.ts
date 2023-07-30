@@ -29,7 +29,7 @@ export class GetVisitUseCase extends BaseService {
                 }
             )
 
-            if (card) {
+            if (!card) {
                 return Result.err(`Card with id ${cardId} not found!`)
             }
 
