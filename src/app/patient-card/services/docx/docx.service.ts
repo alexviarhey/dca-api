@@ -32,6 +32,8 @@ export class DocxService extends BaseService {
                 return await this.getGeneralInfoDocxPage(cardId)
             case DocxPages.PATIENT_EXAMINATION_AT_INITIAL_PLACEMENT:
                 return await this.getPatientExaminationAtInitialPlacementDocxPage(cardId)
+            case DocxPages.GENERAL_TREATMENT_PLAN:
+                return await this.getGeneralTreatmentPlanDocxPage(cardId)
             default:
                 return Result.err(`Sorry docx service for page ${page} not implemented!`)
         }
