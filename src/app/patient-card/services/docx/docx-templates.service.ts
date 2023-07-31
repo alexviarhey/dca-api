@@ -19,8 +19,20 @@ export type GeneralInfoDocxData = {
 export type GetPatientExaminationAtInitialPlacementPatchesData = {
     applicationDate: Date
     complains: string
-    stateOfHealth: string
-    commonDiseases: CommonDiseasesType,
+    commonDiseases: {
+        stateOfHealth: string
+        cardiovascularSystem: string | null
+        nervousSystem: string | null
+        endocrineSystem: string | null
+        digestiveSystem: string | null
+        respiratorySystem: string | null
+        allergicReactions: string | null
+        continuousUseOfMedicines: string | null
+        harmfulFactors: string | null
+        pregnancyOrPostpartumPeriod: string | null
+        infectiousDiseases: string | null
+        other: string | null
+    },
     externalExamination: {
         faceConfiguration: string
         conditionOfTheSkinRedBorder: string
@@ -29,24 +41,6 @@ export type GetPatientExaminationAtInitialPlacementPatchesData = {
     }
 }
 
-export type CommonDiseasesType = {
-    cardiovascularSystem: CommonDiseasesInDocxData
-    nervousSystem: CommonDiseasesInDocxData
-    endocrineSystem: CommonDiseasesInDocxData
-    digestiveSystem: CommonDiseasesInDocxData
-    respiratorySystem: CommonDiseasesInDocxData
-    allergicReactions: CommonDiseasesInDocxData
-    continuousUseOfMedicines: CommonDiseasesInDocxData
-    harmfulFactors: CommonDiseasesInDocxData
-    pregnancyOrPostpartumPeriod: CommonDiseasesInDocxData
-    infectiousDiseases: CommonDiseasesInDocxData
-    other: string | null
-}
-
-export type CommonDiseasesInDocxData = {
-    yes: boolean,
-    value: string | null
-}
 
 @Injectable()
 export class DocxTemplatesService {

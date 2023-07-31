@@ -5,6 +5,7 @@ export const commonDiseasesAjvSchema = {
     additionalProperties: false,
     allRequired: true,
     properties: {
+        stateOfHealth: { type: 'string' },
         cardiovascularSystem: { type: 'string' },
         nervousSystem: { type: 'string' },
         endocrineSystem:{ type: 'string' },
@@ -20,6 +21,9 @@ export const commonDiseasesAjvSchema = {
 };
 
 export class CreateCommonDiseasesDto {
+    @ApiProperty({ nullable: true })
+    stateOfHealth: string | null;
+
     @ApiProperty({ nullable: true })
     cardiovascularSystem: string | null;
 

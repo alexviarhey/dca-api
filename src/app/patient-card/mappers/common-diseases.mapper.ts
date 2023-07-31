@@ -7,6 +7,7 @@ import { Injectable } from "@nestjs/common";
 export class CommonDiseasesMapper extends Mapper<ICommonDiseasesSchema, CommonDiseasesDto, CreateCommonDiseasesDto> {
     async map(model: ICommonDiseasesSchema): Promise<CommonDiseasesDto> {
         return {
+            stateOfHealth: model.stateOfHealth,
             cardiovascularSystem: model.cardiovascularSystem,
             nervousSystem: model.nervousSystem,
             endocrineSystem: model.endocrineSystem,
@@ -23,6 +24,7 @@ export class CommonDiseasesMapper extends Mapper<ICommonDiseasesSchema, CommonDi
 
     async mapToSchema(dto: Partial<CreateCommonDiseasesDto> | CreateCommonDiseasesDto): Promise<ICommonDiseasesSchema> {
         return {
+            stateOfHealth: dto.stateOfHealth,
             cardiovascularSystem: dto.cardiovascularSystem,
             nervousSystem: dto.nervousSystem,
             endocrineSystem: dto.endocrineSystem,

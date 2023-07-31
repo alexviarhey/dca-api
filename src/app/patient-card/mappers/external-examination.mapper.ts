@@ -8,7 +8,6 @@ export class ExternalExaminationMapper extends Mapper<IExternalExaminationSchema
     async map(model: IExternalExaminationSchema): Promise<ExternalExaminationDto> {
         return {
             complaints: model.complaints,
-            stateOfHealth: model.stateOfHealth,
             conditionOfTheSkinRedBorder: model.conditionOfTheSkinRedBorder,
             faceConfiguration: model.faceConfiguration,
             lymphNodes: model.lymphNodes,
@@ -19,7 +18,6 @@ export class ExternalExaminationMapper extends Mapper<IExternalExaminationSchema
     async mapToSchema(dto: Partial<ExternalExaminationDto>): Promise<IExternalExaminationSchema> {
         return {
             complaints: dto.complaints,
-            stateOfHealth: dto.stateOfHealth,
             conditionOfTheSkinRedBorder: dto.conditionOfTheSkinRedBorder,
             faceConfiguration: dto.faceConfiguration,
             lymphNodes: dto.lymphNodes,

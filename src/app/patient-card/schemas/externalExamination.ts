@@ -62,7 +62,6 @@ export const TemporomandibularJointReadable = {
 
 export interface IExternalExaminationSchema {
     complaints: string | null
-    stateOfHealth: string | null
     faceConfiguration: FaceConfiguration[],
     conditionOfTheSkinRedBorder: string | null
     lymphNodes: LymphNodes[]
@@ -71,53 +70,8 @@ export interface IExternalExaminationSchema {
 
 export const externalExaminationSchema = new Schema<IExternalExaminationSchema>({
     complaints: { type: String, nullable: true, default: null },
-    stateOfHealth: { type: String, nullable: true, default: null },
     faceConfiguration: { type: [Number], nullable: false },
     conditionOfTheSkinRedBorder: { type: String, nullable: true, default: null },
     lymphNodes: { type: [Number], nullable: false },
     temporomandibularJoint: { type: [Number], nullable: false }
 }, {_id: false})
-
-
-  //  bite: string
-  //  hardTissuesOfTeethAndPeriodontiumCondtitions: IHardTissuesOfTeethAndPeriodontiumCondtitions
-  //  xrayAndOtherResearchData: XrayAndOtherResearchData
-
-
-
-//export enum Bite {
-//    ORTHOGNATHIC = 1,
-//    STRAIGHT,
-//    DISTAL,
-//    MESIAL,
-//    DEEP,
-//    OPEN,
-//    CROSS
-//}
-
-//export const biteReadable = {
-//    [Bite.ORTHOGNATHIC]: 'ортогнатический',
-//    [Bite.STRAIGHT]: 'прямой',
-//    [Bite.DISTAL]: 'дистальный',
-//    [Bite.MESIAL]: 'мезиальный',
-//    [Bite.DEEP]: 'глубокий',
-//    [Bite.OPEN]: 'открытый',
-//    [Bite.CROSS]: 'перекрестный',
-//}
-
-//interface IHardTissuesOfTeethAndPeriodontiumCondtitions {
-//    extensiveFillings: number[] | null
-//    abrasion: number[] | null
-//    colorChange: number[] | null
-//    shapeChange: number[] | null
-//    IROPZ: number[] | null
-//    hyperemia: number[] | null
-//    recession: number[] | null
-//    dentogingivalAttachmentDisorder: number[] | null
-//}
-
-//export interface XrayAndOtherResearchData {
-//    notCarriedOut: boolean
-//    seeDiary: boolean
-//    pathologicalChanges: number[] | null
-//}

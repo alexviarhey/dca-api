@@ -24,7 +24,6 @@ export class ExternalExaminationService extends CardTabService<ExternalExaminati
     public getDefaultExternalExamination(): ExternalExaminationDto {
         return {
             complaints: null,
-            stateOfHealth: 'удовлетворительное',
             conditionOfTheSkinRedBorder: null,
             faceConfiguration: [
                 FaceConfiguration.NOT_CHANGED,

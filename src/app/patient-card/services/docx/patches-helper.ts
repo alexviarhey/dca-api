@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { IPatch, PatchType, TextRun, UnderlineType } from "docx";
-import { CommonDiseasesInDocxData, GeneralInfoDocxData, GetPatientExaminationAtInitialPlacementPatchesData } from "./docx-templates.service";
+import { GeneralInfoDocxData, GetPatientExaminationAtInitialPlacementPatchesData } from "./docx-templates.service";
 import { GenderValues } from "../../../patients/types/gender";
 
 export type PatchObj = {
@@ -113,17 +113,6 @@ export class PatchesHelper {
             })]
         }
 
-        const stateOfHealth: IPatch = {
-            type: PatchType.PARAGRAPH,
-            children: [new TextRun({
-                text: data.complains,
-                underline: this.underline,
-                italics: true,
-                ...this.getBasicTextSettings()
-            })]
-        }
-
-
         const commonDiseases = Object
             .keys(data.commonDiseases)
             .reduce<Record<string, IPatch>>((res, key) => {
@@ -140,13 +129,25 @@ export class PatchesHelper {
                     return res
                 }
 
-                const item: CommonDiseasesInDocxData = data.commonDiseases[key]
+                if (key === 'stateOfHealth') {
+                    res.stateOfHealth = {
+                        type: PatchType.PARAGRAPH,
+                        children: [new TextRun({
+                            text: data.commonDiseases.stateOfHealth || '',
+                            ...this.getBasicTextSettings()
+                        })]
+                    }
+
+                    return res
+                }
+
+                const value: string = data.commonDiseases[key]
 
                 res[`${key}Yes`] = {
                     type: PatchType.PARAGRAPH,
                     children: [new TextRun({
                         text: 'ДА',
-                        strike: item.yes,
+                        strike: !!!value,
                         ...this.getBasicTextSettings()
                     })]
                 }
@@ -155,7 +156,7 @@ export class PatchesHelper {
                     type: PatchType.PARAGRAPH,
                     children: [new TextRun({
                         text: 'НЕТ',
-                        strike: !item.yes,
+                        strike: !!value,
                         ...this.getBasicTextSettings()
                     })]
                 }
@@ -163,7 +164,7 @@ export class PatchesHelper {
                 res[key] = {
                     type: PatchType.PARAGRAPH,
                     children: [new TextRun({
-                        text: item.value || '',
+                        text: value || '',
                         ...this.getBasicTextSettings()
                     })]
                 }
@@ -191,7 +192,6 @@ export class PatchesHelper {
         return {
             applicationDate,
             complains,
-            stateOfHealth,
             ...commonDiseases,
             ...externalExamination
         }

@@ -23,9 +23,9 @@ export const patientSchema = new Schema<IPatientSchema>({
     birthDate: { type: String, required: true },
     gender: { type: String, enum: GenderValues, required: true },
     name: { type: humanNameSchema, required: true },
-    address: { type: [addressSchema], required: false, default: []},
-    telecom: { type: [contactPointSchema], required: false, default: []},
-    contact: { type: [contactSchema], required: false, default: []}
-}, {timestamps: true})
+    address: { type: [addressSchema], required: false, default: [] },
+    telecom: { type: [contactPointSchema], required: false, default: [] },
+    contact: { type: [contactSchema], required: false, default: [] }
+}, { timestamps: true })
 
 export const PATIENTS = 'patients'

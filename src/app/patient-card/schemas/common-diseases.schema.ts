@@ -1,6 +1,7 @@
 import { Schema } from "mongoose";
 
 export interface ICommonDiseasesSchema {
+    stateOfHealth: string | null
     cardiovascularSystem: string | null;
     nervousSystem: string | null;
     endocrineSystem: string | null;
@@ -16,6 +17,7 @@ export interface ICommonDiseasesSchema {
 
 
 export const commonDiseasesSchema = new Schema<ICommonDiseasesSchema>({
+    stateOfHealth: { type: String, nullable: true, default: null },
     cardiovascularSystem: { type: String, nullable: true, default: null },
     nervousSystem: { type: String, nullable: true, default: null },
     endocrineSystem: { type: String, nullable: true, default: null },

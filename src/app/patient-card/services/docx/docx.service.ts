@@ -5,7 +5,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { BaseService } from "../../../../core/base.service";
 import { Result } from "../../../../core/result";
 import { IPatientSchema, PATIENTS } from "../../../patients/schemas/patient.schema";
-import { CommonDiseasesInDocxData, CommonDiseasesType, DocxTemplatesService } from "./docx-templates.service";
+import { DocxTemplatesService } from "./docx-templates.service";
 import { ContactPointSystem } from "../../../common/schemas/contact-point.schema";
 import { DocxPages } from "../../dto/docx.dto";
 import { FaceConfiguration, FaceConfigurationReadable, LymphNodes, LymphNodesReadable, TemporomandibularJoint, TemporomandibularJointReadable } from "../../schemas/externalExamination";
@@ -77,7 +77,8 @@ export class DocxService extends BaseService {
 
             const card = await this.cardModel.findById(cardId, {
                 externalExamination: 1,
-                commonDiseases: 1
+                commonDiseases: 1,
+                createdAt: 1
             })
             if (!card) {
                 return Result.err('Карточка не найдена!')
@@ -88,35 +89,28 @@ export class DocxService extends BaseService {
             const doc = await this.docxTemplatesService.fillAndGetPatientExaminationAtInitialPlacementPage({
                 applicationDate: new Date(card.createdAt),
                 complains: card.externalExamination.complaints,
-                stateOfHealth: card.externalExamination.stateOfHealth,
                 commonDiseases: {
-                    cardiovascularSystem: getCommonDiseasesInDocxData(commonDiseases.cardiovascularSystem),
-                    nervousSystem: getCommonDiseasesInDocxData(commonDiseases.nervousSystem),
-                    endocrineSystem: getCommonDiseasesInDocxData(commonDiseases.endocrineSystem),
-                    digestiveSystem: getCommonDiseasesInDocxData(commonDiseases.digestiveSystem),
-                    respiratorySystem: getCommonDiseasesInDocxData(commonDiseases.respiratorySystem),
-                    allergicReactions: getCommonDiseasesInDocxData(commonDiseases.allergicReactions),
-                    continuousUseOfMedicines: getCommonDiseasesInDocxData(commonDiseases.continuousUseOfMedicines),
-                    harmfulFactors: getCommonDiseasesInDocxData(commonDiseases.harmfulFactors),
-                    pregnancyOrPostpartumPeriod: getCommonDiseasesInDocxData(commonDiseases.pregnancyOrPostpartumPeriod),
-                    infectiousDiseases: getCommonDiseasesInDocxData(commonDiseases.infectiousDiseases),
+                    stateOfHealth: commonDiseases.stateOfHealth,
+                    cardiovascularSystem: commonDiseases.cardiovascularSystem,
+                    nervousSystem: commonDiseases.nervousSystem,
+                    endocrineSystem: commonDiseases.endocrineSystem,
+                    digestiveSystem: commonDiseases.digestiveSystem,
+                    respiratorySystem: commonDiseases.respiratorySystem,
+                    allergicReactions: commonDiseases.allergicReactions,
+                    continuousUseOfMedicines: commonDiseases.continuousUseOfMedicines,
+                    harmfulFactors: commonDiseases.harmfulFactors,
+                    pregnancyOrPostpartumPeriod: commonDiseases.pregnancyOrPostpartumPeriod,
+                    infectiousDiseases: commonDiseases.infectiousDiseases,
                     other: commonDiseases.other
-                } as CommonDiseasesType,
+                },
 
                 externalExamination: {
-                    conditionOfTheSkinRedBorder: externalExamination.conditionOfTheSkinRedBorder,
+                    conditionOfTheSkinRedBorder: externalExamination.conditionOfTheSkinRedBorder || 'без видимых патологоческих изменений',
                     faceConfiguration: externalExaminationItemToReadable<FaceConfiguration>(externalExamination.faceConfiguration, FaceConfigurationReadable),
                     lymphNodes: externalExaminationItemToReadable<LymphNodes>(externalExamination.lymphNodes, LymphNodesReadable),
                     temporomandibularJoint: externalExaminationItemToReadable<TemporomandibularJoint>(externalExamination.temporomandibularJoint, TemporomandibularJointReadable)
                 }
             })
-
-            function getCommonDiseasesInDocxData(value: string): CommonDiseasesInDocxData {
-                return {
-                    yes: !!value,
-                    value
-                }
-            }
 
             function externalExaminationItemToReadable<T extends number>(values: T[], readable: Record<T, string>): string {
                 return values
