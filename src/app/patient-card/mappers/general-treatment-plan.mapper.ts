@@ -25,6 +25,7 @@ export class GeneralTreatmentPlanMapper extends Mapper<GeneralTreatmentPlanSchem
                 replacementOfFillings: source.therapeuticTreatment.replacementOfFillings,
                 treatmentOfCariesAndNonCariousLesions: source.therapeuticTreatment.treatmentOfCariesAndNonCariousLesions,
                 endodonticTreatment: source.therapeuticTreatment.endodonticTreatment,
+                periodontalTreatment: source.therapeuticTreatment.periodontalTreatment,
                 treatmentOfDiseasesOfTheOralMucosa: source.therapeuticTreatment.treatmentOfDiseasesOfTheOralMucosa,
                 other: source.therapeuticTreatment.other
             } : null,

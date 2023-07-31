@@ -4,6 +4,7 @@ import { GenderValues } from "../../../patients/types/gender";
 import * as fs from 'fs'
 import { PatchesHelper } from "./patches-helper";
 import { Injectable } from "@nestjs/common";
+import { PreventiveActions, SurgicalTreatment, TherapeuticTreatment } from "../../schemas/general-treatment-plan.schema";
 
 export type GeneralInfoDocxData = {
     createAt: Date,
@@ -41,6 +42,27 @@ export type GetPatientExaminationAtInitialPlacementPatchesData = {
     }
 }
 
+export type GetGeneralTreatmentTypePatchesData = {
+    emergencyCare: string | null;
+    motivationByRiskFactorsAndHygieneEducation: boolean;
+    professionalHygiene: boolean;
+    preventiveActionsOther: string | null;
+    replacementOfFillings: string | null;
+    treatmentOfCariesAndNonCariousLesions: string | null;
+    endodonticTreatment: string | null;
+    periodontalTreatment: string | null
+    treatmentOfDiseasesOfTheOralMucosa: string | null;
+    therapeuticTreatmentOther: string | null;
+    extractionOfTeethToots: string | null;
+    outpatientSurgicalInterventionsOnSoftTissues: string | null;
+    outpatientSurgicalInterventionsOnTheBonesOfTheFacialSkeleton: string | null;
+    surgicalTreatmentOther: string | null;
+    orthopedicTreatment: string | null;
+    orthodonticTreatment: string | null;
+    additionalDiagnosticMeasures: string | null;
+    consultationOfOtherSpecialists: string | null;
+    doctorFio: string
+}
 
 @Injectable()
 export class DocxTemplatesService {
@@ -70,6 +92,21 @@ export class DocxTemplatesService {
 
             const doc = await patchDocument(content, {
                 patches: this.patchesHelper.getPatientExaminationAtInitialPlacementPatches(data)
+            });
+
+            return Result.ok(doc)
+
+        } catch (e) {
+            console.log('CardDocxService fillAndGetPatientExaminationAtInitialPlacementPage error: ', e)
+        }
+    }
+
+    public async fillAndGetGeneralTreatmentPlanPage(data: GetGeneralTreatmentTypePatchesData): Promise<Result<Buffer>> {
+        try {
+            const content = fs.readFileSync(process.cwd() + '/templates/generalTreatmentPlan.docx')
+
+            const doc = await patchDocument(content, {
+                patches: this.patchesHelper.getGeneralTreatmentPlanPatches(data)
             });
 
             return Result.ok(doc)

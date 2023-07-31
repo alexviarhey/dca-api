@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { IPatch, PatchType, TextRun, UnderlineType } from "docx";
-import { GeneralInfoDocxData, GetPatientExaminationAtInitialPlacementPatchesData } from "./docx-templates.service";
+import { GeneralInfoDocxData, GetGeneralTreatmentTypePatchesData, GetPatientExaminationAtInitialPlacementPatchesData } from "./docx-templates.service";
 import { GenderValues } from "../../../patients/types/gender";
 
 export type PatchObj = {
@@ -14,6 +14,8 @@ export class PatchesHelper {
         color: '#000000',
         type: UnderlineType.SINGLE
     }
+
+    private readonly noDataText = 'НЕТ'
 
     public getGeneralInfoPatches(data: GeneralInfoDocxData): PatchObj {
 
@@ -197,6 +199,40 @@ export class PatchesHelper {
         }
     }
 
+    public getGeneralTreatmentPlanPatches(data: GetGeneralTreatmentTypePatchesData): PatchObj {
+
+        return Object
+            .keys(data)
+            .reduce<PatchObj>((res, key) => {
+                const value = data[key]
+
+                if(typeof value === 'boolean') {
+
+                    const text = value ? 'ДА' : this.noDataText
+
+                    res[key] = {
+                        type: PatchType.PARAGRAPH,
+                        children: [new TextRun({
+                            text,
+                            underline: this.underline,
+                            ...this.getBasicTextSettings()
+                        })]
+                    }
+                } else {
+                    res[key] = {
+                        type: PatchType.PARAGRAPH,
+                        children: [new TextRun({
+                            text: this.withNoDataText(value),
+                            underline: this.underline,
+                            ...this.getBasicTextSettings()
+                        })]
+                    }
+                }
+
+                return res
+            }, {})
+    }
+
     private getBasicTextSettings() {
         return {
             font: 'Times New Roman',
@@ -210,5 +246,9 @@ export class PatchesHelper {
             month: 'long',
             day: 'numeric',
         })
+    }
+
+    private withNoDataText(value: string | null, customNoDataText?: string) {
+        return value ? value : (customNoDataText ? customNoDataText : this.noDataText)
     }
 }
