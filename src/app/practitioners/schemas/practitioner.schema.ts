@@ -4,7 +4,6 @@ import { humanNameSchema, IHumanNameSchema } from "../../common/schemas/human-na
 import { PractitionerCode, PractitionerRole } from "./practitioner-role.schema"
 import { GenderValues } from "../../patients/types/gender"
 
-
 export type PractitionerSchema = {
     _id?: string
     active: boolean
@@ -12,6 +11,8 @@ export type PractitionerSchema = {
     gender: GenderValues
     telecom: IContactPointSchema[]
     roles: Array<PractitionerRole>
+    login: string
+    passwordHash: string
 }
 
 export const practitionerRoleSchema = new Schema<PractitionerRole>({
