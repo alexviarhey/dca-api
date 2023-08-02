@@ -107,7 +107,7 @@ export class DocxService extends BaseService {
                 },
 
                 externalExamination: {
-                    conditionOfTheSkinRedBorder: externalExamination.conditionOfTheSkinRedBorder || 'без видимых патологоческих изменений',
+                    conditionOfTheSkinRedBorder: externalExamination.conditionOfTheSkinRedBorder || 'без видимых паталогоческих изменений',
                     faceConfiguration: externalExaminationItemToReadable<FaceConfiguration>(externalExamination.faceConfiguration, FaceConfigurationReadable),
                     lymphNodes: externalExaminationItemToReadable<LymphNodes>(externalExamination.lymphNodes, LymphNodesReadable),
                     temporomandibularJoint: externalExaminationItemToReadable<TemporomandibularJoint>(externalExamination.temporomandibularJoint, TemporomandibularJointReadable)
@@ -150,7 +150,7 @@ export class DocxService extends BaseService {
                 outpatientSurgicalInterventionsOnSoftTissues: card.generalTreatmentPlan.surgicalTreatment.outpatientSurgicalInterventionsOnSoftTissues,
                 outpatientSurgicalInterventionsOnTheBonesOfTheFacialSkeleton: card.generalTreatmentPlan.surgicalTreatment.outpatientSurgicalInterventionsOnTheBonesOfTheFacialSkeleton,
                 surgicalTreatmentOther: card.generalTreatmentPlan.surgicalTreatment.other,
-                orthopedicTreatment: card.generalTreatmentPlan.orthodonticTreatment,
+                orthopedicTreatment: card.generalTreatmentPlan.orthopedicTreatment,
                 orthodonticTreatment: card.generalTreatmentPlan.orthodonticTreatment,
                 additionalDiagnosticMeasures: card.generalTreatmentPlan.additionalDiagnosticMeasures,
                 consultationOfOtherSpecialists: card.generalTreatmentPlan.consultationOfOtherSpecialists,
