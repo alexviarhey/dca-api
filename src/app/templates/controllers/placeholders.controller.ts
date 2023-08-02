@@ -9,7 +9,6 @@ import {
     UpdatePlaceholderDto,
     updatePlaceholderSchema
 } from "../dto/placeholders.dto";
-import { ResponseMessages } from "../../../core/response-messages";
 import { IdDto, idDtoSchema } from "../../common/dto/id.dto";
 import { templatePlaceholdersMapReadable } from "../schemas/placeholder";
 import { Result } from "../../../core/result";
@@ -25,13 +24,9 @@ class PlaceholderResponseType extends CustomResponseType<PlaceholderDto> {
 @UseInterceptors(CustomResponseInterceptor)
 @ApiTags("Templates")
 export class PlaceholdersController {
-    private responseMessages: ResponseMessages;
-
     constructor(
         private placeholdersCrudUseCases: PlaceholdersCrudUseCases
-    ) {
-        this.responseMessages = new ResponseMessages("Плейсхолдер");
-    }
+    ) {}
 
     @Post("")
     @ApiCreatedResponse({ type: PlaceholderResponseType })

@@ -10,7 +10,6 @@ import {
 import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiProperty, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { TemplatesCrudUseCases } from "../use-cases/templates.crud-use-cases";
 import { AjvBody } from "../../common/decorators/ajv.decorators";
-import { ResponseMessages } from "../../../core/response-messages";
 import { IdDto } from "../../common/dto/id.dto";
 import { Paginated, Pagination } from "../../../core/paginated";
 import { FilterQuery } from "mongoose";
@@ -38,15 +37,10 @@ class GetTemplatesResponseType extends CustomResponseType<PaginatedTemplates> {
 @UseInterceptors(CustomResponseInterceptor)
 @ApiTags("Templates")
 export class TemplatesController {
-
-    responseMessages: ResponseMessages;
-
     constructor(
         private readonly templatesCrudUseCases: TemplatesCrudUseCases,
         private readonly templateService: TemplatesService
-    ) {
-        this.responseMessages = new ResponseMessages(templatesCrudUseCases.modelName);
-    }
+    ) {}
 
     @Post("")
     @ApiCreatedResponse({ type: CreateTemplateResponseType })
