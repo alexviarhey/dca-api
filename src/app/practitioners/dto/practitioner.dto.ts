@@ -37,7 +37,18 @@ export const createPractitionerSchema = {
 
         }
     },
-    additionalProperties: true
+    additionalProperties: false
+};
+
+export const updatePractitionerSchema = {
+    ...createPractitionerSchema,
+    properties: {
+        ...createPractitionerSchema.properties,
+        id: { type: "string" },
+        active: { type: "boolean" }
+    },
+    required: ["id"],
+    additionalProperties: false
 };
 
 export type PractitionerDto = {
@@ -57,6 +68,7 @@ export type CreatePractitionerDto = {
 }
 
 export type UpdatePractitionerDto = {
+    id: string
     active?: boolean
     gender?: GenderValues
     name?: CreateHumanNameDto,
