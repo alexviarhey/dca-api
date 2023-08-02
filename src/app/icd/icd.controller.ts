@@ -1,12 +1,12 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get, UseInterceptors } from "@nestjs/common";
 import { FilterQuery } from "mongoose";
 import { ICDCrudUseCase } from "./icd.crud-use-case";
 import { ICDSchema } from "./icd.schema";
 import { GetICDFilters, getICDFiltersSchema, ICDDto} from "./icd.dto";
 import { AjvQuery } from "../common/decorators/ajv.decorators";
-import { CustomResponse, CustomResponseType } from "../../core/custom-response";
+import { CustomResponseType } from "../../core/custom-response";
 import { ApiOkResponse, ApiProperty, ApiQuery, ApiTags } from "@nestjs/swagger";
-
+import { CustomResponseInterceptor } from "../common/interceptors/custom-response.interceptor";
 
 
 class GetICDResponseType extends CustomResponseType<ICDDto[]> {
@@ -15,6 +15,7 @@ class GetICDResponseType extends CustomResponseType<ICDDto[]> {
 }
 
 @Controller("/icd")
+@UseInterceptors(CustomResponseInterceptor)
 @ApiTags("ICD")
 
 export class ICDController {
@@ -41,8 +42,6 @@ export class ICDController {
             ]
         }
 
-        const res = await this.icdCrudUseCase.find(filterQuery)
-
-        return CustomResponse.fromResult(res)
+        return this.icdCrudUseCase.find(filterQuery)
     }
 }

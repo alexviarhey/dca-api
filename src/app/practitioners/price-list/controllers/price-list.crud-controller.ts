@@ -4,14 +4,15 @@ import {
     Delete,
     Get,
     Post,
-    Put
+    Put,
+    UseInterceptors
 } from "@nestjs/common";
 import {
     PriceItemsCrudUseCase,
     ServiceGroupCrudUseCase,
     ServiceSubgroupCrudUseCase
 } from "../use-cases/price-list.crud-use-cases";
-import { CustomResponse, CustomResponseType } from "../../../../core/custom-response";
+import { CustomResponseType } from "../../../../core/custom-response";
 import {
     createGroupSchema,
     CreatePriceItemDto,
@@ -32,10 +33,12 @@ import {
     PriceListResponse
 } from "./types-for-swagger";
 import { IdDto } from "../../../common/dto/id.dto";
+import { CustomResponseInterceptor } from "../../../common/interceptors/custom-response.interceptor";
 
 
 @ApiTags("Price List")
 @Controller("/price-list")
+@UseInterceptors(CustomResponseInterceptor)
 export class PriceListCrudController {
     constructor(
         private readonly priceItemsCrudUseCase: PriceItemsCrudUseCase,
@@ -48,13 +51,7 @@ export class PriceListCrudController {
     @Get()
     @ApiOkResponse({ type: PriceListResponse })
     async getPriceList() {
-        const res = await this.getPriseListUseCase.execute(
-            this.priceItemsCrudUseCase,
-            this.serviceSubgroupUseCase,
-            this.serviceGroupUseCase
-        );
-
-        return CustomResponse.fromResult(res);
+        return this.getPriseListUseCase.execute(this.priceItemsCrudUseCase, this.serviceSubgroupUseCase, this.serviceGroupUseCase)
     }
 
     @Post("/items")
@@ -63,26 +60,14 @@ export class PriceListCrudController {
     async createPriceItem(
         @AjvBody(createPriceItemSchema) createDto: CreatePriceItemDto
     ) {
-        const res = await this.priceItemsCrudUseCase.create(
-            createDto,
-            null,
-            { or: ["name", "itemNumber"] }
-        );
-
-        return CustomResponse
-            .fromResult(res)
-            .withSuccessMessage("Элемент прайс-листа успешно создан!");
+        return this.priceItemsCrudUseCase.create(createDto, null, { or: ["name", "itemNumber"] })
     }
 
 
     @Get("/items")
     @ApiOkResponse({ type: GetPriceItemsResponse })
     async getPriceItems() {
-        const res = await this.priceItemsCrudUseCase.find(
-            {},
-            { itemNumber: "ascending" }
-        );
-        return CustomResponse.fromResult(res);
+        return this.priceItemsCrudUseCase.find({}, { itemNumber: "ascending" })
     }
 
     @Put("/items")
@@ -91,13 +76,7 @@ export class PriceListCrudController {
     async updatePriceItem(
         @AjvBody(updatePriceItemSchema) { _id, ...updatePriceItemDto }: UpdatePriceItemDto
     ) {
-        const res = await this.priceItemsCrudUseCase.updateOne(
-            _id,
-            updatePriceItemDto,
-            null,
-            { or: ["itemNumber", "name"] }
-        );
-        return CustomResponse.fromResult(res);
+        return this.priceItemsCrudUseCase.updateOne(_id, updatePriceItemDto, null, { or: ["itemNumber", "name"] })
     }
 
     @Delete("/items")
@@ -106,11 +85,7 @@ export class PriceListCrudController {
     async deletePriceItem(
         @Body() dto: IdDto
     ) {
-        const res = await this.priceItemsCrudUseCase.deleteOne(dto.id);
-
-        return CustomResponse
-            .fromResult(res)
-            .withSuccessMessage("Элемент прайс-листа успешно удален!");
+        return this.priceItemsCrudUseCase.deleteOne(dto.id)
     }
 
     @Post("/subgroups")
@@ -119,37 +94,20 @@ export class PriceListCrudController {
     async createSubgroup(
         @AjvBody(createSubgroupSchema) createDto: CreateServiceSubgroupDto
     ) {
-        const res = await this.serviceSubgroupUseCase.create(createDto);
-
-        return CustomResponse
-            .fromResult(res)
-            .withSuccessMessage("Подгруппа успешно создана!");
+        return this.serviceSubgroupUseCase.create(createDto)
     }
 
     @Get("/subgroups")
     @ApiOkResponse({ type: GetSubgroupsResponse })
     async getSubgroups() {
-        const res = await this.serviceSubgroupUseCase.find(
-            {},
-            { subgroupNumber: "ascending" }
-        );
-        return CustomResponse.fromResult(res);
+        return this.serviceSubgroupUseCase.find({}, { subgroupNumber: "ascending" })
     }
 
     @Put("/subgroups")
     async updateSubgroup(
         @AjvBody(updateSubgroupSchema) { _id, ...updateSubgroupDto }: UpdateServiceSubgroupDto
     ) {
-        const res = await this.serviceSubgroupUseCase.updateOne(
-            _id,
-            updateSubgroupDto,
-            null,
-            { or: ["subgroupNumber", "name"] }
-        );
-
-        return CustomResponse
-            .fromResult(res)
-            .withSuccessMessage("Подгруппа успешно обновлена!");
+        return this.serviceSubgroupUseCase.updateOne(_id, updateSubgroupDto, null, { or: ["subgroupNumber", "name"] })
     }
 
     @Delete("/subgroup")
@@ -158,11 +116,7 @@ export class PriceListCrudController {
     async deleteSubgroup(
         @Body() dto: IdDto
     ) {
-        const res = await this.serviceSubgroupUseCase.deleteOne(dto.id);
-
-        return CustomResponse
-            .fromResult(res)
-            .withSuccessMessage("Подгруппа успешно удалена!");
+        return this.serviceSubgroupUseCase.deleteOne(dto.id)
     }
 
     @Post("/groups")
@@ -171,42 +125,21 @@ export class PriceListCrudController {
     async createGroup(
         @AjvBody(createGroupSchema) createDto: CreateServiceGroupDto
     ) {
-        const res = await this.serviceGroupUseCase.create(
-            createDto,
-            null,
-            { or: ["name", "groupNumber"] }
-        );
-
-        return CustomResponse
-            .fromResult(res)
-            .withSuccessMessage("Группа успешно создана!");
+        return this.serviceGroupUseCase.create(createDto, null, { or: ["name", "groupNumber"] })
     }
 
     @Put("/groups")
     async updateGroup(
         @AjvBody(updateGroupSchema) { _id, ...updateGroupDto }: UpdateGroupDto
     ) {
-        const res = await this.serviceGroupUseCase.updateOne(
-            _id,
-            updateGroupDto,
-            null,
-            { or: ["groupNumber", "name"] }
-        );
-
-        return CustomResponse
-            .fromResult(res)
-            .withSuccessMessage("Группа успешно обновлена!");
+        return this.serviceGroupUseCase.updateOne(_id, updateGroupDto, null, { or: ["groupNumber", "name"] })
     }
 
 
     @Get("/groups")
     @ApiOkResponse({ type: GetGroupsResponse })
     async getGroups() {
-        const res = await this.serviceGroupUseCase.find(
-            {},
-            { groupNumber: "ascending" }
-        );
-        return CustomResponse.fromResult(res);
+        return this.serviceGroupUseCase.find({}, { groupNumber: "ascending" })
     }
 
 
@@ -216,10 +149,6 @@ export class PriceListCrudController {
     async deleteGroup(
         @Body() dto: IdDto
     ) {
-        const res = await this.serviceGroupUseCase.deleteById(dto.id);
-
-        return CustomResponse
-            .fromResult(res)
-            .withSuccessMessage("Группа успешно удалена!");
+        return this.serviceGroupUseCase.deleteById(dto.id)
     }
 }

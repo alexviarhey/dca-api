@@ -1,7 +1,7 @@
-import { Controller, Delete, Get, Post, Put } from "@nestjs/common";
+import { Controller, Delete, Get, Post, Put, UseInterceptors } from "@nestjs/common";
 import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiProperty, ApiTags } from "@nestjs/swagger";
 import { PlaceholdersCrudUseCases } from "../use-cases/placeholders.crud-use-cases";
-import { CustomResponse, CustomResponseType } from "../../../core/custom-response";
+import { CustomResponseType } from "../../../core/custom-response";
 import { AjvBody } from "../../common/decorators/ajv.decorators";
 import {
     CreatePlaceholderDto,
@@ -13,13 +13,16 @@ import { ResponseMessages } from "../../../core/response-messages";
 import { IdDto, idDtoSchema } from "../../common/dto/id.dto";
 import { templatePlaceholdersMapReadable } from "../schemas/placeholder";
 import { Result } from "../../../core/result";
+import { CustomResponseInterceptor } from "../../common/interceptors/custom-response.interceptor";
 
 class PlaceholderResponseType extends CustomResponseType<PlaceholderDto> {
-    @ApiProperty({type: PlaceholderDto})
+    @ApiProperty({ type: PlaceholderDto })
     data: PlaceholderDto;
 }
 
+
 @Controller("/templates/placeholders")
+@UseInterceptors(CustomResponseInterceptor)
 @ApiTags("Templates")
 export class PlaceholdersController {
     private responseMessages: ResponseMessages;
@@ -36,16 +39,7 @@ export class PlaceholdersController {
     async create(
         @AjvBody(createPlaceholderSchema) dto: CreatePlaceholderDto
     ) {
-
-        return CustomResponse
-            .fromResult(
-                await this.placeholdersCrudUseCases.create(
-                    dto,
-                    null,
-                    { or: ["name", "placeholder"] }
-                )
-            )
-            .withSuccessMessage(this.responseMessages.createdSuccessfully);
+        return this.placeholdersCrudUseCases.create(dto, null, { or: ["name", "placeholder"] })
     }
 
     @Put("")
@@ -54,16 +48,7 @@ export class PlaceholdersController {
     async update(
         @AjvBody(updatePlaceholderSchema) { _id, ...dto }: UpdatePlaceholderDto
     ) {
-        return CustomResponse
-            .fromResult(
-                await this.placeholdersCrudUseCases.updateOne(
-                    _id,
-                    dto,
-                    null,
-                    { or: ["name", "placeholder"] }
-                )
-            )
-            .withSuccessMessage(this.responseMessages.updatedSuccessfully);
+        return this.placeholdersCrudUseCases.updateOne(_id, dto, null, { or: ["name", "placeholder"] })
     }
 
     @Delete("")
@@ -71,15 +56,11 @@ export class PlaceholdersController {
     async delete(
         @AjvBody(idDtoSchema) dto: IdDto
     ) {
-        return CustomResponse
-            .fromResult(
-                await this.placeholdersCrudUseCases.deleteById(dto.id)
-            )
-            .withSuccessMessage(this.responseMessages.deletedSuccessfully);
+        return this.placeholdersCrudUseCases.deleteById(dto.id)
     }
 
     @Get("")
     async getAll() {
-        return CustomResponse.fromResult(Result.ok(templatePlaceholdersMapReadable));
+        return Result.ok(templatePlaceholdersMapReadable);
     }
 }

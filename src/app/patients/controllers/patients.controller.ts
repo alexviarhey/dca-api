@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Put } from "@nestjs/common";
+import { Controller, Get, Param, Post, Put, UseInterceptors } from "@nestjs/common";
 import { ApiBody, ApiOkResponse, ApiProperty, ApiQuery, ApiTags } from "@nestjs/swagger";
 import {
     CreatePatientDto,
@@ -6,12 +6,13 @@ import {
     PatientDto, UpdatePatientDto,
     updatePatientValidationSchema
 } from "../dto/patient.dtos";
-import { CustomResponse, CustomResponseType } from "../../../core/custom-response";
+import { CustomResponseType } from "../../../core/custom-response";
 import { PatientsCrudUseCases } from "../use-cases/patients.crud-use-cases";
 import { AjvBody, AjvQuery } from "../../common/decorators/ajv.decorators";
 import { GetPatientsFilters, getPatientsFiltersSchema } from "../dto/get-patients-filters";
 import { Paginated } from "../../../core/paginated";
 import { GetPatientCardsUserCase } from "../use-cases/get-patient-cards.use-case";
+import { CustomResponseInterceptor } from "../../common/interceptors/custom-response.interceptor";
 
 class CreatePatientResponse extends CustomResponseType<PatientDto> {
     @ApiProperty({ type: PatientDto })
@@ -31,14 +32,14 @@ class GetPatientsResponse extends CustomResponseType<PaginatedPatients> {
 const GetPatientResponse = CreatePatientResponse;
 
 @Controller("/patients")
+@UseInterceptors(CustomResponseInterceptor)
 @ApiTags("Patients")
 export class PatientsController {
 
     constructor(
         private readonly patientsCrudUseCases: PatientsCrudUseCases,
         private readonly getPatientCardsUseCase: GetPatientCardsUserCase
-    ) {
-    }
+    ) {}
 
     @Post()
     @ApiBody({ type: CreatePatientDto })
@@ -46,14 +47,10 @@ export class PatientsController {
     async create(
         @AjvBody(createPatientValidationSchema) dto: CreatePatientDto
     ) {
-        const res = await this.patientsCrudUseCases.create(
+        return this.patientsCrudUseCases.create(
             dto,
             this.patientsCrudUseCases.getFiltersForUniqueness(dto)
         );
-
-        return CustomResponse
-            .fromResult(res)
-            .withSuccessMessage("Пациент успешно создан!");
     }
 
     @Put("/inactivate")
@@ -61,10 +58,7 @@ export class PatientsController {
     async inactivate(
         @AjvBody(inactivatePatientSchema) dto: InactivatePatientDto
     ) {
-        const res = await this.patientsCrudUseCases.inactivatePatient(dto._id);
-        return CustomResponse
-            .fromResult(res)
-            .withSuccessMessage("Пациент успещно заархивирован!");
+        return this.patientsCrudUseCases.inactivatePatient(dto._id);
     }
 
     @Put()
@@ -73,15 +67,11 @@ export class PatientsController {
     async update(
         @AjvBody(updatePatientValidationSchema) { _id, ...dto }: UpdatePatientDto
     ) {
-        const res = await this.patientsCrudUseCases.updateOne(
+        return this.patientsCrudUseCases.updateOne(
             _id,
             dto,
             this.patientsCrudUseCases.getFiltersForUniqueness(dto)
         );
-
-        return CustomResponse
-            .fromResult(res)
-            .withSuccessMessage("Пациент успешно обновлен!");
     }
 
     @Get()
@@ -90,8 +80,7 @@ export class PatientsController {
     async getPatients(
         @AjvQuery(getPatientsFiltersSchema) filters: GetPatientsFilters
     ) {
-        const res = await this.patientsCrudUseCases.findWithPagination(filters);
-        return CustomResponse.fromResult(res);
+        return this.patientsCrudUseCases.findWithPagination(filters);
     }
 
     @Get("/:id")
@@ -99,16 +88,13 @@ export class PatientsController {
     async getPatient(
         @Param("id") id: string
     ) {
-        const res = await this.patientsCrudUseCases.findById(id);
-        return CustomResponse.fromResult(res);
+        return this.patientsCrudUseCases.findById(id);
     }
 
     @Get("/:id/cards")
     async getPatientCards(
         @Param("id") id: string
     ) {
-        return CustomResponse.fromResult(
-            await this.getPatientCardsUseCase.execute(id)
-        )
+        return this.getPatientCardsUseCase.execute(id)
     }
 }
