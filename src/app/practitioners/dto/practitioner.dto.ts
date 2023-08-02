@@ -12,7 +12,9 @@ export const getPractitionersFiltersSchema = {
         name: { type: "string" },
         address: { type: "string" },
         active: { type: "boolean" },
-        phone: { type: "string" }
+        phone: { type: "string" },
+        code: { type: "string" },
+        speciality: { type: "string" }
     }
 }
 
@@ -83,4 +85,6 @@ export type GetPractitionersFilters = {
     address?: string
     active?: number
     phone?: string
+    code?: string
+    speciality?: string
 }
