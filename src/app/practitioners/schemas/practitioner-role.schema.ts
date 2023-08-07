@@ -101,7 +101,10 @@ export class PractitionerRoleHelper {
     }
 
     public getAllRolesWithSpecialties() {
-        const res = []
+        const res: {
+            code: PractitionerCode;
+            specialties: string[];
+        }[] = []
 
         this.roles.forEach(r => {
             res.push(r.getCodeWithSpecialties())
