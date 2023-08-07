@@ -107,7 +107,7 @@ export class PractitionerRoleHelper {
             res.push(r.getCodeWithSpecialties())
         })
 
-        return res
+        return Result.ok(res)
     }
 
     public static forRoles(roles: PractitionerRoles[]): PractitionerRoleHelper {
