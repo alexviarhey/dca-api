@@ -37,15 +37,23 @@ export class PractitionersCrudUseCases extends CrudUseCases<PractitionerSchema,
             filterQuery.active = true
         }
 
-        if (filters.name) filterQuery["name.text"] = { $regex: filters.name };
+        if (filters.name) filterQuery["name.text"] = { $regex: filters.name, $options: 'i' };
 
-        if (filters.address) filterQuery["address.text"] = { $regex: filters.address };
+        if (filters.address) filterQuery["address.text"] = { $regex: filters.address, $options: 'i' };
 
         if (filters.phone) {
             filterQuery.telecom = {
                 $elemMatch: {
                     system: ContactPointSystem.PHONE,
-                    value: { $regex: filters.phone, $options: "i" }
+                    value: { $regex: filters.phone }
+                }
+            };
+        }
+
+        if (filters.code && !filters.speciality) {
+            filterQuery.roles = {
+                $elemMatch: {
+                    code: filters.code
                 }
             };
         }

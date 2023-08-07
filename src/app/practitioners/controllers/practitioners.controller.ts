@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Query, UseInterceptors } from "@nestjs/common";
+import { Controller, Get, Param, Post, Put, UseInterceptors } from "@nestjs/common";
 import { AjvBody, AjvQuery } from "../../common/decorators/ajv.decorators";
 import { PractitionersCrudUseCases } from "../use-cases/practitioners.crud.use-cases";
 import { CreatePractitionerDto, GetPractitionersFilters, UpdatePractitionerDto, createPractitionerSchema, getPractitionersFiltersSchema, updatePractitionerSchema } from "../dto/practitioner.dto";
@@ -28,7 +28,7 @@ export class PractitionersController {
 
     @Get("/:id")
     async getPractitionerById(
-        @Query("id") id: string
+        @Param("id") id: string
     ) {
         return this.practitionersCrudUseCases.findById(id)
     }
