@@ -40,7 +40,7 @@ export class PractitionersController {
         const roles = dto.roles
 
         const res = practitionerRoleHelper.validateListOfRoles(roles)
-        if(res.isSuccess) return res
+        if(!res.isSuccess) return res
 
         return this.practitionersCrudUseCases.create(
             dto,
