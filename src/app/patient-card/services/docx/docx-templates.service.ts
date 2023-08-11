@@ -64,6 +64,12 @@ export type GetGeneralTreatmentTypePatchesData = {
     doctorFio: string
 }
 
+
+export type DentalStatusPatchesData = {
+    bite: string
+    hardTissueConditions: string
+}
+
 @Injectable()
 export class DocxTemplatesService {
 
