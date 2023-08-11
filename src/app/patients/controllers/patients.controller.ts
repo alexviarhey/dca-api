@@ -70,7 +70,7 @@ export class PatientsController {
         return this.patientsCrudUseCases.updateOne(
             _id,
             dto,
-            this.patientsCrudUseCases.getFiltersForUniqueness(dto)
+            this.patientsCrudUseCases.getFiltersForUniqueness(dto, _id)
         );
     }
 

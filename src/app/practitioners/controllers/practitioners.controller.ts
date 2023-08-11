@@ -5,6 +5,7 @@ import { CreatePractitionerDto, GetPractitionersFilters, UpdatePractitionerDto, 
 import { practitionerRoleHelper } from "../schemas/practitioner-role.schema";
 import { ContactPointHelper } from "../../common/dto/contact-point.dtos";
 import { CustomResponseInterceptor } from "../../common/interceptors/custom-response.interceptor";
+import { FilterQuery } from "mongoose";
 
 @Controller("/practitioners")
 @UseInterceptors(CustomResponseInterceptor)
@@ -54,10 +55,15 @@ export class PractitionersController {
     ) {
         const { id, ...fields } = dto
 
+        const filters = {
+            _id: {$ne: id},
+            ...ContactPointHelper.getFilterByPhone(dto)
+        }
+
         return this.practitionersCrudUseCases.updateOne(
             id,
-            fields,
-            ContactPointHelper.getFilterByPhone(dto)
+            fields ,
+            filters
         )
     }
 }
