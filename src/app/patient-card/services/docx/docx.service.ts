@@ -5,14 +5,18 @@ import { InjectModel } from "@nestjs/mongoose";
 import { BaseService } from "../../../../core/base.service";
 import { Result } from "../../../../core/result";
 import { IPatientSchema, PATIENTS } from "../../../patients/schemas/patient.schema";
-import { DocxTemplatesService, GetGeneralTreatmentTypePatchesData } from "./docx-templates.service";
+import { DocxTemplatesService, GetDentalStatusPatchesData, GetGeneralTreatmentTypePatchesData } from "./docx-templates.service";
 import { ContactPointSystem } from "../../../common/schemas/contact-point.schema";
 import { DocxPages } from "../../dto/docx.dto";
 import { FaceConfiguration, FaceConfigurationReadable, LymphNodes, LymphNodesReadable, TemporomandibularJoint, TemporomandibularJointReadable } from "../../schemas/externalExamination";
+import { Bite, ConditionOfTheOralMucosa, HardTissueConditions, bitesReadable, conditionOfTheOralMucosaReadable, hardTissueConditionsReadable, periodontalConditionReadable } from "../../schemas/dental-status.schema";
 
 
 @Injectable()
 export class DocxService extends BaseService {
+
+    private noChangesValue = 'без видимых патологических изменений'
+
     constructor(
         @InjectModel(PATIENTS_CARDS_COLLECTION)
         private readonly cardModel: Model<IPatientCardSchema>,
@@ -158,6 +162,64 @@ export class DocxService extends BaseService {
             }
 
             return this.docxTemplatesService.fillAndGetGeneralTreatmentPlanPage(data)
+        } catch (e) {
+            return this.errorLogger.logErrorAndReturnSomethingWentWrongResult(e)
+        }
+    }
+
+    public async getDentalStatusDocxPage(cardId: string): Promise<Result<Buffer>> {
+        try {
+
+            const card = await this.cardModel.findById(cardId, { dentalStatus: 1 })
+            if (!card) {
+                return Result.err('Карточка не найдена!')
+            }
+
+            const { dentalStatus } = card
+
+            const data: GetDentalStatusPatchesData = {
+                bite: getBiteValue(dentalStatus.bite),
+                hardTissueConditions: getFormattedString(dentalStatus.hardTissueConditions, hardTissueConditionsReadable),
+                periodontalCondition: getFormattedString(dentalStatus.periodontalCondition, periodontalConditionReadable),
+                conditionOfTheOralMucosa: geConditionOfTheOralMucosaValue(dentalStatus.conditionOfTheOralMucosa),
+                researchData: dentalStatus.researchData || 'периапикальных изменений в области зуба нет',
+                provisionalDiagnosis: dentalStatus.provisionalDiagnosis
+            }
+
+            function getBiteValue(bite: Bite): string {
+                return bite.map(v => bitesReadable[v]).join(', ')
+            }
+
+            function getFormattedString<T extends { [key: string]: string | null }>(obj: T, readable: { [key in keyof T]: string }): string {
+                const res = Object
+                    .keys(obj)
+                    .filter(k => !!obj[k])
+                    .map(k => readable[k])
+
+                return res.length
+                    ? res.join(', ')
+                    : this.noChangesValue
+            }
+
+            function geConditionOfTheOralMucosaValue(conditionOfTheOralMucosa: ConditionOfTheOralMucosa): string {
+                const res = Object
+                    .keys(conditionOfTheOralMucosa)
+                    .filter(k => !!conditionOfTheOralMucosa[k])
+                    .map(k => {
+                        const value = conditionOfTheOralMucosa[k]
+                        if (typeof value === 'boolean') {
+                            return conditionOfTheOralMucosaReadable[k]
+                        } else {
+                            return value
+                        }
+                    })
+
+                return res.length
+                    ? res.join(', ')
+                    : this.noChangesValue
+            }
+
+            return this.docxTemplatesService.fillAndGetDentalStatusPage(data)
         } catch (e) {
             return this.errorLogger.logErrorAndReturnSomethingWentWrongResult(e)
         }

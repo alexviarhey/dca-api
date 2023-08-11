@@ -78,6 +78,29 @@ export type HardTissueConditions = {
     largeFillings: string | null
 }
 
+export const hardTissueConditionsReadable: Record<keyof HardTissueConditions, string> = {
+    colorChange: 'изменение цвета',
+    shapeChange: 'изменение формы',
+    surfaceChange: 'измени поверхности',
+    largeFillings: 'обширные плломбы зуба (-ов)'
+}
+
+export const periodontalConditionReadable: Record<keyof PeriodontalCondition, string> = {
+    bleeding: 'кровоточивость',
+    dentogingivalAttachmentDisorder: 'нарушение зубодесневого прикрепления',
+    recession: 'рецессия',
+    presenceOfPeriodontalPocket: 'наличие периодонтального кармана',
+    toothMobility: 'подвижность зубов'
+}
+
+export const conditionOfTheOralMucosaReadable: Record<keyof ConditionOfTheOralMucosa, string> = {
+    hyperemic: 'гиперимированная',
+    edematous: 'отечная',
+    hyperplasia: 'гиперплазия',
+    colorIsBroken: 'нарушена цветность (язвы, афты, эрозии)',
+    other: 'другое'
+}
+
 export type PeriodontalCondition = {
     bleeding: string | null
     dentogingivalAttachmentDisorder: string | null
@@ -87,10 +110,11 @@ export type PeriodontalCondition = {
 }
 
 export type ConditionOfTheOralMucosa = {
-    hyperemic: string | null
-    edematous: string | null
-    hyperplasia: string | null
-    colorIsBroken: string | null
+    hyperemic: boolean
+    edematous: boolean
+    hyperplasia: boolean
+    colorIsBroken: boolean
+    other: string
 }
 
 export type DentalStatusSchema = {
@@ -128,10 +152,11 @@ const periodontalCondition = new Schema<PeriodontalCondition>({
 }, { _id: false })
 
 const conditionOfTheOralMucosa = new Schema<ConditionOfTheOralMucosa>({
-    hyperemic: { type: String, nullable: true, default: null },
-    edematous: { type: String, nullable: true, default: null },
-    hyperplasia: { type: String, nullable: true, default: null },
-    colorIsBroken: { type: String, nullable: true, default: null },
+    hyperemic: { type: Boolean, default: true },
+    edematous: { type: Boolean, default: true },
+    hyperplasia: { type: Boolean, default: true },
+    colorIsBroken: { type: Boolean, default: true },
+    other: { type: String, nullable: true, default: null },
 }, { _id: false })
 
 export const dentalStatusSchema = new Schema<DentalStatusSchema>({

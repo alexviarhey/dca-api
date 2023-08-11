@@ -42,10 +42,11 @@ export class DentalStatusTabService extends CardTabService<DentalStatusDto, Dent
                 toothMobility: null,
             },
             conditionOfTheOralMucosa: {
-                hyperemic: null,
-                edematous: null,
-                hyperplasia: null,
-                colorIsBroken: null,
+                hyperemic: false,
+                edematous: false,
+                hyperplasia: false,
+                colorIsBroken: false,
+                other: null
             },
             researchData: null,
             provisionalDiagnosis: null

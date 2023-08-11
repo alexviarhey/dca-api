@@ -65,9 +65,13 @@ export type GetGeneralTreatmentTypePatchesData = {
 }
 
 
-export type DentalStatusPatchesData = {
+export type GetDentalStatusPatchesData = {
     bite: string
     hardTissueConditions: string
+    periodontalCondition: string
+    conditionOfTheOralMucosa: string
+    researchData: string
+    provisionalDiagnosis: string
 }
 
 @Injectable()
@@ -113,6 +117,21 @@ export class DocxTemplatesService {
 
             const doc = await patchDocument(content, {
                 patches: this.patchesHelper.getGeneralTreatmentPlanPatches(data)
+            });
+
+            return Result.ok(doc)
+
+        } catch (e) {
+            console.log('CardDocxService fillAndGetPatientExaminationAtInitialPlacementPage error: ', e)
+        }
+    }
+
+    public async fillAndGetDentalStatusPage(data: GetDentalStatusPatchesData): Promise<Result<Buffer>> {
+        try {
+            const content = fs.readFileSync(process.cwd() + '/templates/dentalStatus.docx')
+
+            const doc = await patchDocument(content, {
+                patches: this.patchesHelper.getDentalStatusPatches(data)
             });
 
             return Result.ok(doc)

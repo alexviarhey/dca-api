@@ -67,10 +67,10 @@ export const dentalStatusAjvSchema = {
             allRequired: true,
             nullable: false,
             properties: {
-                colorChange: { type: 'string', nullable: false },
-                shapeChange: { type: 'string', nullable: false },
-                surfaceChange: { type: 'string', nullable: false },
-                largeFillings: { type: 'string', nullable: false },
+                colorChange: { type: 'string', nullable: true },
+                shapeChange: { type: 'string', nullable: true },
+                surfaceChange: { type: 'string', nullable: true },
+                largeFillings: { type: 'string', nullable: true },
             }
         },
         periodontalCondition: {
@@ -79,11 +79,11 @@ export const dentalStatusAjvSchema = {
             allRequired: true,
             nullable: false,
             properties: {
-                bleeding: { type: 'string', nullable: false },
-                dentogingivalAttachmentDisorder: { type: 'string', nullable: false },
-                recession: { type: 'string', nullable: false },
-                presenceOfPeriodontalPocket: { type: 'string', nullable: false },
-                toothMobility: { type: 'string', nullable: false },
+                bleeding: { type: 'string', nullable: true},
+                dentogingivalAttachmentDisorder: { type: 'string', nullable: true },
+                recession: { type: 'string', nullable: true },
+                presenceOfPeriodontalPocket: { type: 'string', nullable: true },
+                toothMobility: { type: 'string', nullable: true },
             }
         },
         conditionOfTheOralMucosa: {
@@ -92,10 +92,11 @@ export const dentalStatusAjvSchema = {
             allRequired: true,
             nullable: false,
             properties: {
-                hyperemic: { type: 'string', nullable: false },
-                edematous: { type: 'string', nullable: false },
-                hyperplasia: { type: 'string', nullable: false },
-                colorIsBroken: { type: 'string', nullable: true},
+                hyperemic: { type: 'boolean', nullable: false },
+                edematous: { type: 'boolean', nullable: false },
+                hyperplasia: { type: 'boolean', nullable: false },
+                colorIsBroken: { type: 'boolean', nullable: false },
+                other: { type: 'string', nullable: true },
             }
         },
         researchData: { type: 'string', nullable: true },

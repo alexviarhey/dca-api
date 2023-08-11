@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { IPatch, PatchType, TextRun, UnderlineType } from "docx";
-import { GeneralInfoDocxData, GetGeneralTreatmentTypePatchesData, GetPatientExaminationAtInitialPlacementPatchesData } from "./docx-templates.service";
+import { GeneralInfoDocxData, GetDentalStatusPatchesData, GetGeneralTreatmentTypePatchesData, GetPatientExaminationAtInitialPlacementPatchesData } from "./docx-templates.service";
 import { GenderValues } from "../../../patients/types/gender";
 
 export type PatchObj = {
@@ -231,6 +231,21 @@ export class PatchesHelper {
 
                 return res
             }, {})
+    }
+
+    public getDentalStatusPatches(data: GetDentalStatusPatchesData): PatchObj {
+        const fioShort: IPatch = {
+            type: PatchType.PARAGRAPH,
+            children: [new TextRun({
+                text: "HHHH",
+                ...this.getBasicTextSettings()
+            })]
+        }
+
+        return {
+            fioShort
+        }
+
     }
 
     private getBasicTextSettings() {
