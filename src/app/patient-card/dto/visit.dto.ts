@@ -15,7 +15,7 @@ export const createVisitAjvSchema = {
                 additionalProperties: false,
                 allRequired: true,
                 properties: {
-                    tooth: { type: 'number' },
+                    tooth: { type: 'number', nullable: true },
                     icdId: { type: 'string' },
                 }
             }
@@ -30,7 +30,7 @@ export type VisitDiagnosisDto = {
 }
 
 export type CreateVisitDiagnosisDto = {
-    tooth: number,
+    tooth?: number,
     icdId: string
 }
 
