@@ -72,6 +72,32 @@ export type GetDentalStatusPatchesData = {
     conditionOfTheOralMucosa: string
     researchData: string
     provisionalDiagnosis: string
+    ohis: OhisData
+    kpi: KpiData
+    dentalFormula: DentalFormulaData
+}
+
+export type OhisData = {
+    ohis11: string,
+    ohis12: string,
+    ohis13: string,
+    ohis14: string,
+    ohis15: string,
+    ohis16: string,
+}
+
+export type KpiData = {
+    kpi11: string,
+    kpi12: string,
+    kpi13: string,
+    kpi14: string,
+    kpi15: string,
+    kpi16: string,
+}
+
+export type DentalFormulaData = {
+    top: { top1: string, top2: string, top3: string, top4: string, top5: string, top6: string, top7: string, top8: string, top9: string, top10: string, top11: string, top12: string, top13: string, top14: string, top15: string, top16: string},
+    bot: {bot1: string, bot2: string, bot3: string, bot4: string, bot5: string, bot6: string, bot7: string, bot8: string, bot9: string, bot10: string, bot11: string, bot12: string, bot13: string, bot14: string, bot15: string, bot16: string}
 }
 
 @Injectable()

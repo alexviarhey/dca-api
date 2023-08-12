@@ -5,11 +5,11 @@ import { InjectModel } from "@nestjs/mongoose";
 import { BaseService } from "../../../../core/base.service";
 import { Result } from "../../../../core/result";
 import { IPatientSchema, PATIENTS } from "../../../patients/schemas/patient.schema";
-import { DocxTemplatesService, GetDentalStatusPatchesData, GetGeneralTreatmentTypePatchesData } from "./docx-templates.service";
+import { DentalFormulaData, DocxTemplatesService, GetDentalStatusPatchesData, GetGeneralTreatmentTypePatchesData, KpiData, OhisData } from "./docx-templates.service";
 import { ContactPointSystem } from "../../../common/schemas/contact-point.schema";
 import { DocxPages } from "../../dto/docx.dto";
 import { FaceConfiguration, FaceConfigurationReadable, LymphNodes, LymphNodesReadable, TemporomandibularJoint, TemporomandibularJointReadable } from "../../schemas/externalExamination";
-import { Bite, ConditionOfTheOralMucosa, HardTissueConditions, bitesReadable, conditionOfTheOralMucosaReadable, hardTissueConditionsReadable, periodontalConditionReadable } from "../../schemas/dental-status.schema";
+import { Bite, ConditionOfTheOralMucosa, DentalFormula, HardTissueConditions, KPI, OHIS, bitesReadable, conditionOfTheOralMucosaReadable, hardTissueConditionsReadable, periodontalConditionReadable } from "../../schemas/dental-status.schema";
 
 
 @Injectable()
@@ -183,14 +183,17 @@ export class DocxService extends BaseService {
                 periodontalCondition: getFormattedString(dentalStatus.periodontalCondition, periodontalConditionReadable),
                 conditionOfTheOralMucosa: geConditionOfTheOralMucosaValue(dentalStatus.conditionOfTheOralMucosa),
                 researchData: dentalStatus.researchData || 'периапикальных изменений в области зуба нет',
-                provisionalDiagnosis: dentalStatus.provisionalDiagnosis
+                provisionalDiagnosis: dentalStatus.provisionalDiagnosis,
+                ohis: getOhisValue(dentalStatus.ohis),
+                kpi: getKpiValue(dentalStatus.kpi),
+                dentalFormula: getDentalFormulaData(dentalStatus.dentalFormula)
             }
 
             function getBiteValue(bite: Bite): string {
                 return bite.map(v => bitesReadable[v]).join(', ')
             }
 
-            function getFormattedString<T extends { [key: string]: string | null }>(obj: T, readable: { [key in keyof T]: string }): string {
+            function getFormattedString(obj, readable): string {
                 const res = Object
                     .keys(obj)
                     .filter(k => !!obj[k])
@@ -217,6 +220,37 @@ export class DocxService extends BaseService {
                 return res.length
                     ? res.join(', ')
                     : this.noChangesValue
+            }
+
+            function getOhisValue(ohis: OHIS): OhisData {
+                const res =  ohis.reduce((res, value, i) => {
+                    res[`ohis1${i + 1}`] = value ? `${value[0]}/${value[1]}`: '-'
+                    return res
+                }) as unknown as OhisData
+
+                return res
+            }
+
+            function getKpiValue(kpi: KPI): KpiData  {
+                const res =  kpi.reduce((res, value, i) => {
+                    res[`kpi1${i + 1}`] = (value !== null) ? value.toString() : '-'
+                    return res
+                }) as unknown as KpiData
+
+                return res
+            }
+
+            function getDentalFormulaData(dentalFormula: DentalFormula): DentalFormulaData {
+                return Object.keys(dentalFormula).reduce((res, key) => {
+                    const k = (key === 'top') ? 'top' : 'bot'
+                    res[k] = {}
+
+                    dentalFormula[key].forEach((v, i) => {
+                        res[k][`${k}${i + 1}`] = v ? v : ''
+                    })
+
+                    return res
+                }, {})  as unknown as DentalFormulaData
             }
 
             return this.docxTemplatesService.fillAndGetDentalStatusPage(data)

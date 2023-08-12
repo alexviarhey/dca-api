@@ -206,7 +206,7 @@ export class PatchesHelper {
             .reduce<PatchObj>((res, key) => {
                 const value = data[key]
 
-                if(typeof value === 'boolean') {
+                if (typeof value === 'boolean') {
 
                     const text = value ? 'ДА' : this.noDataText
 
@@ -234,18 +234,30 @@ export class PatchesHelper {
     }
 
     public getDentalStatusPatches(data: GetDentalStatusPatchesData): PatchObj {
-        const fioShort: IPatch = {
-            type: PatchType.PARAGRAPH,
-            children: [new TextRun({
-                text: "HHHH",
-                ...this.getBasicTextSettings()
-            })]
-        }
+        return Object
+            .keys(data)
+            .reduce<PatchObj>((res, key) => {
 
-        return {
-            fioShort
-        }
+                let size: string;
 
+                if (key in ['ohis', 'kpi']) {
+                    size = '11pt'
+                } else if (key === 'dentalFormula') {
+                    size = '10pt'
+                } else {
+                    size = '16pt'
+                }
+
+                res[key] = {
+                    type: PatchType.PARAGRAPH,
+                    children: [new TextRun({
+                        text: data[key],
+                        ...this.getBasicTextSettings(),
+                        size
+                    })]
+                }
+                return res
+            }, {})
     }
 
     private getBasicTextSettings() {
