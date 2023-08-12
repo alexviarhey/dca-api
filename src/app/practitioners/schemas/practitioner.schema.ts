@@ -25,7 +25,9 @@ export const practitionerSchema = new Schema<PractitionerSchema>({
     name: { type: humanNameSchema, required: true },
     gender: { type: String, enum: GenderValues, required: true },
     telecom: { type: [contactPointSchema], default: [] },
-    roles: { type: [practitionerRoleSchema], nullable: false, default: [] }
+    roles: { type: [practitionerRoleSchema], nullable: false, default: [] },
+    login: { type: String, nullable: false},
+    passwordHash: { type: String, nullable: false}
 })
 
 export const PRACTITIONERS_COLLECTION = 'practitioners'

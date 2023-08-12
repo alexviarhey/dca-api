@@ -36,8 +36,9 @@ export const createPractitionerSchema = {
                     speciality: { type: 'string', nullable: true },
                 }
             }
-
-        }
+        },
+        login: { type: "string", nullable: false },
+        password: { type: "string", nullable: false },
     },
     additionalProperties: false
 };
@@ -60,6 +61,7 @@ export type PractitionerDto = {
     name: HumanNameDto
     telecom: ContactPointDto[]
     roles: PractitionerRoleDto[]
+    login: string
 }
 
 export type CreatePractitionerDto = {
@@ -67,6 +69,8 @@ export type CreatePractitionerDto = {
     gender: GenderValues
     telecom: CreateContactPointDto[]
     roles: PractitionerRoleDto[]
+    login: string
+    password: string
 }
 
 export type UpdatePractitionerDto = {
@@ -76,6 +80,8 @@ export type UpdatePractitionerDto = {
     name?: CreateHumanNameDto,
     telecom?: CreateContactPointDto[]
     roles?: PractitionerRoleDto[]
+    login?: string
+    password?: string
 }
 
 export type GetPractitionersFilters = {
