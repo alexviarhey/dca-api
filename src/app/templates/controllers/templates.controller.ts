@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Post, Put, Query } from "@nestjs/common";
-import { CustomResponse, CustomResponseType } from "../../../core/custom-response";
+import { Body, Controller, Delete, Get, Post, Put, Query, UseInterceptors } from "@nestjs/common";
+import { CustomResponseType } from "../../../core/custom-response";
 import {
     CreateTemplateDto,
     createTemplateSchema, GetTemplatesFilters,
@@ -10,12 +10,13 @@ import {
 import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiProperty, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { TemplatesCrudUseCases } from "../use-cases/templates.crud-use-cases";
 import { AjvBody } from "../../common/decorators/ajv.decorators";
-import { ResponseMessages } from "../../../core/response-messages";
 import { IdDto } from "../../common/dto/id.dto";
 import { Paginated, Pagination } from "../../../core/paginated";
 import { FilterQuery } from "mongoose";
 import { ITemplateSchema } from "../schemas/template.schema";
 import { TemplatesGroups, TemplatesService } from "../services/templates.service";
+import { CustomResponseInterceptor } from "../../common/interceptors/custom-response.interceptor";
+import { Result } from "../../../core/result";
 
 class CreateTemplateResponseType extends CustomResponseType<TemplateDto> {
     @ApiProperty({ type: TemplateDto })
@@ -33,17 +34,13 @@ class GetTemplatesResponseType extends CustomResponseType<PaginatedTemplates> {
 }
 
 @Controller("/templates")
+@UseInterceptors(CustomResponseInterceptor)
 @ApiTags("Templates")
 export class TemplatesController {
-
-    responseMessages: ResponseMessages;
-
     constructor(
         private readonly templatesCrudUseCases: TemplatesCrudUseCases,
         private readonly templateService: TemplatesService
-    ) {
-        this.responseMessages = new ResponseMessages(templatesCrudUseCases.modelName);
-    }
+    ) {}
 
     @Post("")
     @ApiCreatedResponse({ type: CreateTemplateResponseType })
@@ -51,16 +48,7 @@ export class TemplatesController {
     async createTemplate(
         @AjvBody(createTemplateSchema) dto: CreateTemplateDto
     ) {
-
-        const res = await this.templatesCrudUseCases.create(
-            dto,
-            null,
-            { and: ["name", "type"] }
-        );
-
-        return CustomResponse
-            .fromResult(res)
-            .withSuccessMessage(this.responseMessages.createdSuccessfully);
+        return this.templatesCrudUseCases.create(dto, null, { and: ["name", "type"] })
     }
 
     @Put("")
@@ -69,12 +57,7 @@ export class TemplatesController {
     async updateTemplate(
         @AjvBody(updateTemplateSchema) { _id, ...dto }: UpdateTemplateDto
     ) {
-
-        const res = await this.templatesCrudUseCases.updateOne(_id, dto);
-
-        return CustomResponse
-            .fromResult(res)
-            .withSuccessMessage(this.responseMessages.updatedSuccessfully);
+        return this.templatesCrudUseCases.updateOne(_id, dto)
     }
 
     @Delete("")
@@ -82,12 +65,7 @@ export class TemplatesController {
     async deleteTemplate(
         @Body() dto: IdDto
     ) {
-
-        const res = await this.templatesCrudUseCases.deleteById(dto.id);
-
-        return CustomResponse
-            .fromResult(res)
-            .withSuccessMessage(this.responseMessages.deletedSuccessfully);
+        return this.templatesCrudUseCases.deleteById(dto.id)
     }
 
     @Get("")
@@ -113,17 +91,13 @@ export class TemplatesController {
             ];
         }
 
-        const res = await this.templatesCrudUseCases.findWithPagination(filterQuery, paginated);
-
-        return CustomResponse.fromResult(res);
+        return this.templatesCrudUseCases.findWithPagination(filterQuery, paginated)
     }
 
     @Post("/get-text")
     public async generateTextFromTemplates(
         @Body() templateGroups: TemplatesGroups
-    ): Promise<CustomResponse<{[key: string]: string}>> {
-        return CustomResponse.fromResult(
-            await this.templateService.fillTemplatesGroups(templateGroups)
-        )
+    ): Promise<Result<{ [key: string]: string }>> {
+        return this.templateService.fillTemplatesGroups(templateGroups)
     }
 }

@@ -10,6 +10,7 @@ export type TherapeuticTreatment = {
     replacementOfFillings: string | null;
     treatmentOfCariesAndNonCariousLesions: string | null;
     endodonticTreatment: string | null;
+    periodontalTreatment: string | null
     treatmentOfDiseasesOfTheOralMucosa: string | null;
     other: string | null;
 }

@@ -1,4 +1,4 @@
-import { Bite, DentalFormula, HardTissueConditions, KPI, KPU, OHIS, ResearchData } from "../schemas/dental-status.schema"
+import { Bite, ConditionOfTheOralMucosa, DentalFormula, HardTissueConditions, KPI, KPU, OHIS, PeriodontalCondition } from "../schemas/dental-status.schema"
 
 export type DentalStatusDto = {
     dentalFormula: DentalFormula
@@ -7,7 +7,10 @@ export type DentalStatusDto = {
     kpu: KPU
     bite: Bite
     hardTissueConditions: HardTissueConditions
-    researchData: ResearchData
+    periodontalCondition: PeriodontalCondition
+    conditionOfTheOralMucosa: ConditionOfTheOralMucosa
+    researchData: string | null
+    provisionalDiagnosis: string | null
 }
 
 export const dentalStatusAjvSchema = {
@@ -64,26 +67,39 @@ export const dentalStatusAjvSchema = {
             allRequired: true,
             nullable: false,
             properties: {
-                largeFillings: { type: 'string', nullable: true },
-                abrasion: { type: 'string', nullable: true },
                 colorChange: { type: 'string', nullable: true },
                 shapeChange: { type: 'string', nullable: true },
-                irops: { type: 'string', nullable: true },
-                hyperemia: { type: 'string', nullable: true },
-                recession: { type: 'string', nullable: true },
-                toothAttachments: { type: 'string', nullable: true },
+                surfaceChange: { type: 'string', nullable: true },
+                largeFillings: { type: 'string', nullable: true },
             }
         },
-        researchData: {
+        periodontalCondition: {
             type: "object",
             additionalProperties: false,
             allRequired: true,
             nullable: false,
             properties: {
-                notCarriedOut: { type: 'boolean', nullable: false },
-                seeDiary: { type: 'boolean', nullable: false },
-                noPathologicalChanges: { type: 'string', nullable: true },
+                bleeding: { type: 'string', nullable: true},
+                dentogingivalAttachmentDisorder: { type: 'string', nullable: true },
+                recession: { type: 'string', nullable: true },
+                presenceOfPeriodontalPocket: { type: 'string', nullable: true },
+                toothMobility: { type: 'string', nullable: true },
             }
         },
+        conditionOfTheOralMucosa: {
+            type: "object",
+            additionalProperties: false,
+            allRequired: true,
+            nullable: false,
+            properties: {
+                hyperemic: { type: 'boolean', nullable: false },
+                edematous: { type: 'boolean', nullable: false },
+                hyperplasia: { type: 'boolean', nullable: false },
+                colorIsBroken: { type: 'boolean', nullable: false },
+                other: { type: 'string', nullable: true },
+            }
+        },
+        researchData: { type: 'string', nullable: true },
+        provisionalDiagnosis: { type: 'string', nullable: true }
     }
 }

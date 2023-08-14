@@ -29,20 +29,27 @@ export class DentalStatusTabService extends CardTabService<DentalStatusDto, Dent
             kpu: DentalIndexes.defaultKpu(),
             bite: null,
             hardTissueConditions: {
-                largeFillings: null,
-                abrasion: null,
                 colorChange: null,
                 shapeChange: null,
-                irops: null,
-                hyperemia: null,
-                recession: null,
-                toothAttachments: null
+                surfaceChange: null,
+                largeFillings: null,
             },
-            researchData: {
-                notCarriedOut: false,
-                seeDiary: false,
-                noPathologicalChanges: null
-            }
+            periodontalCondition: {
+                bleeding: null,
+                dentogingivalAttachmentDisorder: null,
+                recession: null,
+                presenceOfPeriodontalPocket: null,
+                toothMobility: null,
+            },
+            conditionOfTheOralMucosa: {
+                hyperemic: false,
+                edematous: false,
+                hyperplasia: false,
+                colorIsBroken: false,
+                other: null
+            },
+            researchData: null,
+            provisionalDiagnosis: null
         }
     }
 }

@@ -22,6 +22,7 @@ export class CommonDiseasesService extends CardTabService<CommonDiseasesDto, Com
 
     public getDefaultCommonDiseases(): CommonDiseasesDto {
         return {
+            stateOfHealth: 'удовлетворительное',
             cardiovascularSystem: null,
             nervousSystem: null,
             endocrineSystem: null,
@@ -31,7 +32,8 @@ export class CommonDiseasesService extends CardTabService<CommonDiseasesDto, Com
             continuousUseOfMedicines: null,
             harmfulFactors: null,
             pregnancyOrPostpartumPeriod: null,
-            infectiousDiseases: null
+            infectiousDiseases: null,
+            other: null
         }
     }
 }

@@ -12,7 +12,9 @@ export const getPractitionersFiltersSchema = {
         name: { type: "string" },
         address: { type: "string" },
         active: { type: "boolean" },
-        phone: { type: "string" }
+        phone: { type: "string" },
+        code: { type: "string" },
+        speciality: { type: "string" }
     }
 }
 
@@ -37,7 +39,18 @@ export const createPractitionerSchema = {
 
         }
     },
-    additionalProperties: true
+    additionalProperties: false
+};
+
+export const updatePractitionerSchema = {
+    ...createPractitionerSchema,
+    properties: {
+        ...createPractitionerSchema.properties,
+        id: { type: "string" },
+        active: { type: "boolean" }
+    },
+    required: ["id"],
+    additionalProperties: false
 };
 
 export type PractitionerDto = {
@@ -57,6 +70,7 @@ export type CreatePractitionerDto = {
 }
 
 export type UpdatePractitionerDto = {
+    id: string
     active?: boolean
     gender?: GenderValues
     name?: CreateHumanNameDto,
@@ -71,4 +85,6 @@ export type GetPractitionersFilters = {
     address?: string
     active?: number
     phone?: string
+    code?: string
+    speciality?: string
 }

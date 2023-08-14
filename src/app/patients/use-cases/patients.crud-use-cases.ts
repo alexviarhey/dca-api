@@ -56,11 +56,9 @@ export class PatientsCrudUseCases extends CrudUseCases<IPatientSchema,
 
         if (filters.gender) filterQuery.gender = filters.gender;
 
-        console.log('FILTERS', filters)
+        if (filters.name) filterQuery["name.text"] = { $regex: filters.name, $options: 'i' };
 
-        if (filters.name) filterQuery["name.text"] = { $regex: filters.name };
-
-        if (filters.address) filterQuery["address.text"] = { $regex: filters.address };
+        if (filters.address) filterQuery["address.text"] = { $regex: filters.address, $options: 'i' };
 
         if (filters.phone) {
             filterQuery.telecom = {
@@ -78,7 +76,7 @@ export class PatientsCrudUseCases extends CrudUseCases<IPatientSchema,
         return super.updateOne(_id, { active: false })
     }
 
-    public getFiltersForUniqueness(dto: Partial<CreatePatientDto>): FilterQuery<IPatientSchema> | null {
+    public getFiltersForUniqueness(dto: Partial<CreatePatientDto>, _id?: string): FilterQuery<IPatientSchema> | null {
         let filterQuery: FilterQuery<IPatientSchema> = null
 
         const phoneFilterQuery = ContactPointHelper.getFilterByPhone(dto)
@@ -87,6 +85,13 @@ export class PatientsCrudUseCases extends CrudUseCases<IPatientSchema,
             name: dto.name,
             ...phoneFilterQuery
         };
+
+        if (_id) {
+            filterQuery = {
+                _id: { $ne: _id },
+                ...filterQuery
+            }
+        }
 
         return filterQuery
     }

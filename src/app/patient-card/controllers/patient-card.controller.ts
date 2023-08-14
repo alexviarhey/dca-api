@@ -1,5 +1,4 @@
-import { Controller, Get, Param, Post, Put } from "@nestjs/common";
-import { CustomResponse } from "../../../core/custom-response";
+import { Controller, Get, Param, Post, Put, UseInterceptors } from "@nestjs/common";
 import { AjvBody, AjvQuery } from "../../common/decorators/ajv.decorators";
 import { commonDiseasesAjvSchema, CommonDiseasesDto, UpdateCommonDiseasesDto } from "../dto/common-diseases.dto";
 import { externalExaminationAjvSchema, ExternalExaminationDto } from "../dto/external-examination.dto";
@@ -16,6 +15,8 @@ import { GetAllVisitsUseCase } from "../use-cases/get-all-visits.use-case";
 import { UpdateVisitUseCase } from "../use-cases/update-visit.use-case";
 import { GetDocxQuery, getDocxQuerySchema } from "../dto/docx.dto";
 import { DocxService } from "../services/docx/docx.service";
+import { CustomResponseInterceptor } from "../../common/interceptors/custom-response.interceptor";
+import { Result } from "../../../core/result";
 
 
 const commonDiseasesRoutingKey = '/common-diseases'
@@ -25,6 +26,7 @@ const dentalStatusRoutingKey = '/dental-status'
 const visitsRoutingKey = '/visits'
 
 @Controller("/card/:id")
+@UseInterceptors(CustomResponseInterceptor)
 export class PatientCardController {
 
     constructor(
@@ -42,10 +44,8 @@ export class PatientCardController {
     @Get(commonDiseasesRoutingKey)
     async getCommonDiseases(
         @Param("id") cardId: string
-    ): Promise<CustomResponse<CommonDiseasesDto>> {
-        return CustomResponse.fromResult(
-            await this.commonDiseasesService.getTabData(cardId)
-        )
+    ): Promise<Result<CommonDiseasesDto>> {
+        return this.commonDiseasesService.getTabData(cardId)
     }
 
     @Put(commonDiseasesRoutingKey)
@@ -53,107 +53,84 @@ export class PatientCardController {
         @AjvBody(commonDiseasesAjvSchema) dto: UpdateCommonDiseasesDto,
         @Param("id") cardId: string
     ) {
-        return CustomResponse
-            .fromResult(
-                await this.commonDiseasesService.updateTabData(cardId, dto)
-            )
+        return this.commonDiseasesService.updateTabData(cardId, dto)
     }
 
     @Get(externalExaminationRoutingKey)
     async getExternalExamination(
         @Param("id") cardId: string
-    ): Promise<CustomResponse<ExternalExaminationDto>> {
-        return CustomResponse.fromResult(
-            await this.externalExaminationService.getTabData(cardId)
-        )
+    ): Promise<Result<ExternalExaminationDto>> {
+        return this.externalExaminationService.getTabData(cardId)
     }
 
     @Put(externalExaminationRoutingKey)
     async updateExternalExamination(
         @Param("id") cardId: string,
         @AjvBody(externalExaminationAjvSchema) data: ExternalExaminationDto
-    ): Promise<CustomResponse> {
-        return CustomResponse.fromResult(
-            await this.externalExaminationService.updateTabData(cardId, data)
-        )
+    ): Promise<Result> {
+        return this.externalExaminationService.updateTabData(cardId, data)
     }
 
     @Get(generalTreatmentPlanRoutingKey)
     async getGeneralTreatmentPlan(
         @Param("id") cardId: string
-    ): Promise<CustomResponse<GeneralTreatmentPlanDto>> {
-        return CustomResponse.fromResult(
-            await this.generalTreatmentPlanService.getTabData(cardId)
-        )
+    ): Promise<Result<GeneralTreatmentPlanDto>> {
+        return this.generalTreatmentPlanService.getTabData(cardId)
     }
 
     @Put(generalTreatmentPlanRoutingKey)
     async updateGeneralTreatmentPlan(
         @Param("id") cardId: string,
         @AjvBody(generalTreatmentAjvSchema) data: GeneralTreatmentPlanDto
-    ): Promise<CustomResponse> {
-        return CustomResponse.fromResult(
-            await this.generalTreatmentPlanService.updateTabData(cardId, data)
-        )
+    ): Promise<Result> {
+        return this.generalTreatmentPlanService.updateTabData(cardId, data)
     }
 
     @Get(dentalStatusRoutingKey)
     async getDentalStatus(
         @Param("id") cardId: string
-    ): Promise<CustomResponse<DentalStatusDto>> {
-        return CustomResponse.fromResult(
-            await this.dentalStatusTabService.getTabData(cardId)
-        )
+    ): Promise<Result<DentalStatusDto>> {
+        return this.dentalStatusTabService.getTabData(cardId)
     }
 
     @Put(dentalStatusRoutingKey)
     async updateDentalStatus(
         @Param("id") cardId: string,
         @AjvBody(dentalStatusAjvSchema) data: DentalStatusDto
-    ): Promise<CustomResponse<DentalStatusDto>> {
-        return CustomResponse.fromResult(
-            await this.dentalStatusTabService.updateTabData(cardId, data)
-        )
+    ): Promise<Result<DentalStatusDto>> {
+        return this.dentalStatusTabService.updateTabData(cardId, data)
     }
 
     @Post(visitsRoutingKey)
     async createVisit(
         @Param("id") cardId: string,
         @AjvBody(createVisitAjvSchema) data: CreateVisitDto
-    ): Promise<CustomResponse> {
-        return CustomResponse
-            .fromResult(await this.createVisitUseCase.execute(cardId, data))
-            .withSuccessMessage('Визит успешно добавлен!')
+    ): Promise<Result> {
+        return this.createVisitUseCase.execute(cardId, data)
     }
 
-    @Put(`${visitsRoutingKey}/visitId`)
+    @Put(`${visitsRoutingKey}/:visitId`)
     async updateVisit(
         @Param("id") cardId: string,
         @Param("visitId") visitId: string,
         @AjvBody(createVisitAjvSchema) data: CreateVisitDto
-    ): Promise<CustomResponse> {
-        return CustomResponse
-            .fromResult(await this.updateVisitUseCase.execute(cardId, visitId, data))
-            .withSuccessMessage('Визит успешно обновлен!')
+    ): Promise<Result> {
+        return this.updateVisitUseCase.execute(cardId, visitId, data)
     }
 
-    @Get(`${visitsRoutingKey}/visitId`)
+    @Get(`${visitsRoutingKey}/:visitId`)
     async getVisit(
         @Param("id") cardId: string,
         @Param("visitId") visitId: string,
-    ): Promise<CustomResponse<VisitDto>> {
-        return CustomResponse.fromResult(
-            await this.getVisitUseCase.execute(cardId, visitId)
-        )
+    ): Promise<Result<VisitDto>> {
+        return this.getVisitUseCase.execute(cardId, visitId)
     }
 
     @Get(`${visitsRoutingKey}`)
     async getAllVisits(
         @Param("id") cardId: string,
-    ): Promise<CustomResponse<ShortVisitDto[]>> {
-        return CustomResponse.fromResult(
-            await this.getAllVisitsUseCase.execute(cardId)
-        )
+    ): Promise<Result<ShortVisitDto[]>> {
+        return this.getAllVisitsUseCase.execute(cardId)
     }
 
     @Get('/docx')
@@ -161,8 +138,6 @@ export class PatientCardController {
         @Param("id") cardId: string,
         @AjvQuery(getDocxQuerySchema) query: GetDocxQuery
     ) {
-        return CustomResponse.fromResult(
-            await this.docxService.getDocx(cardId, query.page)
-        )
+        return this.docxService.getDocx(cardId, query.page)
     }
 }

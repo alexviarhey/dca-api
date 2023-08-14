@@ -41,6 +41,7 @@ export const generalTreatmentAjvSchema = {
                 replacementOfFillings: { type: 'string', nullable: true },
                 treatmentOfCariesAndNonCariousLesions: { type: 'string', nullable: true },
                 endodonticTreatment: { type: 'string', nullable: true },
+                periodontalTreatment: { type: 'string', nullable: true },
                 treatmentOfDiseasesOfTheOralMucosa: { type: 'string', nullable: true },
                 other: { type: 'string', nullable: true },
             }

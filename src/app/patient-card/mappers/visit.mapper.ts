@@ -39,13 +39,19 @@ export class VisitMapper extends Mapper<VisitSchema, VisitDto, CreateVisitDto> {
 
         const icdIdToothMap = new Map(dto.diagnosis.map(d => [d.icdId, d.tooth]))
 
-        const ids =  [...icdIdToothMap.keys()]
+        const ids = [...icdIdToothMap.keys()]
 
         const icds = await this.icdModel.find({
-            _id: {$in: ids}
+            _id: { $in: ids }
         })
 
-        const diagnosis = icds.map(i => ({tooth: icdIdToothMap.get(i._id), icdName: i.name, icdCode: i.code}))
+        const diagnosis = icds.map(i => {
+            return {
+                tooth: icdIdToothMap.get(i._id.toString()) || null,
+                icdName: i.name,
+                icdCode: i.code
+            }
+        })
 
         return {
             date: new Date(dto.date),

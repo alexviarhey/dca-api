@@ -1,19 +1,21 @@
 import { Injectable } from "@nestjs/common";
 import { IPatch, PatchType, TextRun, UnderlineType } from "docx";
-import { GeneralInfoDocxData } from "./docx-templates.service";
+import { GeneralInfoDocxData, GetDentalStatusPatchesData, GetGeneralTreatmentTypePatchesData, GetPatientExaminationAtInitialPlacementPatchesData } from "./docx-templates.service";
 import { GenderValues } from "../../../patients/types/gender";
 
 export type PatchObj = {
     [key: string]: IPatch
 }
 
-type BasicTextSettingsParams = {
-    bold?: boolean,
-    underline?: boolean
-}
-
 @Injectable()
 export class PatchesHelper {
+
+    private readonly underline = {
+        color: '#000000',
+        type: UnderlineType.SINGLE
+    }
+
+    private readonly noDataText = 'НЕТ'
 
     public getGeneralInfoPatches(data: GeneralInfoDocxData): PatchObj {
 
@@ -21,7 +23,7 @@ export class PatchesHelper {
             type: PatchType.PARAGRAPH,
             children: [new TextRun({
                 text: this.formatDate(data.createAt),
-                ...this.getBasicTextSettings({ bold: false, underline: false })
+                ...this.getBasicTextSettings()
             })]
         }
 
@@ -29,6 +31,8 @@ export class PatchesHelper {
             type: PatchType.PARAGRAPH,
             children: [new TextRun({
                 text: data.fullPatientName,
+                bold: true,
+                underline: this.underline,
                 ...this.getBasicTextSettings()
             })]
         }
@@ -37,7 +41,8 @@ export class PatchesHelper {
             type: PatchType.PARAGRAPH,
             children: [new TextRun({
                 text: this.formatDate(data.dateOfBirth),
-                ...this.getBasicTextSettings({ bold: true })
+                bold: true,
+                ...this.getBasicTextSettings()
             })]
         }
 
@@ -58,6 +63,8 @@ export class PatchesHelper {
             type: PatchType.PARAGRAPH,
             children: [new TextRun({
                 text: data.address,
+                bold: true,
+                underline: this.underline,
                 ...this.getBasicTextSettings()
             })]
         }
@@ -70,7 +77,7 @@ export class PatchesHelper {
             })]
         }
 
-        const shortFio: IPatch = {
+        const fioShort: IPatch = {
             type: PatchType.PARAGRAPH,
             children: [new TextRun({
                 text: data.shortFio,
@@ -85,35 +92,179 @@ export class PatchesHelper {
             gender,
             address,
             phone,
-            shortFio: shortFio
+            fioShort
         }
     }
 
-    private getBasicTextSettings(params?: BasicTextSettingsParams) {
-        const res: any = {
+
+    public getPatientExaminationAtInitialPlacementPatches(data: GetPatientExaminationAtInitialPlacementPatchesData): PatchObj {
+        const applicationDate: IPatch = {
+            type: PatchType.PARAGRAPH,
+            children: [new TextRun({
+                text: this.formatDate(data.applicationDate),
+                ...this.getBasicTextSettings()
+            })]
+        }
+
+        const complains: IPatch = {
+            type: PatchType.PARAGRAPH,
+            children: [new TextRun({
+                text: data.complains,
+                italics: true,
+                ...this.getBasicTextSettings()
+            })]
+        }
+
+        const commonDiseases = Object
+            .keys(data.commonDiseases)
+            .reduce<Record<string, IPatch>>((res, key) => {
+
+                if (key === 'other') {
+                    res.other = {
+                        type: PatchType.PARAGRAPH,
+                        children: [new TextRun({
+                            text: data.commonDiseases.other || '',
+                            ...this.getBasicTextSettings()
+                        })]
+                    }
+
+                    return res
+                }
+
+                if (key === 'stateOfHealth') {
+                    res.stateOfHealth = {
+                        type: PatchType.PARAGRAPH,
+                        children: [new TextRun({
+                            text: data.commonDiseases.stateOfHealth || '',
+                            ...this.getBasicTextSettings()
+                        })]
+                    }
+
+                    return res
+                }
+
+                const value: string = data.commonDiseases[key]
+
+                res[`${key}Yes`] = {
+                    type: PatchType.PARAGRAPH,
+                    children: [new TextRun({
+                        text: 'ДА',
+                        strike: !!!value,
+                        ...this.getBasicTextSettings()
+                    })]
+                }
+
+                res[`${key}No`] = {
+                    type: PatchType.PARAGRAPH,
+                    children: [new TextRun({
+                        text: 'НЕТ',
+                        strike: !!value,
+                        ...this.getBasicTextSettings()
+                    })]
+                }
+
+                res[key] = {
+                    type: PatchType.PARAGRAPH,
+                    children: [new TextRun({
+                        text: value || '',
+                        ...this.getBasicTextSettings()
+                    })]
+                }
+
+                return res
+            }, {})
+
+        const externalExamination = Object
+            .keys(data.externalExamination)
+            .reduce<Record<string, IPatch>>((res, key) => {
+                const value = data.externalExamination[key]
+
+                res[key] = {
+                    type: PatchType.PARAGRAPH,
+                    children: [new TextRun({
+                        text: value,
+                        italics: true,
+                        ...this.getBasicTextSettings()
+                    })]
+                }
+
+                return res
+            }, {})
+
+        return {
+            applicationDate,
+            complains,
+            ...commonDiseases,
+            ...externalExamination
+        }
+    }
+
+    public getGeneralTreatmentPlanPatches(data: GetGeneralTreatmentTypePatchesData): PatchObj {
+
+        return Object
+            .keys(data)
+            .reduce<PatchObj>((res, key) => {
+                const value = data[key]
+
+                if (typeof value === 'boolean') {
+
+                    const text = value ? 'ДА' : this.noDataText
+
+                    res[key] = {
+                        type: PatchType.PARAGRAPH,
+                        children: [new TextRun({
+                            text,
+                            underline: this.underline,
+                            ...this.getBasicTextSettings()
+                        })]
+                    }
+                } else {
+                    res[key] = {
+                        type: PatchType.PARAGRAPH,
+                        children: [new TextRun({
+                            text: this.withNoDataText(value),
+                            underline: this.underline,
+                            ...this.getBasicTextSettings()
+                        })]
+                    }
+                }
+
+                return res
+            }, {})
+    }
+
+    public getDentalStatusPatches(data: GetDentalStatusPatchesData): PatchObj {
+        return Object
+            .keys(data)
+            .reduce<PatchObj>((res, key) => {
+
+                let size: string;
+
+                if (key in ['ohis', 'kpi']) {
+                    size = '11pt'
+                } else if (key === 'dentalFormula') {
+                    size = '10pt'
+                } else {
+                    size = '16pt'
+                }
+
+                res[key] = {
+                    type: PatchType.PARAGRAPH,
+                    children: [new TextRun({
+                        text: data[key],
+                        ...this.getBasicTextSettings(),
+                        size
+                    })]
+                }
+                return res
+            }, {})
+    }
+
+    private getBasicTextSettings() {
+        return {
             font: 'Times New Roman',
             size: '16pt',
-        }
-
-        let bold = true
-        let underline = true
-
-        if (typeof params?.bold === 'boolean') {
-            bold = params.bold
-        }
-
-        res.bold = bold
-
-        if (typeof params?.underline === 'boolean') {
-            underline = params.underline
-        }
-
-        underline && (res.underline = {
-            color: '#000000',
-            type: UnderlineType.SINGLE
-        })
-
-        return res
+        } as any
     }
 
     private formatDate(date: Date): string {
@@ -122,5 +273,9 @@ export class PatchesHelper {
             month: 'long',
             day: 'numeric',
         })
+    }
+
+    private withNoDataText(value: string | null, customNoDataText?: string) {
+        return value ? value : (customNoDataText ? customNoDataText : this.noDataText)
     }
 }

@@ -1,13 +1,14 @@
-import { Controller, Get, Post } from "@nestjs/common";
-import { CustomResponse } from "../../../core/custom-response";
+import { Controller, Get, Param, Post, Put, UseInterceptors } from "@nestjs/common";
 import { AjvBody, AjvQuery } from "../../common/decorators/ajv.decorators";
 import { PractitionersCrudUseCases } from "../use-cases/practitioners.crud.use-cases";
-import { CreatePractitionerDto, GetPractitionersFilters, createPractitionerSchema, getPractitionersFiltersSchema } from "../dto/practitioner.dto";
+import { CreatePractitionerDto, GetPractitionersFilters, UpdatePractitionerDto, createPractitionerSchema, getPractitionersFiltersSchema, updatePractitionerSchema } from "../dto/practitioner.dto";
 import { practitionerRoleHelper } from "../schemas/practitioner-role.schema";
 import { ContactPointHelper } from "../../common/dto/contact-point.dtos";
-import { Result } from "../../../core/result";
+import { CustomResponseInterceptor } from "../../common/interceptors/custom-response.interceptor";
+import { FilterQuery } from "mongoose";
 
 @Controller("/practitioners")
+@UseInterceptors(CustomResponseInterceptor)
 export class PractitionersController {
     constructor(
         private readonly practitionersCrudUseCases: PractitionersCrudUseCases
@@ -16,17 +17,21 @@ export class PractitionersController {
 
     @Get("/roles")
     async getPractitionersRolesWithSpecialties() {
-        return CustomResponse.fromResult(Result.ok(
-            practitionerRoleHelper.getAllRolesWithSpecialties()
-        ))
+        return practitionerRoleHelper.getAllRolesWithSpecialties()
     }
 
     @Get()
     async getPractitioners(
         @AjvQuery(getPractitionersFiltersSchema) filters: GetPractitionersFilters
     ) {
-        const res = await this.practitionersCrudUseCases.findWithPagination(filters);
-        return CustomResponse.fromResult(res);
+        return this.practitionersCrudUseCases.findWithPagination(filters);
+    }
+
+    @Get("/:id")
+    async getPractitionerById(
+        @Param("id") id: string
+    ) {
+        return this.practitionersCrudUseCases.findById(id)
     }
 
     @Post()
@@ -36,16 +41,29 @@ export class PractitionersController {
         const roles = dto.roles
 
         const res = practitionerRoleHelper.validateListOfRoles(roles)
-        if (!res.isSuccess) return CustomResponse.validationError({
-            field: 'role',
-            message: res.error
-        })
+        if(!res.isSuccess) return res
 
-        const createPractitionerRes = await this.practitionersCrudUseCases.create(
+        return this.practitionersCrudUseCases.create(
             dto,
             ContactPointHelper.getFilterByPhone(dto)
         )
+    }
 
-        return CustomResponse.fromResult(createPractitionerRes)
+    @Put()
+    async updatePractitioner(
+        @AjvBody(updatePractitionerSchema) dto: UpdatePractitionerDto
+    ) {
+        const { id, ...fields } = dto
+
+        const filters = {
+            _id: {$ne: id},
+            ...ContactPointHelper.getFilterByPhone(dto)
+        }
+
+        return this.practitionersCrudUseCases.updateOne(
+            id,
+            fields ,
+            filters
+        )
     }
 }

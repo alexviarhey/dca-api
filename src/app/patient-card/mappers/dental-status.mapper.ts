@@ -13,7 +13,10 @@ export class DentalStatusMapper extends Mapper<DentalStatusSchema, DentalStatusD
             kpu: model.kpu,
             bite: model.bite,
             hardTissueConditions: model.hardTissueConditions,
-            researchData: model.researchData
+            periodontalCondition: model.periodontalCondition,
+            conditionOfTheOralMucosa: model.conditionOfTheOralMucosa,
+            researchData: model.researchData,
+            provisionalDiagnosis: model.provisionalDiagnosis
         }
     }
 
@@ -25,7 +28,10 @@ export class DentalStatusMapper extends Mapper<DentalStatusSchema, DentalStatusD
             kpu: dto.kpu,
             bite: dto.bite,
             hardTissueConditions: dto.hardTissueConditions,
-            researchData: dto.researchData
+            periodontalCondition: dto.periodontalCondition,
+            conditionOfTheOralMucosa: dto.conditionOfTheOralMucosa,
+            researchData: dto.researchData,
+            provisionalDiagnosis: dto.provisionalDiagnosis
         }
     }
 }
