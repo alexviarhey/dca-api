@@ -256,6 +256,18 @@ export class PatchesHelper {
                         size
                     })]
                 }
+
+                if(key === 'provisionalDiagnosis') {
+                    res[key] = {
+                        type: PatchType.PARAGRAPH,
+                        children: data.provisionalDiagnosis.map(d => (
+                            new TextRun({
+                                text: d,
+                                ...this.getBasicTextSettings(),
+                            })))
+                    }
+                }
+
                 return res
             }, {})
     }

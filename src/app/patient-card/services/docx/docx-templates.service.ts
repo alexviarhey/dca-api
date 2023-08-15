@@ -71,7 +71,7 @@ export type GetDentalStatusPatchesData = {
     periodontalCondition: string
     conditionOfTheOralMucosa: string
     researchData: string
-    provisionalDiagnosis: string
+    provisionalDiagnosis: string[]
     ohis: OhisData
     kpi: KpiData
     dentalFormula: DentalFormulaData

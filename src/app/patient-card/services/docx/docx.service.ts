@@ -197,7 +197,7 @@ export class DocxService extends BaseService {
                 periodontalCondition: getFormattedString(dentalStatus.periodontalCondition, periodontalConditionReadable),
                 conditionOfTheOralMucosa: geConditionOfTheOralMucosaValue(dentalStatus.conditionOfTheOralMucosa),
                 researchData: dentalStatus.researchData || 'периапикальных изменений в области зуба нет',
-                provisionalDiagnosis: dentalStatus.provisionalDiagnosis,
+                provisionalDiagnosis: this.getDiagnosisFormatted(dentalStatus.provisionalDiagnosis),
                 ohis: getOhisValue(dentalStatus.ohis),
                 kpi: getKpiValue(dentalStatus.kpi),
                 dentalFormula: getDentalFormulaData(dentalStatus.dentalFormula)
@@ -297,7 +297,7 @@ export class DocxService extends BaseService {
                 date: getDateFormatted(visit.date),
                 complains: visit.complains,
                 localStatus: visit.localStatus,
-                diagnosis: getDiagnosisFormatted(visit.diagnosis),
+                diagnosis: this.getDiagnosisFormatted(visit.diagnosis),
                 treatment: visit.treatment,
                 other: visit.other
             }
@@ -315,19 +315,19 @@ export class DocxService extends BaseService {
                 )
             }
 
-            function getDiagnosisFormatted(diagnosis: VisitDiagnosis[]): string[] {
-                return diagnosis
-                    .map(d => {
-                        let res = d.icdCode + ' ' + d.icdName
-                        if (d.tooth) res += ' ' + d.tooth
-                        return res
-                    })
-            }
-
             return this.docxTemplatesService.fillAndGetVisitPage(data)
 
         } catch (e) {
             return this.errorLogger.logErrorAndReturnSomethingWentWrongResult(e)
         }
+    }
+
+    private getDiagnosisFormatted(diagnosis: VisitDiagnosis[]): string[] {
+        return diagnosis
+            .map(d => {
+                let res = d.icdCode + ' ' + d.icdName
+                if (d.tooth) res += ' ' + d.tooth
+                return res
+            })
     }
 }
