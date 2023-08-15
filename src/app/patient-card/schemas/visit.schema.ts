@@ -13,7 +13,7 @@ export type VisitSchema = {
     diagnosis: Array<VisitDiagnosis>
     localStatus: string
     treatment: string
-    other: string
+    other: string | null
 }
 
 const visitDiagnosisSchema = new Schema({

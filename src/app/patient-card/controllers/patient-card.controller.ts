@@ -138,6 +138,10 @@ export class PatientCardController {
         @Param("id") cardId: string,
         @AjvQuery(getDocxQuerySchema) query: GetDocxQuery
     ) {
-        return this.docxService.getDocx(cardId, query.page)
+        return this.docxService.getDocx({
+            cardId: cardId,
+            page: query.page,
+            visitId: query.visitId
+        })
     }
 }

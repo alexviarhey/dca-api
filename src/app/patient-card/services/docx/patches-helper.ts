@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { IPatch, PatchType, TextRun, UnderlineType } from "docx";
-import { GeneralInfoDocxData, GetDentalStatusPatchesData, GetGeneralTreatmentTypePatchesData, GetPatientExaminationAtInitialPlacementPatchesData } from "./docx-templates.service";
+import { GeneralInfoDocxData, GetDentalStatusPatchesData, GetGeneralTreatmentTypePatchesData, GetPatientExaminationAtInitialPlacementPatchesData, GetVisitPatchesData } from "./docx-templates.service";
 import { GenderValues } from "../../../patients/types/gender";
 
 export type PatchObj = {
@@ -255,6 +255,32 @@ export class PatchesHelper {
                         ...this.getBasicTextSettings(),
                         size
                     })]
+                }
+                return res
+            }, {})
+    }
+
+    public getVisitPatches(data: GetVisitPatchesData): PatchObj {
+        return Object
+            .keys(data)
+            .reduce<PatchObj>((res, key) => {
+                if (key !== 'diagnosis') {
+                    res[key] = {
+                        type: PatchType.PARAGRAPH,
+                        children: [new TextRun({
+                            text: data[key],
+                            ...this.getBasicTextSettings(),
+                        })]
+                    }
+                } else {
+                    res[key] = {
+                        type: PatchType.PARAGRAPH,
+                        children: data.diagnosis.map(d => (
+                            new TextRun({
+                                text: d,
+                                ...this.getBasicTextSettings(),
+                            })))
+                    }
                 }
                 return res
             }, {})

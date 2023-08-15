@@ -100,6 +100,16 @@ export type DentalFormulaData = {
     bot: {bot1: string, bot2: string, bot3: string, bot4: string, bot5: string, bot6: string, bot7: string, bot8: string, bot9: string, bot10: string, bot11: string, bot12: string, bot13: string, bot14: string, bot15: string, bot16: string}
 }
 
+
+export type GetVisitPatchesData = {
+    date: string
+    complains: string
+    localStatus: string
+    diagnosis: string[]
+    treatment: string
+    other: string
+}
+
 @Injectable()
 export class DocxTemplatesService {
 
@@ -164,6 +174,21 @@ export class DocxTemplatesService {
 
         } catch (e) {
             console.log('CardDocxService fillAndGetPatientExaminationAtInitialPlacementPage error: ', e)
+        }
+    }
+
+    public async fillAndGetVisitPage(data: GetVisitPatchesData): Promise<Result<Buffer>> {
+        try {
+            const content = fs.readFileSync(process.cwd() + '/templates/visit.docx')
+
+            const doc = await patchDocument(content, {
+                patches: this.patchesHelper.getVisitPatches(data)
+            });
+
+            return Result.ok(doc)
+
+        } catch (e) {
+            console.log('CardDocxService fillAndGetVisitPate error: ', e)
         }
     }
 }
