@@ -1,4 +1,5 @@
 import { Schema } from "mongoose"
+import { VisitDiagnosis, visitDiagnosisSchema } from "./visit.schema"
 
 export const dentalConditionValue = [
     "0",
@@ -127,7 +128,7 @@ export type DentalStatusSchema = {
     periodontalCondition: PeriodontalCondition
     conditionOfTheOralMucosa: ConditionOfTheOralMucosa
     researchData: string | null
-    provisionalDiagnosis: string | null
+    provisionalDiagnosis: VisitDiagnosis[] | null
 }
 
 const dentalFormulaSchema = new Schema<DentalFormula>({
@@ -169,5 +170,5 @@ export const dentalStatusSchema = new Schema<DentalStatusSchema>({
     periodontalCondition: { type: periodontalCondition, required: true },
     conditionOfTheOralMucosa: { type: conditionOfTheOralMucosa, required: true },
     researchData: { type: String, nullable: true, default: null },
-    provisionalDiagnosis: { type: String, nullable: true, default: null }
+    provisionalDiagnosis: { type: [visitDiagnosisSchema], nullable: true, default: null }
 }, { _id: false })

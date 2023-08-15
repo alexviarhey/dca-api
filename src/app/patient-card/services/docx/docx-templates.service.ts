@@ -71,7 +71,7 @@ export type GetDentalStatusPatchesData = {
     periodontalCondition: string
     conditionOfTheOralMucosa: string
     researchData: string
-    provisionalDiagnosis: string
+    provisionalDiagnosis: string[]
     ohis: OhisData
     kpi: KpiData
     dentalFormula: DentalFormulaData
@@ -98,6 +98,16 @@ export type KpiData = {
 export type DentalFormulaData = {
     top: { top1: string, top2: string, top3: string, top4: string, top5: string, top6: string, top7: string, top8: string, top9: string, top10: string, top11: string, top12: string, top13: string, top14: string, top15: string, top16: string},
     bot: {bot1: string, bot2: string, bot3: string, bot4: string, bot5: string, bot6: string, bot7: string, bot8: string, bot9: string, bot10: string, bot11: string, bot12: string, bot13: string, bot14: string, bot15: string, bot16: string}
+}
+
+
+export type GetVisitPatchesData = {
+    date: string
+    complains: string
+    localStatus: string
+    diagnosis: string[]
+    treatment: string
+    other: string
 }
 
 @Injectable()
@@ -164,6 +174,21 @@ export class DocxTemplatesService {
 
         } catch (e) {
             console.log('CardDocxService fillAndGetPatientExaminationAtInitialPlacementPage error: ', e)
+        }
+    }
+
+    public async fillAndGetVisitPage(data: GetVisitPatchesData): Promise<Result<Buffer>> {
+        try {
+            const content = fs.readFileSync(process.cwd() + '/templates/visit.docx')
+
+            const doc = await patchDocument(content, {
+                patches: this.patchesHelper.getVisitPatches(data)
+            });
+
+            return Result.ok(doc)
+
+        } catch (e) {
+            console.log('CardDocxService fillAndGetVisitPate error: ', e)
         }
     }
 }

@@ -5,12 +5,18 @@ import { InjectModel } from "@nestjs/mongoose";
 import { BaseService } from "../../../../core/base.service";
 import { Result } from "../../../../core/result";
 import { IPatientSchema, PATIENTS } from "../../../patients/schemas/patient.schema";
-import { DentalFormulaData, DocxTemplatesService, GetDentalStatusPatchesData, GetGeneralTreatmentTypePatchesData, KpiData, OhisData } from "./docx-templates.service";
+import { DentalFormulaData, DocxTemplatesService, GetDentalStatusPatchesData, GetGeneralTreatmentTypePatchesData, GetVisitPatchesData, KpiData, OhisData } from "./docx-templates.service";
 import { ContactPointSystem } from "../../../common/schemas/contact-point.schema";
 import { DocxPages } from "../../dto/docx.dto";
 import { FaceConfiguration, FaceConfigurationReadable, LymphNodes, LymphNodesReadable, TemporomandibularJoint, TemporomandibularJointReadable } from "../../schemas/externalExamination";
 import { Bite, ConditionOfTheOralMucosa, DentalFormula, HardTissueConditions, KPI, OHIS, bitesReadable, conditionOfTheOralMucosaReadable, hardTissueConditionsReadable, periodontalConditionReadable } from "../../schemas/dental-status.schema";
+import { VisitDiagnosis } from "../../schemas/visit.schema";
 
+type GetDocxParams = {
+    cardId: string
+    visitId: string
+    page: DocxPages
+}
 
 @Injectable()
 export class DocxService extends BaseService {
@@ -30,7 +36,11 @@ export class DocxService extends BaseService {
         super('DocxService')
     }
 
-    public async getDocx(cardId: string, page: DocxPages): Promise<Result<Buffer>> {
+    public async getDocx({
+        cardId,
+        page,
+        visitId
+    }: GetDocxParams): Promise<Result<Buffer>> {
         switch (page) {
             case DocxPages.GENERAL_INFO:
                 return await this.getGeneralInfoDocxPage(cardId)
@@ -38,6 +48,10 @@ export class DocxService extends BaseService {
                 return await this.getPatientExaminationAtInitialPlacementDocxPage(cardId)
             case DocxPages.GENERAL_TREATMENT_PLAN:
                 return await this.getGeneralTreatmentPlanDocxPage(cardId)
+            case DocxPages.DENTAL_STATUS:
+                return await this.getDentalStatusDocxPage(cardId)
+            case DocxPages.VISIT:
+                return await this.getVisitDocxPage(cardId, visitId)
             default:
                 return Result.err(`Sorry docx service for page ${page} not implemented!`)
         }
@@ -183,7 +197,7 @@ export class DocxService extends BaseService {
                 periodontalCondition: getFormattedString(dentalStatus.periodontalCondition, periodontalConditionReadable),
                 conditionOfTheOralMucosa: geConditionOfTheOralMucosaValue(dentalStatus.conditionOfTheOralMucosa),
                 researchData: dentalStatus.researchData || 'периапикальных изменений в области зуба нет',
-                provisionalDiagnosis: dentalStatus.provisionalDiagnosis,
+                provisionalDiagnosis: this.getDiagnosisFormatted(dentalStatus.provisionalDiagnosis),
                 ohis: getOhisValue(dentalStatus.ohis),
                 kpi: getKpiValue(dentalStatus.kpi),
                 dentalFormula: getDentalFormulaData(dentalStatus.dentalFormula)
@@ -223,16 +237,16 @@ export class DocxService extends BaseService {
             }
 
             function getOhisValue(ohis: OHIS): OhisData {
-                const res =  ohis.reduce((res, value, i) => {
-                    res[`ohis1${i + 1}`] = value ? `${value[0]}/${value[1]}`: '-'
+                const res = ohis.reduce((res, value, i) => {
+                    res[`ohis1${i + 1}`] = value ? `${value[0]}/${value[1]}` : '-'
                     return res
                 }) as unknown as OhisData
 
                 return res
             }
 
-            function getKpiValue(kpi: KPI): KpiData  {
-                const res =  kpi.reduce((res, value, i) => {
+            function getKpiValue(kpi: KPI): KpiData {
+                const res = kpi.reduce((res, value, i) => {
                     res[`kpi1${i + 1}`] = (value !== null) ? value.toString() : '-'
                     return res
                 }) as unknown as KpiData
@@ -250,12 +264,70 @@ export class DocxService extends BaseService {
                     })
 
                     return res
-                }, {})  as unknown as DentalFormulaData
+                }, {}) as unknown as DentalFormulaData
             }
 
             return this.docxTemplatesService.fillAndGetDentalStatusPage(data)
         } catch (e) {
             return this.errorLogger.logErrorAndReturnSomethingWentWrongResult(e)
         }
+    }
+
+    public async getVisitDocxPage(cardId: string, visitId: string): Promise<Result<Buffer>> {
+        try {
+
+            const card = await this.cardModel.findById(
+                cardId,
+                {
+                    visits: { $elemMatch: { _id: visitId } },
+                }
+            )
+
+            if (!card) {
+                return Result.err('Карточка не найдена!')
+            }
+
+            if (!card.visits.length || card.visits.length > 1) {
+                return Result.err('Визит не найден!')
+            }
+
+            const visit = card.visits[0]
+
+            const data: GetVisitPatchesData = {
+                date: getDateFormatted(visit.date),
+                complains: visit.complains,
+                localStatus: visit.localStatus,
+                diagnosis: this.getDiagnosisFormatted(visit.diagnosis),
+                treatment: visit.treatment,
+                other: visit.other
+            }
+
+            function getDateFormatted(date: Date): string {
+                return new Date(visit.date).toLocaleString(
+                    "ru",
+                    {
+                        year: 'numeric',
+                        month: 'numeric',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    }
+                )
+            }
+
+            return this.docxTemplatesService.fillAndGetVisitPage(data)
+
+        } catch (e) {
+            return this.errorLogger.logErrorAndReturnSomethingWentWrongResult(e)
+        }
+    }
+
+    private getDiagnosisFormatted(diagnosis: VisitDiagnosis[]): string[] {
+        return diagnosis
+            .map(d => {
+                let res = d.icdCode + ' ' + d.icdName
+                if (d.tooth) res += ' ' + d.tooth
+                return res
+            })
     }
 }
