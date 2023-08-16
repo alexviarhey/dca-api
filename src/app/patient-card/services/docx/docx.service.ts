@@ -11,6 +11,7 @@ import { DocxPages } from "../../dto/docx.dto";
 import { FaceConfiguration, FaceConfigurationReadable, LymphNodes, LymphNodesReadable, TemporomandibularJoint, TemporomandibularJointReadable } from "../../schemas/externalExamination";
 import { Bite, ConditionOfTheOralMucosa, DentalFormula, HardTissueConditions, KPI, OHIS, bitesReadable, conditionOfTheOralMucosaReadable, hardTissueConditionsReadable, periodontalConditionReadable } from "../../schemas/dental-status.schema";
 import { VisitDiagnosis } from "../../schemas/visit.schema";
+import { ICDSchema, ICD_COLLECTION } from "../../../icd/icd.schema";
 
 type GetDocxParams = {
     cardId: string
@@ -29,6 +30,9 @@ export class DocxService extends BaseService {
 
         @InjectModel(PATIENTS)
         private readonly patientModel: Model<IPatientSchema>,
+
+        @InjectModel(ICD_COLLECTION)
+        private readonly icdModel: Model<ICDSchema>,
 
         private readonly docxTemplatesService: DocxTemplatesService
 
@@ -197,7 +201,7 @@ export class DocxService extends BaseService {
                 periodontalCondition: getFormattedString(dentalStatus.periodontalCondition, periodontalConditionReadable),
                 conditionOfTheOralMucosa: geConditionOfTheOralMucosaValue(dentalStatus.conditionOfTheOralMucosa),
                 researchData: dentalStatus.researchData || 'периапикальных изменений в области зуба нет',
-                provisionalDiagnosis: this.getDiagnosisFormatted(dentalStatus.provisionalDiagnosis),
+                provisionalDiagnosis: await this.getDiagnosisFormatted(dentalStatus.provisionalDiagnosis),
                 ohis: getOhisValue(dentalStatus.ohis),
                 kpi: getKpiValue(dentalStatus.kpi),
                 dentalFormula: getDentalFormulaData(dentalStatus.dentalFormula)
@@ -297,7 +301,7 @@ export class DocxService extends BaseService {
                 date: getDateFormatted(visit.date),
                 complains: visit.complains,
                 localStatus: visit.localStatus,
-                diagnosis: this.getDiagnosisFormatted(visit.diagnosis),
+                diagnosis: await this.getDiagnosisFormatted(visit.diagnosis),
                 treatment: visit.treatment,
                 other: visit.other
             }
@@ -322,10 +326,16 @@ export class DocxService extends BaseService {
         }
     }
 
-    private getDiagnosisFormatted(diagnosis: VisitDiagnosis[]): string[] {
+    private async getDiagnosisFormatted(diagnosis: VisitDiagnosis[]): Promise<string[]> {
+
+       const icds = await this.icdModel.find({
+        _id: {$in: diagnosis.map(d => d.icdId)}
+       })
+
         return diagnosis
             .map(d => {
-                let res = d.icdCode + ' ' + d.icdName
+                let icd = icds.find(icd => icd._id === d.icdId)
+                let res = icd.code + ' ' + icd.name
                 if (d.tooth) res += ' ' + d.tooth
                 return res
             })

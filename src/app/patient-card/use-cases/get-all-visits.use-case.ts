@@ -26,7 +26,7 @@ export class GetAllVisitsUseCase extends BaseService {
             }
 
             return Result.ok(
-                card.visits
+                await card.visits
                     .map(this.visitMapper.shortMap)
                     .sort((a, b) => new Date(b.date).getMilliseconds() - new Date(a.date).getMilliseconds())
             )
