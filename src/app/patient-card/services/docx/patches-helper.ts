@@ -77,10 +77,11 @@ export class PatchesHelper {
             })]
         }
 
-        const fioShort: IPatch = {
+
+        const fio: IPatch = {
             type: PatchType.PARAGRAPH,
             children: [new TextRun({
-                text: data.shortFio,
+                text: data.phone,
                 ...this.getBasicTextSettings()
             })]
         }
@@ -92,7 +93,7 @@ export class PatchesHelper {
             gender,
             address,
             phone,
-            fioShort
+            fio
         }
     }
 

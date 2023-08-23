@@ -129,7 +129,7 @@ export class DocxService extends BaseService {
                 },
 
                 externalExamination: {
-                    conditionOfTheSkinRedBorder: externalExamination.conditionOfTheSkinRedBorder || 'без видимых паталогоческих изменений',
+                    conditionOfTheSkinRedBorder: externalExamination.conditionOfTheSkinRedBorder || 'без видимых патологоческих изменений',
                     faceConfiguration: externalExaminationItemToReadable<FaceConfiguration>(externalExamination.faceConfiguration, FaceConfigurationReadable),
                     lymphNodes: externalExaminationItemToReadable<LymphNodes>(externalExamination.lymphNodes, LymphNodesReadable),
                     temporomandibularJoint: externalExaminationItemToReadable<TemporomandibularJoint>(externalExamination.temporomandibularJoint, TemporomandibularJointReadable)
