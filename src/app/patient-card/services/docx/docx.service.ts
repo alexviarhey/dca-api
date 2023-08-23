@@ -279,7 +279,6 @@ export class DocxService extends BaseService {
 
     public async getVisitDocxPage(cardId: string, visitId: string): Promise<Result<Buffer>> {
         try {
-
             const card = await this.cardModel.findById(
                 cardId,
                 {
@@ -291,7 +290,7 @@ export class DocxService extends BaseService {
                 return Result.err('Карточка не найдена!')
             }
 
-            if (!card.visits.length || card.visits.length > 1) {
+            if (!card.visits?.length || card.visits.length > 1) {
                 return Result.err('Визит не найден!')
             }
 
@@ -334,7 +333,7 @@ export class DocxService extends BaseService {
 
         return diagnosis
             .map(d => {
-                let icd = icds.find(icd => icd._id === d.icdId)
+                let icd = icds.find(icd => icd._id.toString() === d.icdId)
                 let res = icd.code + ' ' + icd.name
                 if (d.tooth) res += ' ' + d.tooth
                 return res
