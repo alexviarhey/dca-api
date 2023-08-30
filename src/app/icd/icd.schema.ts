@@ -1,6 +1,5 @@
 import { Schema } from "mongoose";
 
-
 export interface ICDSchema {
     _id?: string
     code: string

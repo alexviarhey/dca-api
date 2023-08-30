@@ -244,7 +244,7 @@ export class DocxService extends BaseService {
                 const res = ohis.reduce((res, value, i) => {
                     res[`ohis1${i + 1}`] = value ? `${value[0]}/${value[1]}` : '-'
                     return res
-                }) as unknown as OhisData
+                }, {}) as unknown as OhisData
 
                 return res
             }
@@ -253,26 +253,32 @@ export class DocxService extends BaseService {
                 const res = kpi.reduce((res, value, i) => {
                     res[`kpi1${i + 1}`] = (value !== null) ? value.toString() : '-'
                     return res
-                }) as unknown as KpiData
+                }, {}) as unknown as KpiData
 
                 return res
             }
 
             function getDentalFormulaData(dentalFormula: DentalFormula): DentalFormulaData {
-                return Object.keys(dentalFormula).reduce((res, key) => {
-                    const k = (key === 'top') ? 'top' : 'bot'
-                    res[k] = {}
+                const res = {
+                    top: {},
+                    bottom: {}
+                }
 
-                    dentalFormula[key].forEach((v, i) => {
-                        res[k][`${k}${i + 1}`] = v ? v : ''
-                    })
+                dentalFormula.top.forEach((v, i) => {
+                    res.top[`top${i + 1}`] = v ? v : ''
+                })
 
-                    return res
-                }, {}) as unknown as DentalFormulaData
+                dentalFormula.bottom.forEach((v, i) => {
+                    res.bottom[`bottom${i + 1}`] = v ? v : ''
+                })
+
+                return res as unknown as DentalFormulaData
             }
+
 
             return this.docxTemplatesService.fillAndGetDentalStatusPage(data)
         } catch (e) {
+            console.log(e)
             return this.errorLogger.logErrorAndReturnSomethingWentWrongResult(e)
         }
     }
@@ -327,9 +333,9 @@ export class DocxService extends BaseService {
 
     private async getDiagnosisFormatted(diagnosis: VisitDiagnosis[]): Promise<string[]> {
 
-       const icds = await this.icdModel.find({
-        _id: {$in: diagnosis.map(d => d.icdId)}
-       })
+        const icds = await this.icdModel.find({
+            _id: { $in: diagnosis.map(d => d.icdId) }
+        })
 
         return diagnosis
             .map(d => {
