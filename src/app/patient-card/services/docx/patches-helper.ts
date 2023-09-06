@@ -81,7 +81,7 @@ export class PatchesHelper {
         const fio: IPatch = {
             type: PatchType.PARAGRAPH,
             children: [new TextRun({
-                text: data.phone,
+                text: data.shortFio,
                 ...this.getBasicTextSettings()
             })]
         }

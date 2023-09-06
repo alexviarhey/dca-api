@@ -164,6 +164,9 @@ export class DocxTemplatesService {
 
     public async fillAndGetDentalStatusPage(data: GetDentalStatusPatchesData): Promise<Result<Buffer>> {
         try {
+
+            console.log("DATA", data)
+
             const content = fs.readFileSync(process.cwd() + '/templates/dentalStatus.docx')
 
             const doc = await patchDocument(content, {

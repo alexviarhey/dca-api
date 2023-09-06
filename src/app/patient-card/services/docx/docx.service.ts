@@ -12,6 +12,7 @@ import { FaceConfiguration, FaceConfigurationReadable, LymphNodes, LymphNodesRea
 import { Bite, ConditionOfTheOralMucosa, DentalFormula, HardTissueConditions, KPI, OHIS, bitesReadable, conditionOfTheOralMucosaReadable, hardTissueConditionsReadable, periodontalConditionReadable } from "../../schemas/dental-status.schema";
 import { VisitDiagnosis } from "../../schemas/visit.schema";
 import { ICDSchema, ICD_COLLECTION } from "../../../icd/icd.schema";
+import { read } from "fs";
 
 type GetDocxParams = {
     cardId: string
@@ -198,7 +199,8 @@ export class DocxService extends BaseService {
             const data: GetDentalStatusPatchesData = {
                 bite: getBiteValue(dentalStatus.bite),
                 hardTissueConditions: getFormattedString(dentalStatus.hardTissueConditions, hardTissueConditionsReadable),
-                periodontalCondition: getFormattedString(dentalStatus.periodontalCondition, periodontalConditionReadable),
+                periodontalCondition: '',
+                //periodontalCondition: getFormattedString(dentalStatus.periodontalCondition, periodontalConditionReadable),
                 conditionOfTheOralMucosa: geConditionOfTheOralMucosaValue(dentalStatus.conditionOfTheOralMucosa),
                 researchData: dentalStatus.researchData || 'периапикальных изменений в области зуба нет',
                 provisionalDiagnosis: await this.getDiagnosisFormatted(dentalStatus.provisionalDiagnosis),
@@ -216,6 +218,8 @@ export class DocxService extends BaseService {
                     .keys(obj)
                     .filter(k => !!obj[k])
                     .map(k => readable[k])
+
+                console.log(res)
 
                 return res.length
                     ? res.join(', ')
