@@ -53,9 +53,9 @@ export class PatchesHelper {
         const gender: IPatch = {
             type: PatchType.PARAGRAPH,
             children: [
-                new TextRun({ text: 'M', size, bold, strike: isMale }),
+                new TextRun({ text: 'M', size, bold, strike: !isMale }),
                 new TextRun({ text: '/', size, bold: false }),
-                new TextRun({ text: 'Ж', size, bold, strike: !isMale })
+                new TextRun({ text: 'Ж', size, bold, strike: isMale })
             ]
         }
 
