@@ -1,11 +1,11 @@
-import { AddressDto, addressValidationSchema, CreateAddressDto } from "../../common/dto/adress.dtos";
+import { AddressDto, addressValidationSchema, CreateAddressDto } from "../../patient-card/common/dto/adress.dtos";
 import {
     ContactPointDto,
     contactPointValidationSchema,
     CreateContactPointDto
-} from "../../common/dto/contact-point.dtos";
+} from "../../patient-card/common/dto/contact-point.dtos";
 import { ContactDto, contactValidationSchema, CreateContactDto } from "./contact.dtos";
-import { CreateHumanNameDto, HumanNameDto, humanNameValidationSchema } from "../../common/dto/human-name.dtos";
+import { CreateHumanNameDto, HumanNameDto, humanNameValidationSchema } from "../../patient-card/common/dto/human-name.dtos";
 import { GenderValues } from "../types/gender";
 import { ApiProperty } from "@nestjs/swagger";
 

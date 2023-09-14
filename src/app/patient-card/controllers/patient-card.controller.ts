@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Post, Put, UseInterceptors } from "@nestjs/common";
-import { AjvBody, AjvQuery } from "../../common/decorators/ajv.decorators";
+import { AjvBody, AjvQuery } from "../common/decorators/ajv.decorators";
 import { commonDiseasesAjvSchema, CommonDiseasesDto, UpdateCommonDiseasesDto } from "../dto/common-diseases.dto";
 import { externalExaminationAjvSchema, ExternalExaminationDto } from "../dto/external-examination.dto";
 import { generalTreatmentAjvSchema, GeneralTreatmentPlanDto } from "../dto/general-treatment-plan.dto";
@@ -15,7 +15,7 @@ import { GetAllVisitsUseCase } from "../use-cases/get-all-visits.use-case";
 import { UpdateVisitUseCase } from "../use-cases/update-visit.use-case";
 import { GetDocxQuery, getDocxQuerySchema } from "../dto/docx.dto";
 import { DocxService } from "../services/docx/docx.service";
-import { CustomResponseInterceptor } from "../../common/interceptors/custom-response.interceptor";
+import { CustomResponseInterceptor } from "../common/interceptors/custom-response.interceptor";
 import { Result } from "../../../core/result";
 
 

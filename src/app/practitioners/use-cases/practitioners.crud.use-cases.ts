@@ -8,7 +8,7 @@ import { PractitionersMapper } from "../mappers/practitioner.mapper";
 import { GetPatientsFilters } from "../../patients/dto/get-patients-filters";
 import { Result } from "../../../core/result";
 import { Paginated, Pagination } from "../../../core/paginated";
-import { ContactPointSystem } from "../../common/schemas/contact-point.schema";
+import { ContactPointSystem } from "../../patient-card/common/schemas/contact-point.schema";
 
 @Injectable()
 export class PractitionersCrudUseCases extends CrudUseCases<PractitionerSchema,

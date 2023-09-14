@@ -6,7 +6,7 @@ import { BaseService } from "../../../../core/base.service";
 import { Result } from "../../../../core/result";
 import { IPatientSchema, PATIENTS } from "../../../patients/schemas/patient.schema";
 import { DentalFormulaData, DocxTemplatesService, GetDentalStatusPatchesData, GetGeneralTreatmentTypePatchesData, GetVisitPatchesData, KpiData, OhisData } from "./docx-templates.service";
-import { ContactPointSystem } from "../../../common/schemas/contact-point.schema";
+import { ContactPointSystem } from "../../common/schemas/contact-point.schema";
 import { DocxPages } from "../../dto/docx.dto";
 import { FaceConfiguration, FaceConfigurationReadable, LymphNodes, LymphNodesReadable, TemporomandibularJoint, TemporomandibularJointReadable } from "../../schemas/externalExamination";
 import { Bite, ConditionOfTheOralMucosa, DentalFormula, HardTissueConditions, KPI, OHIS, bitesReadable, conditionOfTheOralMucosaReadable, hardTissueConditionsReadable, periodontalConditionReadable } from "../../schemas/dental-status.schema";
@@ -163,16 +163,16 @@ export class DocxService extends BaseService {
                 motivationByRiskFactorsAndHygieneEducation: card.generalTreatmentPlan.preventiveActions.motivationByRiskFactorsAndHygieneEducation,
                 professionalHygiene: card.generalTreatmentPlan.preventiveActions.professionalHygiene,
                 preventiveActionsOther: card.generalTreatmentPlan.preventiveActions.other,
-                replacementOfFillings: card.generalTreatmentPlan.therapeuticTreatment.replacementOfFillings,
-                treatmentOfCariesAndNonCariousLesions: card.generalTreatmentPlan.therapeuticTreatment.treatmentOfCariesAndNonCariousLesions,
-                endodonticTreatment: card.generalTreatmentPlan.therapeuticTreatment.endodonticTreatment,
-                periodontalTreatment: card.generalTreatmentPlan.therapeuticTreatment.periodontalTreatment,
-                treatmentOfDiseasesOfTheOralMucosa: card.generalTreatmentPlan.therapeuticTreatment.treatmentOfDiseasesOfTheOralMucosa,
-                therapeuticTreatmentOther: card.generalTreatmentPlan.therapeuticTreatment.other,
-                extractionOfTeethToots: card.generalTreatmentPlan.surgicalTreatment.extractionOfTeethToots,
-                outpatientSurgicalInterventionsOnSoftTissues: card.generalTreatmentPlan.surgicalTreatment.outpatientSurgicalInterventionsOnSoftTissues,
-                outpatientSurgicalInterventionsOnTheBonesOfTheFacialSkeleton: card.generalTreatmentPlan.surgicalTreatment.outpatientSurgicalInterventionsOnTheBonesOfTheFacialSkeleton,
-                surgicalTreatmentOther: card.generalTreatmentPlan.surgicalTreatment.other,
+                replacementOfFillings: card.generalTreatmentPlan.therapeuticTreatment?.replacementOfFillings,
+                treatmentOfCariesAndNonCariousLesions: card.generalTreatmentPlan.therapeuticTreatment?.treatmentOfCariesAndNonCariousLesions,
+                endodonticTreatment: card.generalTreatmentPlan.therapeuticTreatment?.endodonticTreatment,
+                periodontalTreatment: card.generalTreatmentPlan.therapeuticTreatment?.periodontalTreatment,
+                treatmentOfDiseasesOfTheOralMucosa: card.generalTreatmentPlan.therapeuticTreatment?.treatmentOfDiseasesOfTheOralMucosa,
+                therapeuticTreatmentOther: card.generalTreatmentPlan.therapeuticTreatment?.other,
+                extractionOfTeethToots: card.generalTreatmentPlan.surgicalTreatment?.extractionOfTeethToots,
+                outpatientSurgicalInterventionsOnSoftTissues: card.generalTreatmentPlan.surgicalTreatment?.outpatientSurgicalInterventionsOnSoftTissues,
+                outpatientSurgicalInterventionsOnTheBonesOfTheFacialSkeleton: card.generalTreatmentPlan.surgicalTreatment?.outpatientSurgicalInterventionsOnTheBonesOfTheFacialSkeleton,
+                surgicalTreatmentOther: card.generalTreatmentPlan.surgicalTreatment?.other,
                 orthopedicTreatment: card.generalTreatmentPlan.orthopedicTreatment,
                 orthodonticTreatment: card.generalTreatmentPlan.orthodonticTreatment,
                 additionalDiagnosticMeasures: card.generalTreatmentPlan.additionalDiagnosticMeasures,
@@ -182,6 +182,7 @@ export class DocxService extends BaseService {
 
             return this.docxTemplatesService.fillAndGetGeneralTreatmentPlanPage(data)
         } catch (e) {
+            console.log(e)
             return this.errorLogger.logErrorAndReturnSomethingWentWrongResult(e)
         }
     }
@@ -321,9 +322,7 @@ export class DocxService extends BaseService {
                     {
                         year: 'numeric',
                         month: 'numeric',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
+                        day: 'numeric'
                     }
                 )
             }

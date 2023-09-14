@@ -1,4 +1,4 @@
-import { Mapper } from "../../../core/mapper";
+import { Mapper } from "../../../../core/mapper";
 import { IHumanNameSchema } from "../schemas/human-name.schema";
 import { CreateHumanNameDto, HumanNameDto } from "../dto/human-name.dtos";
 

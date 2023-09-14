@@ -1,7 +1,7 @@
 import { Schema } from "mongoose"
-import { addressSchema, IAddressSchema } from "../../common/schemas/address.schema"
-import { contactPointSchema, IContactPointSchema } from "../../common/schemas/contact-point.schema"
-import { humanNameSchema, IHumanNameSchema } from "../../common/schemas/human-name.schema"
+import { addressSchema, IAddressSchema } from "../../patient-card/common/schemas/address.schema"
+import { contactPointSchema, IContactPointSchema } from "../../patient-card/common/schemas/contact-point.schema"
+import { humanNameSchema, IHumanNameSchema } from "../../patient-card/common/schemas/human-name.schema"
 import { GenderValues } from "../types/gender"
 import { contactSchema, IContactSchema } from "./contact.schema"
 

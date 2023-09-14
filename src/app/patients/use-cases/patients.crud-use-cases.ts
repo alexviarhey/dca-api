@@ -5,12 +5,12 @@ import { FilterQuery, Model, SaveOptions } from "mongoose";
 import { patientMapper } from "../mappers/patient.mapper";
 import { CreatePatientDto, PatientDto } from "../dto/patient.dtos";
 import { Result } from "../../../core/result";
-import { ContactPointSystem } from "../../common/schemas/contact-point.schema";
+import { ContactPointSystem } from "../../patient-card/common/schemas/contact-point.schema";
 import { Injectable } from "@nestjs/common";
 import { Paginated, Pagination } from "../../../core/paginated";
 import { GetPatientsFilters } from "../dto/get-patients-filters";
 import { CreateCardUseCase } from "../../patient-card/use-cases/create-card.use-case";
-import { ContactPointDto, ContactPointHelper } from "../../common/dto/contact-point.dtos";
+import { ContactPointDto, ContactPointHelper } from "../../patient-card/common/dto/contact-point.dtos";
 
 @Injectable()
 export class PatientsCrudUseCases extends CrudUseCases<IPatientSchema,

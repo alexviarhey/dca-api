@@ -2,9 +2,9 @@ import { Mapper } from "../../../core/mapper";
 import { IPatientSchema } from "../schemas/patient.schema";
 import { CreatePatientDto, PatientDto } from "../dto/patient.dtos";
 import { ContactDto, CreateContactDto } from "../dto/contact.dtos";
-import { humanNameMapper } from "../../common/mappers/human-name.mapper";
-import { addressMapper } from "../../common/mappers/address.mapper";
-import { contactPointMapper } from "../../common/mappers/contact-point.mapper";
+import { humanNameMapper } from "../../patient-card/common/mappers/human-name.mapper";
+import { addressMapper } from "../../patient-card/common/mappers/address.mapper";
+import { contactPointMapper } from "../../patient-card/common/mappers/contact-point.mapper";
 import { IContactSchema } from "../schemas/contact.schema";
 
 class ContactMapper extends Mapper<IContactSchema, ContactDto, CreateContactDto> {

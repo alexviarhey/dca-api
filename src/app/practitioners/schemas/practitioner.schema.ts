@@ -1,6 +1,6 @@
 import { Schema } from "mongoose"
-import { contactPointSchema, IContactPointSchema } from "../../common/schemas/contact-point.schema"
-import { humanNameSchema, IHumanNameSchema } from "../../common/schemas/human-name.schema"
+import { contactPointSchema, IContactPointSchema } from "../../patient-card/common/schemas/contact-point.schema"
+import { humanNameSchema, IHumanNameSchema } from "../../patient-card/common/schemas/human-name.schema"
 import { PractitionerCode, PractitionerRole } from "./practitioner-role.schema"
 import { GenderValues } from "../../patients/types/gender"
 

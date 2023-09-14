@@ -1,4 +1,4 @@
-import { Mapper } from "../../../core/mapper";
+import { Mapper } from "../../../../core/mapper";
 import { IContactPointSchema } from "../schemas/contact-point.schema";
 import { ContactPointDto, CreateContactPointDto } from "../dto/contact-point.dtos";
 

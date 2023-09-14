@@ -8,11 +8,11 @@ import {
 } from "../dto/patient.dtos";
 import { CustomResponseType } from "../../../core/custom-response";
 import { PatientsCrudUseCases } from "../use-cases/patients.crud-use-cases";
-import { AjvBody, AjvQuery } from "../../common/decorators/ajv.decorators";
+import { AjvBody, AjvQuery } from "../../patient-card/common/decorators/ajv.decorators";
 import { GetPatientsFilters, getPatientsFiltersSchema } from "../dto/get-patients-filters";
 import { Paginated } from "../../../core/paginated";
 import { GetPatientCardsUserCase } from "../use-cases/get-patient-cards.use-case";
-import { CustomResponseInterceptor } from "../../common/interceptors/custom-response.interceptor";
+import { CustomResponseInterceptor } from "../../patient-card/common/interceptors/custom-response.interceptor";
 
 class CreatePatientResponse extends CustomResponseType<PatientDto> {
     @ApiProperty({ type: PatientDto })

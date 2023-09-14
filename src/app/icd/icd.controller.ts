@@ -3,10 +3,10 @@ import { FilterQuery } from "mongoose";
 import { ICDCrudUseCase } from "./icd.crud-use-case";
 import { ICDSchema } from "./icd.schema";
 import { GetICDFilters, getICDFiltersSchema, ICDDto} from "./icd.dto";
-import { AjvQuery } from "../common/decorators/ajv.decorators";
+import { AjvQuery } from "../patient-card/common/decorators/ajv.decorators";
 import { CustomResponseType } from "../../core/custom-response";
 import { ApiOkResponse, ApiProperty, ApiQuery, ApiTags } from "@nestjs/swagger";
-import { CustomResponseInterceptor } from "../common/interceptors/custom-response.interceptor";
+import { CustomResponseInterceptor } from "../patient-card/common/interceptors/custom-response.interceptor";
 
 
 class GetICDResponseType extends CustomResponseType<ICDDto[]> {

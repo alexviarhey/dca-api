@@ -24,7 +24,7 @@ import {
     updatePriceItemSchema, UpdateServiceSubgroupDto, updateSubgroupSchema
 } from "../dto/price-list.dtos";
 import { GetPriceListUseCase } from "../use-cases/get-price-list.use-case";
-import { AjvBody } from "../../../common/decorators/ajv.decorators";
+import { AjvBody } from "../../../patient-card/common/decorators/ajv.decorators";
 import { ApiBody, ApiOkResponse, ApiTags } from "@nestjs/swagger";
 import {
     CreateGroupResponse,
@@ -32,8 +32,8 @@ import {
     CreateSubgroupResponse, GetGroupsResponse, GetPriceItemsResponse, GetSubgroupsResponse,
     PriceListResponse
 } from "./types-for-swagger";
-import { IdDto } from "../../../common/dto/id.dto";
-import { CustomResponseInterceptor } from "../../../common/interceptors/custom-response.interceptor";
+import { IdDto } from "../../../patient-card/common/dto/id.dto";
+import { CustomResponseInterceptor } from "../../../patient-card/common/interceptors/custom-response.interceptor";
 
 
 @ApiTags("Price List")
