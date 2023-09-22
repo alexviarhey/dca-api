@@ -44,7 +44,7 @@ export class DocxService extends BaseService {
 
         switch (page) {
             case DocxPages.GENERAL_INFO:
-                docxPage = this.generaTreatmentPage
+                docxPage = this.generalInfoPage
                 break;
             case DocxPages.PATIENT_EXAMINATION_AT_INITIAL_PLACEMENT:
                 docxPage = this.generalExaminationPage

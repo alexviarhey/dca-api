@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import { IPatch, PatchType, UnderlineType, patchDocument } from "docx";
+import { IPatch, PatchType, TextRun, UnderlineType, patchDocument } from "docx";
 import { Model } from 'mongoose';
 import { Result } from '../../../../../core/result';
 import { VisitDiagnosis } from '../../../schemas/visit.schema';
@@ -79,7 +79,7 @@ export abstract class DocxPage {
                 italics: !!c.italics,
                 color: '#000000',
                 font: 'Times New Roman',
-                size: '16pt',
+                size: '16pt' as any,
                 underline: c.underline ? { color: '#000000', type: UnderlineType.SINGLE } : undefined
             }
 
@@ -87,7 +87,7 @@ export abstract class DocxPage {
                 iRunOptions.size = c.size
             }
 
-            res.children.push(iRunOptions)
+            res.children.push(new TextRun(iRunOptions))
 
             return res
         }, {

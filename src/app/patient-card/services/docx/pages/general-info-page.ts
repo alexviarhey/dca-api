@@ -69,7 +69,6 @@ export class GeneralInfoPage extends DocxPage {
         }
 
 
-
         return Result.ok({
             createdAt,
             fullName,

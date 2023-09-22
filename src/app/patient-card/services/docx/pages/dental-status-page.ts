@@ -52,6 +52,8 @@ export class DentalStatusPage extends DocxPage {
                     getParagraphPatchArgs = { text: data[key], size }
                 }
 
+                res[key] = this.getParagraphPatch(getParagraphPatchArgs)
+
                 return res
             }, {})
 
@@ -79,8 +81,6 @@ export class DentalStatusPage extends DocxPage {
     }
 
     private getFormattedString(obj, readable): string {
-
-        console.log("KEYS", Object.keys(obj))
         const res = Object
             .keys(obj)
             .filter(k => !!obj[k])
