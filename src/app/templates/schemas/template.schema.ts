@@ -4,7 +4,8 @@ export enum TemplateType {
     TREATMENT = 1,
     LOCAL_STATUS,
     RESEARCH,
-    COMPLAINS
+    COMPLAINS,
+    RECOMMENDATIONS
 }
 
 export interface ITemplateSchema {
