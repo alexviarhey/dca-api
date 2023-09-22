@@ -35,10 +35,10 @@ export abstract class DocxPage {
             if (!getPatchesRes.isSuccess) return getPatchesRes.mapErr()
 
             return Result.ok(
-                // await patchDocument(
-                //     this.getContentOfFile(),
-                //     { patches: getPatchesRes.data }
-                // )
+                await patchDocument(
+                    this.getContentOfFile(),
+                    { patches: getPatchesRes.data }
+                )
             )
 
         } catch (e) {

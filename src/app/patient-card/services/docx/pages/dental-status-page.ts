@@ -30,8 +30,6 @@ export class DentalStatusPage extends DocxPage {
 
         const data = await this.getData(card)
 
-        console.log(data)
-
         const patches = Object
             .keys(data)
             .reduce<{ [key: string]: IPatch }>((res, key) => {

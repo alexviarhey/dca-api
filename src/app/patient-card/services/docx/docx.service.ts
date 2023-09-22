@@ -41,27 +41,26 @@ export class DocxService extends BaseService {
     }: GetDocxParams): Promise<Result<Buffer>> {
 
         let docxPage: DocxPage
-        docxPage = this.dentalStatusPage
 
-        // switch (page) {
-        //     case DocxPages.GENERAL_INFO:
-        //         docxPage = this.generalInfoPage
-        //         break;
-        //     case DocxPages.PATIENT_EXAMINATION_AT_INITIAL_PLACEMENT:
-        //         docxPage = this.generalExaminationPage
-        //         break;
-        //     case DocxPages.GENERAL_TREATMENT_PLAN:
-        //         docxPage = this.generaTreatmentPage
-        //         break;
-        //     case DocxPages.DENTAL_STATUS:
-        //         docxPage = this.dentalStatusPage
-        //         break
-        //     case DocxPages.VISIT:
-        //         docxPage = this.visitPage
-        //         break
-        //     default:
-        //         return Result.err(`Sorry docx service for page ${page} not implemented!`)
-        // }
+        switch (page) {
+            case DocxPages.GENERAL_INFO:
+                docxPage = this.generalInfoPage
+                break;
+            case DocxPages.PATIENT_EXAMINATION_AT_INITIAL_PLACEMENT:
+                docxPage = this.generalExaminationPage
+                break;
+            case DocxPages.GENERAL_TREATMENT_PLAN:
+                docxPage = this.generaTreatmentPage
+                break;
+            case DocxPages.DENTAL_STATUS:
+                docxPage = this.dentalStatusPage
+                break
+            case DocxPages.VISIT:
+                docxPage = this.visitPage
+                break
+            default:
+                return Result.err(`Sorry docx service for page ${page} not implemented!`)
+        }
 
         return await docxPage.fillPlaceholdersInFile({ cardId, visitId })
     }
