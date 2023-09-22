@@ -18,9 +18,12 @@ import { UpdateVisitUseCase } from "./use-cases/update-visit.use-case";
 import { ICD_COLLECTION, icdSchema } from "../icd/icd.schema";
 import { GetAllVisitsUseCase } from "./use-cases/get-all-visits.use-case";
 import { DocxService } from "./services/docx/docx.service";
-import { DocxTemplatesService } from "./services/docx/docx-templates.service";
-import { PatchesHelper } from "./services/docx/patches-helper";
 import { PATIENTS, patientSchema } from "../patients/schemas/patient.schema";
+import { DentalStatusPage } from "./services/docx/pages/dental-status-page";
+import { GeneralExaminationPage } from "./services/docx/pages/general-examination.page";
+import { GeneralInfoPage } from "./services/docx/pages/general-info-page";
+import { GeneralTreatmentPage } from "./services/docx/pages/general-treatment-page";
+import { VisitPage } from "./services/docx/pages/visit.page";
 
 
 @Module({
@@ -46,8 +49,11 @@ import { PATIENTS, patientSchema } from "../patients/schemas/patient.schema";
         GetAllVisitsUseCase,
         UpdateVisitUseCase,
         VisitMapper,
-        PatchesHelper,
-        DocxTemplatesService,
+        DentalStatusPage,
+        GeneralExaminationPage,
+        GeneralInfoPage,
+        GeneralTreatmentPage,
+        VisitPage,
         DocxService
     ],
     controllers: [
