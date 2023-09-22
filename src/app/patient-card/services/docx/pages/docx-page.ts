@@ -48,7 +48,7 @@ export abstract class DocxPage {
     }
 
     private getContentOfFile(): Buffer {
-        return fs.readFileSync(process.cwd() + `/templates/fileName`)
+        return fs.readFileSync(process.cwd() + `/templates/${this.fileName}`)
     }
 
     protected async getDiagnosisFormatted(diagnosis: VisitDiagnosis[], model: Model<ICDSchema>): Promise<string[]> {
