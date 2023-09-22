@@ -1,4 +1,3 @@
-import { ApiProperty } from "@nestjs/swagger";
 
 const addressItemValidationRules = {
     type: "string",
@@ -13,7 +12,7 @@ export const addressValidationSchema = {
     properties: {
         country: addressItemValidationRules,
         city: addressItemValidationRules,
-        street:addressItemValidationRules,
+        street: addressItemValidationRules,
         house: addressItemValidationRules,
         apartment: addressItemValidationRules
     },
@@ -21,40 +20,19 @@ export const addressValidationSchema = {
 
 }
 
-export class CreateAddressDto {
-    @ApiProperty()
+export type CreateAddressDto = {
     country: string
-
-    @ApiProperty()
     city: string
-
-    @ApiProperty()
     street: string
-
-    @ApiProperty()
     house: string
-
-    @ApiProperty({required: false})
     apartment?: string
 }
 
-
-export class AddressDto {
-    @ApiProperty()
+export type AddressDto = {
     text: string
-
-    @ApiProperty()
     country: string
-
-    @ApiProperty()
     city: string
-
-    @ApiProperty()
     street: string
-
-    @ApiProperty()
     house: string
-
-    @ApiProperty()
     apartment: string
 }

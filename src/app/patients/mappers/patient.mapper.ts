@@ -42,6 +42,7 @@ class PatientMapper extends Mapper<IPatientSchema, PatientDto, CreatePatientDto>
             address: await addressMapper.mapArray(model.address),
             telecom: await contactPointMapper.mapArray(model.telecom),
             contact: await contactMapper.mapArray(model.contact),
+            passportData: model.passportData,
             createdAt: model.createdAt,
             updatedAt: model.updatedAt
         };
@@ -56,7 +57,8 @@ class PatientMapper extends Mapper<IPatientSchema, PatientDto, CreatePatientDto>
             name: await humanNameMapper.mapToSchema(dto.name),
             address: await addressMapper.mapToSchemaArray(dto.address),
             telecom: await contactPointMapper.mapToSchemaArray(dto.telecom),
-            contact: dto.contact?.length ? await contactMapper.mapToSchemaArray(dto.contact) : []
+            contact: dto.contact?.length ? await contactMapper.mapToSchemaArray(dto.contact) : [],
+            passportData: dto.passportData ?? null
         };
     }
 }
