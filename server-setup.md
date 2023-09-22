@@ -14,14 +14,22 @@
     **ssh <username>@<ip>**
 
 6. ## Deactivating root login
-    a. ### open ssh config
-        **sudo nano /etc/ssh/sshd_config**
+
+    a. ### open ssh config:
+
+        **sudo nano /etc/ssh/sshd_config**.
+
     b. ### edit file:
+
         *PermitRootLogin     no*
         *PasswordAuthentication no*
-    c. ### save changes
+
+    c. ### save changes:
+
         *CTRL+X, Y, ENTER*
-    d. ### restart ssh
+
+    d. ### restart ssh:
+
         **sudo systemctl restart sshd**
 7. ## Basic firewall setup
     a. ### check packages list
