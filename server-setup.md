@@ -1,19 +1,24 @@
-1. ## Connect to server
+1. ## Connect to server:
+
     **ssh root@<ip>**
 
-2. ## Create new user
+2. ## Create new user:
+
     **adduser <username>**
 
-3. ## Giving a user administrative privileges
+3. ## Giving a user administrative privileges:
+
     **usermod -aG sudo <username>**
 
-4. ## Copy ssh on remote server
+4. ## Copy ssh on remote server:
+
     **8ssh-copy-id <username>@<ip>**
 
-5. ## Testing login with new user
+5. ## Testing login with new user:
+
     **ssh <username>@<ip>**
 
-6. ## Deactivating root login
+6. ## Deactivating root login:
 
     a. ### open ssh config:
 
