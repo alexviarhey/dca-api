@@ -35,10 +35,10 @@ export abstract class DocxPage {
             if (!getPatchesRes.isSuccess) return getPatchesRes.mapErr()
 
             return Result.ok(
-                await patchDocument(
-                    this.getContentOfFile(),
-                    { patches: getPatchesRes.data }
-                )
+                // await patchDocument(
+                //     this.getContentOfFile(),
+                //     { patches: getPatchesRes.data }
+                // )
             )
 
         } catch (e) {
@@ -51,8 +51,7 @@ export abstract class DocxPage {
         return fs.readFileSync(process.cwd() + `/templates/${this.fileName}`)
     }
 
-    protected async getDiagnosisFormatted(diagnosis: VisitDiagnosis[], model: Model<ICDSchema>): Promise<string[]> {
-
+    protected async getDiagnosisFormatted(diagnosis: VisitDiagnosis[], model: Model<ICDSchema>): Promise<string> {
         const icds = await model.find({
             _id: { $in: diagnosis.map(d => d.icdId) }
         })
@@ -64,6 +63,7 @@ export abstract class DocxPage {
                 if (d.tooth) res += ' ' + d.tooth
                 return res
             })
+            .join('; ')
     }
 
     protected getParagraphPatch(data: GetParagraphPatchOptions[] | GetParagraphPatchOptions): IPatch {

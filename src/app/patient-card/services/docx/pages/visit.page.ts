@@ -50,17 +50,7 @@ export class VisitPage extends DocxPage {
         const patches = Object
             .keys(data)
             .reduce((res, key) => {
-
-                let getParagraphPatchArgs;
-
-                if (key === 'diagnosis') {
-                    getParagraphPatchArgs = data.diagnosis.map(d => ({ text: d }))
-                } else {
-                    getParagraphPatchArgs = { text: data[key] }
-                }
-
-                res[key] = this.getParagraphPatch(getParagraphPatchArgs)
-
+                res[key] = this.getParagraphPatch({text: data[key]})
                 return res
             }, {})
 

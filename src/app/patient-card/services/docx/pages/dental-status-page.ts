@@ -30,34 +30,45 @@ export class DentalStatusPage extends DocxPage {
 
         const data = await this.getData(card)
 
+        console.log(data)
+
         const patches = Object
             .keys(data)
             .reduce<{ [key: string]: IPatch }>((res, key) => {
 
-                let size: string;
+                let size;
 
                 if (key in ['ohis', 'kpi']) {
+                    Object.keys(data[key]).forEach((k => {
+                        res[k] = this.getParagraphPatch({ text: data[key][k], size: '11pt' })
+                    }))
+
                     size = '11pt'
+
                 } else if (key === 'dentalFormula') {
                     size = '10pt'
-                } else {
-                    size = '16pt'
                 }
 
-                let getParagraphPatchArgs;
-
-                if (key === 'provisionalDiagnosis') {
-                    getParagraphPatchArgs = data.provisionalDiagnosis.map(d => ({ text: d, size }))
+                if(size) {
+                    Object.keys(data[key]).forEach((k => {
+                        res[k] = this.getParagraphPatch({ text: data[key][k], size })
+                    }))
                 } else {
-                    getParagraphPatchArgs = { text: data[key], size }
+                    res[key] = this.getParagraphPatch({ text: data[key], size: '16pt' })
                 }
-
-                res[key] = this.getParagraphPatch(getParagraphPatchArgs)
 
                 return res
             }, {})
 
+
+
         return Result.ok(patches)
+    }
+
+    private handleOhisKpiAndDentalStatusKeys(size: string, key: string, value: string, res) {
+        Object.keys(key).forEach((k => {
+            res[k] = this.getParagraphPatch({ text: value, size: '10pt' })
+        }))
     }
 
     private async getData(card: IPatientCardSchema) {
@@ -126,17 +137,14 @@ export class DentalStatusPage extends DocxPage {
     }
 
     private getDentalFormulaData(dentalFormula: DentalFormula) {
-        const res = {
-            top: {},
-            bottom: {}
-        }
+        const res = {}
 
         dentalFormula.top.forEach((v, i) => {
-            res.top[`top${i + 1}`] = v ? v : ''
+            res[`top${i + 1}`] = v ? v : ''
         })
 
         dentalFormula.bottom.forEach((v, i) => {
-            res.bottom[`bottom${i + 1}`] = v ? v : ''
+            res[`bottom${i + 1}`] = v ? v : ''
         })
 
         return res
