@@ -36,7 +36,7 @@ export class DentalStatusPage extends DocxPage {
 
                 let size;
 
-                if (key in ['ohis', 'kpi']) {
+                if (['ohis', 'kpi'].includes(key)) {
                     Object.keys(data[key]).forEach((k => {
                         res[k] = this.getParagraphPatch({ text: data[key][k], size: '11pt' })
                     }))
@@ -47,7 +47,7 @@ export class DentalStatusPage extends DocxPage {
                     size = '10pt'
                 }
 
-                if(size) {
+                if (size) {
                     Object.keys(data[key]).forEach((k => {
                         res[k] = this.getParagraphPatch({ text: data[key][k], size })
                     }))
@@ -57,8 +57,6 @@ export class DentalStatusPage extends DocxPage {
 
                 return res
             }, {})
-
-
 
         return Result.ok(patches)
     }
@@ -142,7 +140,7 @@ export class DentalStatusPage extends DocxPage {
         })
 
         dentalFormula.bottom.forEach((v, i) => {
-            res[`bottom${i + 1}`] = v ? v : ''
+            res[`bot${i + 1}`] = v ? v : ''
         })
 
         return res
