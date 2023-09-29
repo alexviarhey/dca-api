@@ -1,6 +1,5 @@
 import { FilterQuery, Schema } from "mongoose";
 import { ContactPointSystem, ContactPointUse } from "../schemas/contact-point.schema";
-import { ApiProperty } from "@nestjs/swagger";
 
 export const contactPointValidationSchema = {
     type: "object",
@@ -36,26 +35,16 @@ export const contactPointValidationSchema = {
 }
 
 
-export class CreateContactPointDto {
-    @ApiProperty({ enum: ContactPointSystem })
+export type CreateContactPointDto = {
     system: ContactPointSystem
-
-    @ApiProperty({ enum: ContactPointUse, required: false })
     use?: ContactPointUse
-
-    @ApiProperty()
     value: string
 }
 
 
-export class ContactPointDto {
-    @ApiProperty({ enum: ContactPointSystem })
+export type ContactPointDto = {
     system: ContactPointSystem
-
-    @ApiProperty({ enum: ContactPointUse })
     use: ContactPointUse
-
-    @ApiProperty()
     value: string
 }
 

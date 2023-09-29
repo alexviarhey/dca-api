@@ -2,17 +2,17 @@ import { Controller, Delete, Get, Post, Put, UseInterceptors } from "@nestjs/com
 import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiProperty, ApiTags } from "@nestjs/swagger";
 import { PlaceholdersCrudUseCases } from "../use-cases/placeholders.crud-use-cases";
 import { CustomResponseType } from "../../../core/custom-response";
-import { AjvBody } from "../../common/decorators/ajv.decorators";
+import { AjvBody } from "../../patient-card/common/decorators/ajv.decorators";
 import {
     CreatePlaceholderDto,
     createPlaceholderSchema, PlaceholderDto,
     UpdatePlaceholderDto,
     updatePlaceholderSchema
 } from "../dto/placeholders.dto";
-import { IdDto, idDtoSchema } from "../../common/dto/id.dto";
+import { IdDto, idDtoSchema } from "../../patient-card/common/dto/id.dto";
 import { templatePlaceholdersMapReadable } from "../schemas/placeholder";
 import { Result } from "../../../core/result";
-import { CustomResponseInterceptor } from "../../common/interceptors/custom-response.interceptor";
+import { CustomResponseInterceptor } from "../../patient-card/common/interceptors/custom-response.interceptor";
 
 class PlaceholderResponseType extends CustomResponseType<PlaceholderDto> {
     @ApiProperty({ type: PlaceholderDto })

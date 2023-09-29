@@ -1,6 +1,6 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app/app.module";
-import { AjvExceptionFilter } from "./app/common/exeption-filters";
+import { AjvExceptionFilter } from "./app/patient-card/common/exeption-filters";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 const PORT = process.env.PORT || 8000;

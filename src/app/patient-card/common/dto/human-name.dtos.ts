@@ -1,5 +1,3 @@
-import { ApiProperty } from "@nestjs/swagger";
-
 const nameValidationRules = {
     type: "string",
     transform: ["trim"],
@@ -18,21 +16,13 @@ export const humanNameValidationSchema = {
     additionalProperties: false
 }
 
-export class CreateHumanNameDto  {
-    @ApiProperty()
+export type CreateHumanNameDto = {
     firstName: string
-
-    @ApiProperty()
     lastName: string
-
-    @ApiProperty({required: false})
     given?: string
 }
 
-export class HumanNameDto extends CreateHumanNameDto {
-    @ApiProperty({nullable: true})
+export type HumanNameDto = CreateHumanNameDto & {
     given: string | null
-
-    @ApiProperty()
     text: string
 }

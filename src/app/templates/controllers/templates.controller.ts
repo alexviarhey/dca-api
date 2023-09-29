@@ -9,13 +9,13 @@ import {
 } from "../dto/templates.dto";
 import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiProperty, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { TemplatesCrudUseCases } from "../use-cases/templates.crud-use-cases";
-import { AjvBody } from "../../common/decorators/ajv.decorators";
-import { IdDto } from "../../common/dto/id.dto";
+import { AjvBody } from "../../patient-card/common/decorators/ajv.decorators";
+import { IdDto } from "../../patient-card/common/dto/id.dto";
 import { Paginated, Pagination } from "../../../core/paginated";
 import { FilterQuery } from "mongoose";
 import { ITemplateSchema } from "../schemas/template.schema";
 import { TemplatesGroups, TemplatesService } from "../services/templates.service";
-import { CustomResponseInterceptor } from "../../common/interceptors/custom-response.interceptor";
+import { CustomResponseInterceptor } from "../../patient-card/common/interceptors/custom-response.interceptor";
 import { Result } from "../../../core/result";
 
 class CreateTemplateResponseType extends CustomResponseType<TemplateDto> {

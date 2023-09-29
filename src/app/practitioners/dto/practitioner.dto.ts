@@ -1,5 +1,5 @@
-import { ContactPointDto, CreateContactPointDto, contactPointValidationSchema } from "../../common/dto/contact-point.dtos"
-import { CreateHumanNameDto, HumanNameDto, humanNameValidationSchema } from "../../common/dto/human-name.dtos"
+import { ContactPointDto, CreateContactPointDto, contactPointValidationSchema } from "../../patient-card/common/dto/contact-point.dtos"
+import { CreateHumanNameDto, HumanNameDto, humanNameValidationSchema } from "../../patient-card/common/dto/human-name.dtos"
 import { GenderValues } from "../../patients/types/gender";
 import { PractitionerRoleDto } from "./practitioner.role.dto"
 

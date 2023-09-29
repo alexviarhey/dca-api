@@ -1,6 +1,6 @@
 import { Mapper } from "../../../core/mapper";
-import { contactPointMapper } from "../../common/mappers/contact-point.mapper";
-import { humanNameMapper } from "../../common/mappers/human-name.mapper";
+import { contactPointMapper } from "../../patient-card/common/mappers/contact-point.mapper";
+import { humanNameMapper } from "../../patient-card/common/mappers/human-name.mapper";
 import { GenderValues } from "../../patients/types/gender";
 import { CreatePractitionerDto, PractitionerDto } from "../dto/practitioner.dto";
 import { PractitionerSchema } from "../schemas/practitioner.schema";

@@ -1,11 +1,11 @@
 import { Schema } from "mongoose"
-import { IAddressSchema } from "../../common/schemas/address.schema"
-import { IContactPointSchema } from "../../common/schemas/contact-point.schema"
-import { IHumanNameSchema } from "../../common/schemas/human-name.schema"
+import { IAddressSchema } from "../../patient-card/common/schemas/address.schema"
+import { IContactPointSchema } from "../../patient-card/common/schemas/contact-point.schema"
+import { IHumanNameSchema } from "../../patient-card/common/schemas/human-name.schema"
 import { GenderValues } from "../types/gender"
-import { addressSchema } from "../../common/schemas/address.schema"
-import { contactPointSchema } from "../../common/schemas/contact-point.schema"
-import { humanNameSchema } from "../../common/schemas/human-name.schema"
+import { addressSchema } from "../../patient-card/common/schemas/address.schema"
+import { contactPointSchema } from "../../patient-card/common/schemas/contact-point.schema"
+import { humanNameSchema } from "../../patient-card/common/schemas/human-name.schema"
 
 
 export enum ContactRelationship {

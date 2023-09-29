@@ -1,5 +1,5 @@
 import { Bite, ConditionOfTheOralMucosa, DentalFormula, HardTissueConditions, KPI, KPU, OHIS, PeriodontalCondition } from "../schemas/dental-status.schema"
-import { VisitDiagnosisDto } from "./visit.dto"
+import { CreateVisitDiagnosisDto, VisitDiagnosisDto } from "./visit.dto"
 
 export type DentalStatusDto = {
     dentalFormula: DentalFormula
@@ -11,7 +11,7 @@ export type DentalStatusDto = {
     periodontalCondition: PeriodontalCondition
     conditionOfTheOralMucosa: ConditionOfTheOralMucosa
     researchData: string | null
-    provisionalDiagnosis: VisitDiagnosisDto[]
+    provisionalDiagnosis: CreateVisitDiagnosisDto[]
 }
 
 export const dentalStatusAjvSchema = {

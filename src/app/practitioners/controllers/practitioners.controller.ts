@@ -1,10 +1,10 @@
 import { Controller, Get, Param, Post, Put, UseInterceptors } from "@nestjs/common";
-import { AjvBody, AjvQuery } from "../../common/decorators/ajv.decorators";
+import { AjvBody, AjvQuery } from "../../patient-card/common/decorators/ajv.decorators";
 import { PractitionersCrudUseCases } from "../use-cases/practitioners.crud.use-cases";
 import { CreatePractitionerDto, GetPractitionersFilters, UpdatePractitionerDto, createPractitionerSchema, getPractitionersFiltersSchema, updatePractitionerSchema } from "../dto/practitioner.dto";
 import { practitionerRoleHelper } from "../schemas/practitioner-role.schema";
-import { ContactPointHelper } from "../../common/dto/contact-point.dtos";
-import { CustomResponseInterceptor } from "../../common/interceptors/custom-response.interceptor";
+import { ContactPointHelper } from "../../patient-card/common/dto/contact-point.dtos";
+import { CustomResponseInterceptor } from "../../patient-card/common/interceptors/custom-response.interceptor";
 import { FilterQuery } from "mongoose";
 
 @Controller("/practitioners")

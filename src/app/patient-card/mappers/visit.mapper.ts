@@ -1,10 +1,11 @@
 import { Injectable } from "@nestjs/common"
 import { Mapper } from "../../../core/mapper"
-import { VisitSchema } from "../schemas/visit.schema"
-import { CreateVisitDto, ShortVisitDto, VisitDto } from "../dto/visit.dto"
+import { VisitDiagnosis, VisitSchema } from "../schemas/visit.schema"
+import { CreateVisitDto, ShortVisitDto, VisitDiagnosisDto, VisitDto } from "../dto/visit.dto"
 import { InjectModel } from "@nestjs/mongoose"
 import { ICDSchema, ICD_COLLECTION } from "../../icd/icd.schema"
 import { Model } from "mongoose"
+
 
 @Injectable()
 export class VisitMapper extends Mapper<VisitSchema, VisitDto, CreateVisitDto> {
@@ -16,6 +17,11 @@ export class VisitMapper extends Mapper<VisitSchema, VisitDto, CreateVisitDto> {
     }
 
     async map(model: VisitSchema): Promise<VisitDto> {
+
+        const icds = this.icdModel.find({
+            _id: { $in: model.diagnosis.map(d => d.icdId) }
+        })
+
         return {
             _id: model._id,
             date: model.date,
@@ -31,32 +37,15 @@ export class VisitMapper extends Mapper<VisitSchema, VisitDto, CreateVisitDto> {
         return {
             _id: model._id,
             date: model.date,
-            diagnosis: model.diagnosis,
+            diagnosis: model.diagnosis
         }
     }
 
     async mapToSchema(dto: Partial<CreateVisitDto>): Promise<VisitSchema> {
-
-        const icdIdToothMap = new Map(dto.diagnosis.map(d => [d.icdId, d.tooth]))
-
-        const ids = [...icdIdToothMap.keys()]
-
-        const icds = await this.icdModel.find({
-            _id: { $in: ids }
-        })
-
-        const diagnosis = icds.map(i => {
-            return {
-                tooth: icdIdToothMap.get(i._id.toString()) || null,
-                icdName: i.name,
-                icdCode: i.code
-            }
-        })
-
         return {
             date: new Date(dto.date),
             complains: dto.complains,
-            diagnosis,
+            diagnosis: dto.diagnosis,
             localStatus: dto.localStatus,
             treatment: dto.treatment,
             other: dto.other

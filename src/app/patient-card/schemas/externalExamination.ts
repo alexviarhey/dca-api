@@ -16,6 +16,8 @@ export const FaceConfigurationReadable = {
     [FaceConfiguration.REDUCED_HEIGHT_OF_THE_LOWER_THIRD_OF_FACE]: "снижена высота нижней трети лица"
 };
 
+export const faceConfigurationWithConditions = [FaceConfiguration.ASYMMETRY]
+
 export enum LymphNodes {
     NOT_ENLARGED = 1,
     ENLARGED,
@@ -37,6 +39,9 @@ export const LymphNodesReadable = {
     [LymphNodes.DENSE]: "плотные",
     [LymphNodes.SWOLLEN]: "спаяные",
 }
+
+export const lymphNodesWithConditions = [LymphNodes.ENLARGED, LymphNodes.PAINFUL, LymphNodes.DENSE, LymphNodes.SWOLLEN]
+
 
 export enum TemporomandibularJoint {
     MOVEMENT_IN_FULL = 1,
@@ -60,6 +65,8 @@ export const TemporomandibularJointReadable = {
     [TemporomandibularJoint.WITH_CLICK_OR_CRUNCH]: "со щелчком/хрустом",
 }
 
+export const temporomandibularJointWithConditions = [TemporomandibularJoint.MOVEMENT_ARE_DIFFICULT, TemporomandibularJoint.LIMITED_MOUTH_OPENING]
+
 export interface IExternalExaminationSchema {
     complaints: string | null
     faceConfiguration: FaceConfiguration[],
@@ -74,4 +81,4 @@ export const externalExaminationSchema = new Schema<IExternalExaminationSchema>(
     conditionOfTheSkinRedBorder: { type: String, nullable: true, default: null },
     lymphNodes: { type: [Number], nullable: false },
     temporomandibularJoint: { type: [Number], nullable: false }
-}, {_id: false})
+}, { _id: false })

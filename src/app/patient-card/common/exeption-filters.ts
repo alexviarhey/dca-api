@@ -1,5 +1,5 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from "@nestjs/common";
-import { CustomResponse } from "../../core/custom-response";
+import { CustomResponse } from "../../../core/custom-response";
 import { Response } from "express";
 
 

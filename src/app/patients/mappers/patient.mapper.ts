@@ -2,9 +2,9 @@ import { Mapper } from "../../../core/mapper";
 import { IPatientSchema } from "../schemas/patient.schema";
 import { CreatePatientDto, PatientDto } from "../dto/patient.dtos";
 import { ContactDto, CreateContactDto } from "../dto/contact.dtos";
-import { humanNameMapper } from "../../common/mappers/human-name.mapper";
-import { addressMapper } from "../../common/mappers/address.mapper";
-import { contactPointMapper } from "../../common/mappers/contact-point.mapper";
+import { humanNameMapper } from "../../patient-card/common/mappers/human-name.mapper";
+import { addressMapper } from "../../patient-card/common/mappers/address.mapper";
+import { contactPointMapper } from "../../patient-card/common/mappers/contact-point.mapper";
 import { IContactSchema } from "../schemas/contact.schema";
 
 class ContactMapper extends Mapper<IContactSchema, ContactDto, CreateContactDto> {
@@ -42,6 +42,7 @@ class PatientMapper extends Mapper<IPatientSchema, PatientDto, CreatePatientDto>
             address: await addressMapper.mapArray(model.address),
             telecom: await contactPointMapper.mapArray(model.telecom),
             contact: await contactMapper.mapArray(model.contact),
+            passportData: model.passportData,
             createdAt: model.createdAt,
             updatedAt: model.updatedAt
         };
@@ -56,7 +57,8 @@ class PatientMapper extends Mapper<IPatientSchema, PatientDto, CreatePatientDto>
             name: await humanNameMapper.mapToSchema(dto.name),
             address: await addressMapper.mapToSchemaArray(dto.address),
             telecom: await contactPointMapper.mapToSchemaArray(dto.telecom),
-            contact: dto.contact?.length ? await contactMapper.mapToSchemaArray(dto.contact) : []
+            contact: dto.contact?.length ? await contactMapper.mapToSchemaArray(dto.contact) : [],
+            passportData: dto.passportData ?? null
         };
     }
 }
