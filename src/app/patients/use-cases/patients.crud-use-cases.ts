@@ -35,7 +35,6 @@ export class PatientsCrudUseCases extends CrudUseCases<IPatientSchema,
         options?: SaveOptions
     ): Promise<Result<PatientDto>> {
         const res = await super.create(dto, filterQuery, uniqueFields, options)
-        console.debug('RER', res)
 
         if (res.isSuccess) {
             await this.createCardUseCase.execute(res.data._id)

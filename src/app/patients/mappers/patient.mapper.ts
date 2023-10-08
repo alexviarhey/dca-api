@@ -58,7 +58,7 @@ class PatientMapper extends Mapper<IPatientSchema, PatientDto, CreatePatientDto>
             address: await addressMapper.mapToSchemaArray(dto.address),
             telecom: await contactPointMapper.mapToSchemaArray(dto.telecom),
             contact: dto.contact?.length ? await contactMapper.mapToSchemaArray(dto.contact) : [],
-            passportData: dto.passportData ?? null,
+            passportData: dto.passportData ?? null
         };
     }
 }
