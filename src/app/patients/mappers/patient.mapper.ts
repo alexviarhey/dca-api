@@ -1,6 +1,6 @@
 import { Mapper } from "../../../core/mapper";
-import { IPatientSchema } from "../schemas/patient.schema";
-import { CreatePatientDto, PatientDto } from "../dto/patient.dtos";
+import {IPatientSchema} from "../schemas/patient.schema";
+import {CreatePatientDto, PatientDto} from "../dto/patient.dtos";
 import { ContactDto, CreateContactDto } from "../dto/contact.dtos";
 import { humanNameMapper } from "../../patient-card/common/mappers/human-name.mapper";
 import { addressMapper } from "../../patient-card/common/mappers/address.mapper";
@@ -58,7 +58,7 @@ class PatientMapper extends Mapper<IPatientSchema, PatientDto, CreatePatientDto>
             address: await addressMapper.mapToSchemaArray(dto.address),
             telecom: await contactPointMapper.mapToSchemaArray(dto.telecom),
             contact: dto.contact?.length ? await contactMapper.mapToSchemaArray(dto.contact) : [],
-            passportData: dto.passportData ?? null
+            passportData: dto.passportData ?? null,
         };
     }
 }

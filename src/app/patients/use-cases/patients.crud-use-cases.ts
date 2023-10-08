@@ -10,7 +10,7 @@ import { Injectable } from "@nestjs/common";
 import { Paginated, Pagination } from "../../../core/paginated";
 import { GetPatientsFilters } from "../dto/get-patients-filters";
 import { CreateCardUseCase } from "../../patient-card/use-cases/create-card.use-case";
-import { ContactPointDto, ContactPointHelper } from "../../patient-card/common/dto/contact-point.dtos";
+import { ContactPointHelper } from "../../patient-card/common/dto/contact-point.dtos";
 
 @Injectable()
 export class PatientsCrudUseCases extends CrudUseCases<IPatientSchema,
@@ -35,6 +35,7 @@ export class PatientsCrudUseCases extends CrudUseCases<IPatientSchema,
         options?: SaveOptions
     ): Promise<Result<PatientDto>> {
         const res = await super.create(dto, filterQuery, uniqueFields, options)
+        console.debug('RER', res)
 
         if (res.isSuccess) {
             await this.createCardUseCase.execute(res.data._id)

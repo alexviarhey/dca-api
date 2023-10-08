@@ -20,10 +20,14 @@ export const createPatientValidationSchema = {
         address: { type: "array", items: addressValidationSchema },
         contact: { type: "array", items: contactValidationSchema },
         passportData: {
-            passportNumber: { type: "string" },
-            dateOfIssue: { type: "string", pattern: "^\\d{4}-\\d{2}-\\d{2}$" },
-            authority: { type: "string" }
-        }
+            type: "object",
+            properties: {
+                passportNumber: { type: "string" },
+                dateOfIssue: { type: "string", pattern: "^\\d{4}-\\d{2}-\\d{2}$" },
+                authority: { type: "string" }
+            },
+            additionalProperties: false
+        },
     },
     additionalProperties: false
 };
