@@ -42,7 +42,6 @@ export class CustomResponse<T = null> {
     ) {
     }
 
-
     public static fromResult<T>(result: Result<T>): CustomResponse<T> {
         if (result.isSuccess) {
             return new CustomResponse<T>(
@@ -58,7 +57,7 @@ export class CustomResponse<T = null> {
         }
     }
 
-    public withSuccessMessage<T>(
+    public withSuccessMessage(
         message: string
     ): this {
 
