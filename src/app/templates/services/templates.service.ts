@@ -63,7 +63,7 @@ export class TemplatesService {
                             for (let [placeholderType, v] of Object.entries(p)) {
                                 const placeholder = templatePlaceholdersMap.get(+placeholderType);
 
-                                filledTemplateDescription = filledTemplateDescription.replace(new RegExp(placeholder), v);
+                                filledTemplateDescription = filledTemplateDescription.replace(new RegExp(placeholder.value), v);
                             }
                         })
 

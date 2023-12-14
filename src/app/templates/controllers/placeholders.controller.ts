@@ -10,7 +10,7 @@ import {
     updatePlaceholderSchema
 } from "../dto/placeholders.dto";
 import { IdDto, idDtoSchema } from "../../patient-card/common/dto/id.dto";
-import { templatePlaceholdersMapReadable } from "../schemas/placeholder";
+import { templatePlaceholdersMap } from "../schemas/placeholder";
 import { Result } from "../../../core/result";
 import { CustomResponseInterceptor } from "../../patient-card/common/interceptors/custom-response.interceptor";
 
@@ -26,7 +26,7 @@ class PlaceholderResponseType extends CustomResponseType<PlaceholderDto> {
 export class PlaceholdersController {
     constructor(
         private placeholdersCrudUseCases: PlaceholdersCrudUseCases
-    ) {}
+    ) { }
 
     @Post("")
     @ApiCreatedResponse({ type: PlaceholderResponseType })
@@ -56,6 +56,8 @@ export class PlaceholdersController {
 
     @Get("")
     async getAll() {
-        return Result.ok(templatePlaceholdersMapReadable);
+        return Result.ok(
+            Object.fromEntries(templatePlaceholdersMap.entries())
+        );
     }
 }
