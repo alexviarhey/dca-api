@@ -10,7 +10,7 @@ import { Injectable } from "@nestjs/common";
 import { Paginated, Pagination } from "../../../core/paginated";
 import { GetPatientsFilters } from "../dto/get-patients-filters";
 import { CreateCardUseCase } from "../../patient-card/use-cases/create-card.use-case";
-import { ContactPointDto, ContactPointHelper } from "../../patient-card/common/dto/contact-point.dtos";
+import { ContactPointHelper } from "../../patient-card/common/dto/contact-point.dtos";
 
 @Injectable()
 export class PatientsCrudUseCases extends CrudUseCases<IPatientSchema,
