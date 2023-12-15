@@ -10,9 +10,10 @@
 
     **usermod -aG sudo <username>**
 
-4. ## Copy ssh on remote server:
+4. ## Copy public key to new user:
 
-    **8ssh-copy-id <username>@<ip>**
+    **rsync --archive --chown=<username>:<username> ~/.ssh /home/<username>**
+
 
 5. ## Testing login with new user:
 
